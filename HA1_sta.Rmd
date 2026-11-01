@@ -1,0 +1,258 @@
+---
+title: "Semesterbegleitende Abgabe WiSe2026-27"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Statistik im Bachelor Wirtschaftsinformatik
+
+Dozent_innen: Martin Spott, Michael Heimann, Anja Hirsch\
+Stand: `r format(Sys.Date(), format='%d.%m.%Y')`
+
+<!-- Bitte geben Sie Ihre Gruppennummer und Ihre Namen an -->
+
+**Gruppe:**
+
+Gruppe D
+
+**Autor_innen:**
+
+Jakob Fahr\
+Anahita Karimi\
+David Marcel Mayer\
+Timo Wahl
+
+## Einleitung
+
+In diesem Semester beschäftigen wir uns mit Kraftstoffpreisen in Berlin.
+Dazu benutzen wir Daten von der Organisation Tankerkönig [1], die jede Preisänderung angeschlossener Tankstellenbetreiber_innen mit Zeitstempel protokolliert.
+In der Datei *tankerkoenig_WiSe2026-27_1.csv* finden Sie den Ausschnitt der Daten, den Sie für die Aufgaben benutzen sollen.
+Dabei haben wir für jede Tankstelle und jede Stunde den Median der von Tankerkönig registrierten Preisänderungen der Kraftstoffe Diesel und E10 ermittelt.
+
+### Regeln
+
+Arbeiten Sie in Ihrer Moodlegruppe von bis zu vier Studierenden, die alle in derselben Übungsgruppe sein und die eine zu wählende Abgabe auch in den zugehörigen Übungen vorstellen müssen (Terminkalender folgt).
+Jede/r von Ihnen hat in Moodle nur Zugriff auf die Gruppeneinteilung Ihrer in LSF festgelegten Übungsgruppe, wo Sie sich in einer Gruppe eintragen müssen, um Punkte zu bekommen.
+
+Bearbeiten Sie die Aufgaben fortlaufend in diesem RMarkdown-Dokument und **geben es bei jeder Teilabgabe komplett als RMarkdown- und als mit Knit übersetztes HTML-Dokument ab**.
+Stellen Sie sicher, dass das RMarkdown-Dokument auch für uns lauffähig ist.
+Gehen Sie dazu davon aus, dass sich auf unseren Rechnern die Daten im selben Verzeichnis befinden werden wie Ihr RMarkdown-Dokument.
+
+Benutzen Sie nur Verfahren und Techniken, die wir in der Vorlesung besprochen haben.
+Sie können aber gerne komplexere Visualisierungen einsetzen, wenn dies sinnvoll erscheint.
+
+Erklären Sie kurz Ihr Vorgehen vor jedem Codeabschnitt und interpretieren die Ergebnisse danach.
+Schreiben Sie Erklärungen/Interpretationen in Textform zwischen die Codeblöcke, nicht als Kommentare in die Codeblöcke.
+Sie können den Code aber gerne zusätzlich knapp kommentieren.
+
+Für jede weitere Woche bekommen Sie eine Aufgabenstellung in RMarkdown, die Sie bitte in diesem Dokument fortlaufend anhängen und dort bearbeiten.
+Geben Sie immer das gesamte Dokument einschließlich der vorangehenden Aufgaben ab, da die Aufgaben teilweise aufeinander aufbauen und Sie vorangehende Lösungen später benötigen.
+
+## Woche 1 -- 27.10.2026
+
+Beschreiben Sie zwischen den Codeblöcken in Textform, was Sie warum tun und was Sie herausfinden.
+
+a.  Importieren Sie die Daten.
+b.  Beschreiben Sie die Daten. Was sind die Merkmale, was die Merkmalsträger?
+c.  Geben Sie für alle Merkmale an, ob sie qualitativ/quantitativ, diskrekt/stetig und auf welchen Skalen sie definiert sind.
+d.  Berechnen Sie für das Merkmal `brand` (Marke) die Tabellen mit absoluter und relativer Häufigkeit.
+e.  Stellen Sie die Tabelle absoluter Häufigkeit von `brand` als Balkendiagramm dar. Beschriften Sie alle Axen und geben dem Diagramm eine Überschrift.
+f.  Was bedeuten die absoluten Häufigkeiten im Kontext unserer Daten? Warum gibt es Unterschiede zwischen den Werten der verschiedenen Marken?
+
+### a. Datenimport
+
+Die Daten liegen im CSV Format.
+Wir lesen sie mit `read.csv()` ein und speichern sie unter dem Namen `tanken`, damit wir sie in den folgenden Aufgaben auswerten können.
+
+```{r}
+   tanken <- read.csv("tankerkoenig_WiSe2026-27_1.csv")
+```
+
+Der Datensatz enthält 478274 Zeilen und 13 Spalten.
+
+### b. Beschreibung der Daten
+
+Um uns einen Überblick zu verschaffen, lassen wir uns die ersten Zeilen und die Struktur der Daten anzeigen.
+
+```{r}
+head(tanken)
+str(tanken)
+```
+
+Der Datensatz enthält stündliche Kraftstoffpreise von Berliner Tankstellen.
+Der Merksmalsträger ist eine Tankstelle in einer bestimmten Stunde an einem bestimmten Tag.
+Grundgesamtheit sind alle Stunden der 78 Tankstellen in Berlin von Februar 2025 bis Januar 2026.
+Merkmale sind die Spalten: 
+- `X`: die Zeilennummer
+- `id`: eindeutige ID der Tankstelle
+- `date`, `time`: Datum und Stunde
+- `name`, `brand`: Name und Marke der Tankstelle
+- `street`, `house_number`, `post_code`: Adresse der Tankstelle
+- `opening_time`, `closing_time`: Öffnungs und Schließzeit
+- `e10_median`, `diesel_median`: Median der Preise für E10 und Diesel in dieser Stunde. Die Preise sind in Euro pro Liter angegeben, aber ohne Komma.
+
+Bei einigen Zeilen fehlen die Preise (`NA`).
+
+### c. Merkmalstypen
+
+| Merkmal         | qualitativ/quantitativ | diskret/stetig | Skala           |
+|-----------------|------------------------|----------------|-----------------|
+| `X`             | quantitativ            | diskret        | Ordinalskala    |
+| `id`            | qualitativ             | diskret        | Nominalskala    |
+| `date`          | quantitativ            | diskret        | Intervallskala  |
+| `time`          | quantitativ            | diskret        | Intervallskala  |
+| `name`          | qualitativ             | diskret        | Nominalskala    |
+| `brand`         | qualitativ             | diskret        | Nominalskala    |
+| `street`        | qualitativ             | diskret        | Nominalskala    |
+| `house_number`  | qualitativ             | diskret        | Nominalskala    |
+| `post_code`     | qualitativ             | diskret        | Nominalskala    |
+| `opening_time`  | quantitativ            | diskret        | Intervallskala  |
+| `closing_time`  | quantitativ            | diskret        | Intervallskala  |
+| `e10_median`    | quantitativ            | quasi-stetig   | Verhältnisskala |
+| `diesel_median` | quantitativ            | quasi-stetig   | Verhältnisskala |
+
+Postleitzahl, Hausnummer und id bestehen zwar teilweise aus Ziffern, sind aber nur Bezeichnungen, mit denen man nicht rechnen kann.
+Deshalb sind sie qualitativ und nominal.
+Datum und Uhrzeiten sind intervallskaliert.
+Abstände sind sinnvoll, aber der Nullpunkt ist willkürlich.
+Die Preise sind verhältnisskaliert, weil 0 € ein echter Nullpunkt ist.
+Sie sind quasi-stetig, weil sie gerundet angegeben werden.
+
+### d. Häufigkeiten der Marken
+
+Wir zählen mit `table()`, wie oft jede Marke im Datensatz vorkommt (absolute Häufigkeit), und rechnen das mit `prop.table()` in Anteile um (relative Häufigkeit). Die Anteile runden wir mit `round()` auf drei Nachkommastellen.
+
+
+```{r}
+brand_abs <- table(tanken$brand)
+brand_abs
+
+brand_rel <- prop.table(brand_abs)
+round (brand_rel, 3)
+```
+
+### e. Balkendiagramm
+
+Da `brand` ein qualitatives Merkmal ist, stellen wir die absoluten Häufigkeiten als Balkendiagramm dar.
+Damit alle Markennamen lesbar sind, verkleinern wir sie (mit `cex.names`) und drehen sie senkrecht (mit `las = 2`).
+
+```{r}
+barplot(brand_abs/1000,
+        main = "Absolute Häufigkeit der Tankstellenmarken",
+        xlab = "Marke",
+        ylab = "Anzahl Stunden aller Tankstellen in Tausend",
+        ylim = c(0, 120),
+        cex.names = 0.7, 
+        las = 2, 
+        col = "skyblue")
+```
+
+
+Auf der x Achse sind die Tankstellenmarken.
+Auf der y Achse ist die absolute Häufigkeit dargestellt, also die Anzahl der Stunden, für die im Datensatz ein Preis einer Tankstelle dieser Marke vorliegt (zusammengezählt über alle Tankstellen der Marke und das ganze Jahr).
+Jeder Balken steht für eine Marke, und seine Höhe zeigt, wie oft diese Marke im Datensatz vorkommt.
+Am häufigsten kommt STAR vor, dicht gefolgt von Shell.
+Mit Abstand folgt TotalEnergies, am seltensten ist AGIP ENI.
+
+
+
+### f. Interpretation der Häufigkeiten
+
+Die absolute Häufigkeit einer Marke gibt an, für wie viele Stunden im Datensatz ein Preis einer Tankstelle dieser Marke vorliegt, zusammengezählt über alle Berliner Tankstellen der Marke im Zeitraum von Februar 2025 bis Januar 2026.
+
+Die Unterschiede können vor allem durch die Anzahl der Tankstellen je Marke entstehen. STAR hat im Datensatz 17 Tankstellen, Shell 15, AGIP ENI dagegen nur 4. Je mehr Tankstellen eine Marke hat, desto mehr Stunden kommen zusammen. Außerdem sind die Öffnungszeiten auch relevant, je länger eine Tankstelle geöffnet hat, desto mehr Stunden mit Preisen gibt es im Datensatz.
+
+```{r}
+tankstellen <- unique(tanken[, c("id", "brand")])
+table(tankstellen$brand)
+```
+
+
+**---Fügen Sie hier kommende Aufgabenbeschreibungen mit Lösungen ein ---**
+
+### a. Fehlende Werte
+Bestimmen Sie, wie viele Werte bei jedem Merkmal im Datensatz fehlen (NA). Finden Sie mit Detektivarbeit heraus, welche Eigenschaft die Datensätze mit den fehlenden Werten haben und wie man die fehlenden mit sinnvollen Werten ersetzen kann. Das Ersetzen müssen Sie nur erklären, nicht implementieren.  
+```{r}
+colSums(is.na(tanken))
+
+fehlende_preise <- tanken[is.na(tanken$e10_median) ,]
+head(fehlende_preise, 15)
+
+
+table(fehlende_preise$time)
+
+
+table(fehlende_preise$opening_time)
+
+
+```
+
+
+
+###b. Uhrzeiten der Messungen
+Bestimmen Sie, zu welchen Uhrzeiten Messungen durchgeführt wurden und jeweils wie viele. Finden Sie mit Detektivarbeit heraus, welche Eigenschaften die Datensätze mit Messungen haben, die nicht bei voller Stunde vorgenommen wurden. Runden Sie die Zeit von allen Datensätzen zur nächsten vollen Stunde ab (streichen die Minuten), um später einfacher mit den Daten arbeiten zu können. 
+
+
+
+Zuerst wird mit `table()` angezeigt, zu welchen Uhrzeiten Messungen vorliegen und wie viele es jeweils sind.
+Mit `length(unique())` zählen wir außerdem, wie viele verschiedene Uhrzeiten im Datensatz vorkommen. 
+```{r}
+length(unique(tanken$time))
+table(tanken$time)
+```
+Im Datensatz kommen 58 verschiedene Uhrzeiten vor.
+Neben den 24 vollen Stunden gibt es auch Messungen um xx:15 und xx:30
+
+
+Die Uhrzeit liegt als Text im Format `"xx:xx"` vor. Mit `sub()` wird der Doppelpunkt durch einen leeren Text ersetzt, also gelöscht, sodass aus `"07:30"` die Zahl `730` wird. Mit der Ganzzahldivision `%/%` erhält man daraus die Stunde und mit dem Rest der Division `%%` die Minute
+
+```{r}
+zeit   <- as.integer(sub(":", "", tanken$time))
+stunde <- zeit %/% 100
+minute <- zeit %% 100
+
+table(minute)
+```
+
+Von den 478274 Messungen wurden 449634 zur vollen Stunde durchgeführt, 11807 zur Viertelstunde und 16833 zur halben Stunde.
+
+```{r}
+voll       <- tanken[minute == 0, ]
+nicht_voll <- tanken[minute != 0, ]
+
+table(nicht_voll$street)
+length(unique(nicht_voll$id))
+
+table(nicht_voll$time)
+table(nicht_voll$street, minute[minute != 0])
+
+```
+
+Die meisten Messungen erfolgten zur vollen Stunde. Die Ausnahmen stammen ausschließlich von 5 Tankstellen, die ihre Preise immer zu einer festen Minute melden:
+
+- **xx:15**: Altentreptower Straße, Waidmannsluster Damm 54
+- **xx:30**: Finckensteinallee 133, Steglitzer Damm 77, Teltower Damm 164
+
+
+Zum Schluss runden wir alle Uhrzeiten auf die volle Stunde ab, indem wir die Minuten streichen.
+Die Stunde haben wir oben bereits berechnet, bisher aber nur in der Variable `stunde` gespeichert.
+Mit `sprintf("%02d:00", stunde)` machen wir daraus wieder eine Uhrzeit im Format `"xx:00"`, wobei `%02d` die Stunde zweistellig mit führender Null schreibt.
+
+
+```{r}
+tanken$time <- sprintf("%02d:00", stunde)
+table(tanken$time)
+```
+
+###c.
+Finden Sie heraus, ob Merkmalsträger komplett fehlen. Wenn ja, können Sie ein Muster für das Fehlen erkennen?
+
+## Quellen
+
+[1] Tankerkönig UG, URL: <https://tankerkoenig.de>, letzter Aufruf: 21.10.2026
