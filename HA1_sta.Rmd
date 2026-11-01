@@ -176,26 +176,47 @@ table(tankstellen$brand)
 
 **---Fügen Sie hier kommende Aufgabenbeschreibungen mit Lösungen ein ---**
 
+## Woche 2
+
+
 ### a. Fehlende Werte
 Bestimmen Sie, wie viele Werte bei jedem Merkmal im Datensatz fehlen (NA). Finden Sie mit Detektivarbeit heraus, welche Eigenschaft die Datensätze mit den fehlenden Werten haben und wie man die fehlenden mit sinnvollen Werten ersetzen kann. Das Ersetzen müssen Sie nur erklären, nicht implementieren.  
+
+Mit `is.na()` wird für jeden Wert geprüft, ob er fehlt.`colSums()` zählt dann die fehlenden Werte für jede Spalte. Mit `mean()` berechnen wir zusätzlich den Anteil der fehlenden Preise.
+
+
 ```{r}
 colSums(is.na(tanken))
-
-fehlende_preise <- tanken[is.na(tanken$e10_median) ,]
-head(fehlende_preise, 15)
-
-
-table(fehlende_preise$time)
-
-
-table(fehlende_preise$opening_time)
-
-
+mean(is.na(tanken$e10_median))
+mean(is.na(tanken$diesel_median))
 ```
 
+Fehlende Werte gibt es nur bei `house_number`, `e10_median` und `diesel_median`. Bei `house_number` fehlen 85868 Werte. Das liegt daran, dass die Hausnummer schon in `street` steht. Bei `e10_median` und `diesel_median` fehlen jeweils 28151 Werte, also etwa 5,9 % aller Zeilen. Da es bei beiden genau gleich viele sind, fehlen wahrscheinlich immer beide Preise gleichzeitig.
 
+Um herauszufinden, was die Zeilen mit fehlenden Preisen gemeinsam haben, filtern wir nur die Zeilen, in denen `e10_median` fehlt, und speichern sie als `fehlende_preise`. Mit `head()` schauen wir uns die ersten 15 Zeilen an.
 
-###b. Uhrzeiten der Messungen
+```{r}
+fehlende_preise <- tanken[is.na(tanken$e10_median) ,]
+head(fehlende_preise, 15)
+```
+
+In allen Zeilen fehlt auch `diesel_median`. Außerdem ist die Uhrzeit immer 07:30, also die erste Stunde nach der Öffnung um 07:00. Das sind aber alles Zeilen von derselben Tankstelle. Deshalb prüfen wir mit `table()`, ob das Muster auch bei den anderen Tankstellen gilt.
+
+```{r}
+
+table(fehlende_preise$time)
+table(fehlende_preise$opening_time)
+```
+Die meisten fehlenden Preise gibt es nachts und früh morgens zwischen 00:00 und 07:00 Uhr. Tagsüber fehlen nur etwa 300 Werte pro Stunde. Bei `opening_time` sieht man, dass 16875 der fehlenden Preise von Tankstellen kommen, die um 00:00 öffnen, also 24 Stunden offen haben. Danach kommen die Tankstellen, die um 06:00 öffnen.
+
+Die Preise fehlen also immer am Anfang des Tages. Eine Tankstelle hat so lange keinen Preis, bis sie an dem Tag zum ersten Mal ihren Preis ändert. Bei Tankstellen, die 24 Stunden offen haben, ist das nachts, bei den anderen in der ersten Stunde nach dem Öffnen. Natürlich gibt es in dieser Zeit trotzdem einen Preis, er wurde nur noch nicht gemeldet. Deshalb konnte für diese Stunde kein Median berechnet werden.
+
+**Ersetzen der fehlenden Werte:**
+
+Weil ein Preis so lange gilt, bis er geändert wird, kann man einen fehlenden Wert durch den letzten bekannten Preis derselben Tankstelle ersetzen, also durch den letzten Preis vom Vortag. Dabei muss man darauf achten, nur Werte derselben Tankstelle zu nehmen und nicht einfach die Zeile darüber. 
+
+### b. Uhrzeiten der Messungen
+
 Bestimmen Sie, zu welchen Uhrzeiten Messungen durchgeführt wurden und jeweils wie viele. Finden Sie mit Detektivarbeit heraus, welche Eigenschaften die Datensätze mit Messungen haben, die nicht bei voller Stunde vorgenommen wurden. Runden Sie die Zeit von allen Datensätzen zur nächsten vollen Stunde ab (streichen die Minuten), um später einfacher mit den Daten arbeiten zu können. 
 
 
@@ -250,7 +271,7 @@ tanken$time <- sprintf("%02d:00", stunde)
 table(tanken$time)
 ```
 
-###c.
+### c.
 Finden Sie heraus, ob Merkmalsträger komplett fehlen. Wenn ja, können Sie ein Muster für das Fehlen erkennen?
 
 ## Quellen
