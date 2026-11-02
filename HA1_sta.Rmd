@@ -372,7 +372,59 @@ table(tanken$time)
 ```
 
 
+### c. Komplett fehlende Merkmalsträger
 
+Ein Merkmalsträger ist eine Tankstelle in einer bestimmten Stunde an einem bestimmten Tag. Zuerst wird geprüft, wie viele Zeilen es theoretisch geben müsste, wenn für alle 78 Tankstellen an allen 365 Tagen jede der 24 Stunden vorhanden wäre.
+
+```{r}
+# Theoretische Gesamtanzahl an Stunden (24h) mit tatsächlicher Zeilenzahl vergleichen
+78 * 365 * 24
+nrow(tanken)
+```
+
+Bei 24 Stunden pro Tag gäbe es 683280 Merkmalsträger, wir haben aber nur 478274 Zeilen. Es fehlen also 205006 Stunden. 
+
+Grund: Öffnungszeiten.
+Es muss geprüft werden ob es im Datensatz überhaupt Zeilen außerhalb der Öffnungszeiten gibt, und dann muss berechnet werden, wie viele Stunden die Tankstellen insgesamt geöffnet haben.
+
+```{r}
+# Öffnungs- und Schließzeiten in Stunden (Zahlen) umwandeln
+open_stunde  <- as.integer(sub(":00", "", tanken$opening_time))
+close_stunde <- as.integer(sub(":00", "", tanken$closing_time))
+
+# Prüfen, ob Messungen außerhalb der Öffnungszeiten liegen
+sum(stunde < open_stunde)
+sum(stunde >= close_stunde)
+
+# Eine Zeile pro Tankstelle und Tag holen, um alle Öffnungsstunden im Jahr zu summieren
+tag_info  <- tanken[!duplicated(tanken[, c("id", "date")]), ]
+tag_open  <- as.integer(sub(":00", "", tag_info$opening_time))
+tag_close <- as.integer(sub(":00", "", tag_info$closing_time))
+
+# Erwartete geöffnete Stunden und Differenz zu vorhandenen Zeilen
+sum(tag_close - tag_open)
+sum(tag_close - tag_open) - nrow(tanken)
+```
+
+Außerhalb der Öffnungszeiten gibt es 0 Zeilen. Insgesamt hatten alle Tankstellen im Jahr zusammen 506484 Stunden geöffnet. Damit fehlen schon mal $683280 - 506484 = 176796$ Merkmalsträger einfach deshalb, weil die Tankstellen nachts geschlossen hatten.
+
+Allerdings fehlen auch innerhalb der Öffnungszeiten noch $506484 - 478274 = 28210$ Zeilen komplett. Um zu sehen, wann diese Zeilen fehlen, wird die erste Tankstelle an den ersten beiden Tagen näher betrachten. Des Weiteren wird geschaut für jede Stunde des Tages, wie viele geöffnete Stunden im Datensatz fehlen.
+
+```{r}
+# Beispiel: Erste Tankstelle am 01.02.2025 (offen von 07:00 bis 22:00)
+tanken[1:14, c("date", "time", "opening_time", "closing_time", "e10_median")]
+
+# Für jede Stunde (0 bis 23) geöffnete Tankstellen-Tage minus vorhandene Zeilen rechnen
+offen_je_stunde <- sapply(0:23, function(h) sum(tag_open <= h & h < tag_close))
+offen_je_stunde - as.integer(table(tanken$time))
+```
+
+Bei der ersten Tankstelle fehlt am `2025-02-01` mitten am Tag die Zeile für `13:00` Uhr (vor dem Abrunden `13:30`). Auch über den ganzen Datensatz verteilt fehlen tagsüber zwischen 06:00 und 22:00 Uhr in jeder Stunde rund 1300 bis 1800 Zeilen.
+
+**Muster für das Fehlen der Merkmalsträger:**
+
+1. **Geschlossene Stunden (176796 Zeilen):** Wenn eine Tankstelle geschlossen hat, wird für diese Stunden gar keine Zeile im Datensatz angelegt.
+2. **Keine Preisänderung in dieser Stunde (28210 Zeilen):** Tankerkönig zeichnet nur Preisänderungen auf. Am Anfang des Tages (nach der Öffnung bis zur ersten Preismeldung) wurden die Stunden ohne Meldung zwar noch als Zeilen mit `NA` aufgefüllt (siehe Aufgabe a). Sobald an einem Tag aber der erste Preis gemeldet wurde, fehlt eine spätere Stunde komplett als Zeile im Datensatz, wenn die Tankstelle in dieser Stunde ihren Preis nicht geändert hat.
 
 
 ## Quellen
