@@ -321,6 +321,60 @@ Bei `house_number` fehlen die Werte bei 14 Tankstellen:
 - **`e10_median` und `diesel_median`:** Da ein Preis an der Tankstelle so lange gilt, bis er geändert wird, ersetzt man die fehlenden Werte am Tagesanfang einfach durch den letzten bekannten Preis derselben Tankstelle vom Vortag (dabei muss man darauf achten, nach `id` zu gruppieren und nicht einfach den Wert einer anderen Tankstelle zu nehmen).
 
 
+### b. Uhrzeiten der Messungen
+
+Mit `table()` wird geschaut, zu welchen Uhrzeiten wie oft gemessen wurde.Mit `length(unique())` werden die verschiedenen Uhrzeiten gezählt.
+
+```{r}
+# Anzahl verschiedener Uhrzeiten und Häufigkeiten ausgeben
+length(unique(tanken$time))
+table(tanken$time)
+```
+
+Es gibt 58 verschiedene Uhrzeiten - 24 vollen Stunden, 34 Messungen um `xx:15` und `xx:30`. 
+Um die Minuten genauer zu untersuchen, wird mit `sub()` der Doppelpunkt aus `time` gelöscht und der Text wird in eine Zahl umgewandelt (aus `"07:30"` wird `730`). Mit der Ganzzahldivision `%/%` entsteht Stunde und mit dem Divisionsrest `%%` die Minute.
+
+```{r}
+# Stunde und Minute aus time berechnen
+zeit   <- as.integer(sub(":", "", tanken$time))
+stunde <- zeit %/% 100
+minute <- zeit %% 100
+
+table(minute)
+```
+
+- 449634 Messungen zur vollen Stunde (`0`)
+- 11807 um Viertel nach (`15`)
+- 16833 zur halben Stunde (`30`)
+Jetzt werdne die Zeilen gefiltert, bei denen `minute != 0` ist, um zu sehen, welche Tankstellen das sind.
+
+```{r}
+# Zeilen filtern, die nicht zur vollen Stunde gemessen wurden
+nicht_voll <- tanken[minute != 0, ]
+
+# Betroffene Tankstellen und Marken anschauen
+unique(nicht_voll[, c("brand", "street")])
+table(nicht_voll$street, minute[minute != 0])
+```
+
+Messungen die nicht zur vollen Stunde stattfinden:
+5 Tankstellen der Marke STAR, die immer zu einer festen Minute gemessen wurden:
+
+- **xx:15:** Altentreptower Straße, Waidmannsluster Damm 54
+- **xx:30:** Finckensteinallee 133, Steglitzer Damm 77, Teltower Damm 164
+
+Zum Schluss werden alle Uhrzeiten auf die volle Stunde abgerundet mit `sprintf("%02d:00", stunde)` die Minuten durch `:00` ersetzen.
+
+```{r}
+# Auf volle Stunde abrunden und kontrollieren
+tanken$time <- sprintf("%02d:00", stunde)
+table(tanken$time)
+```
+
+
+
+
+
 ## Quellen
 
 [1] Tankerkönig UG, URL: <https://tankerkoenig.de>, letzter Aufruf: 02.11.2026
