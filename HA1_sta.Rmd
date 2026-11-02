@@ -274,6 +274,53 @@ table(tanken$time)
 ### c.
 Finden Sie heraus, ob Merkmalsträger komplett fehlen. Wenn ja, können Sie ein Muster für das Fehlen erkennen?
 
+
+## Woche 2 -- 03.11.2026
+
+a. Bestimmen Sie, wie viele Werte bei jedem Merkmal im Datensatz fehlen (NA). Finden Sie mit Detektivarbeit heraus, welche Eigenschaft die Datensätze mit den fehlenden Werten haben und wie man die fehlenden mit sinnvollen Werten ersetzen kann. Das Ersetzen müssen Sie nur erklären, nicht implementieren.  
+b. Bestimmen Sie, zu welchen Uhrzeiten Messungen durchgeführt wurden und jeweils wie viele. Finden Sie mit Detektivarbeit heraus, welche Eigenschaften die Datensätze mit Messungen haben, die nicht bei voller Stunde vorgenommen wurden. Runden Sie die Zeit von allen Datensätzen zur nächsten vollen Stunde ab (streichen die Minuten), um später einfacher mit den Daten arbeiten zu können.  
+c. Finden Sie heraus, ob Merkmalsträger komplett fehlen. Wenn ja, können Sie ein Muster für das Fehlen erkennen?
+
+
+### a. Fehlende Werte
+
+Mit `is.na()` wird für jeden Eintrag geprüft, ob er fehlt, und die fehlenden Werte pro Spalte werden mit `colSums()` gezählt. Mit `mean()` wird außerdem der Anteil der fehlenden Preise berechnet.
+
+```{r}
+# Fehlende Werte pro Spalte zählen
+colSums(is.na(tanken))
+
+# Anteil der fehlenden Preise berechnen
+mean(is.na(tanken$e10_median))
+mean(is.na(tanken$diesel_median))
+```
+
+Fehlende Werte (`NA`) gibt es nur bei `house_number` (85868), `e10_median` (28151) und `diesel_median` (28151). Bei den Preisen fehlen also jeweils etwa 5,9 % der Zeilen, und weil die Anzahl identisch ist, fehlen immer beide Preise gleichzeitig.
+
+Zuerst werden die fehlenden Hausnummern und Preise genauer betrachtet, indem die betroffenen Zeilen gefiltert werden.
+
+```{r}
+# Tankstellen mit fehlender Hausnummer anschauen
+unique(tanken[is.na(tanken$house_number), c("brand", "name", "street", "house_number")])
+
+# Zeilen mit fehlenden Preisen filtern und Uhrzeiten/Öffnungszeiten zählen
+fehlende_preise <- tanken[is.na(tanken$e10_median), ]
+head(fehlende_preise, 10)
+table(fehlende_preise$time)
+table(fehlende_preise$opening_time)
+```
+
+Bei `house_number` fehlen die Werte bei 14 Tankstellen:
+- 13 STAR-Tankstellen steht die Hausnummer in der Spalte `street` mit drin
+- Eine ARAL-Tankstelle an der `"A 115"` ist eine Autobahntankstelle ohne Hausnummer
+- (zusätzlich gibt es noch 6 ESSO-Tankstellen, bei denen statt `NA` ein Leerzeichen `" "` in `house_number` steht und die Nummer ebenfalls in `street` steckt)
+
+**Ersetzen der fehlenden Werte:**
+
+- **`house_number`:** Man kann die Hausnummer aus der Spalte `street` abtrennen und in `house_number` eintragen. Bei der Autobahntankstelle `"A 115"` gibt es keine Hausnummer, dort könnte man z. B. `"keine"` eintragen oder `NA` lassen.
+- **`e10_median` und `diesel_median`:** Da ein Preis an der Tankstelle so lange gilt, bis er geändert wird, ersetzt man die fehlenden Werte am Tagesanfang einfach durch den letzten bekannten Preis derselben Tankstelle vom Vortag (dabei muss man darauf achten, nach `id` zu gruppieren und nicht einfach den Wert einer anderen Tankstelle zu nehmen).
+
+
 ## Quellen
 
-[1] Tankerkönig UG, URL: <https://tankerkoenig.de>, letzter Aufruf: 21.10.2026
+[1] Tankerkönig UG, URL: <https://tankerkoenig.de>, letzter Aufruf: 02.11.2026
