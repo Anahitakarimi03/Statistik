@@ -276,7 +276,6 @@ table(tanken$time)
 Ein Merkmalsträger ist eine Tankstelle in einer bestimmten Stunde an einem bestimmten Tag. Zuerst wird geprüft, wie viele Zeilen es theoretisch geben müsste, wenn für alle 78 Tankstellen an allen 365 Tagen jede der 24 Stunden vorhanden wäre.
 
 ```{r}
-# Theoretische Gesamtanzahl an Stunden (24h) mit tatsächlicher Zeilenzahl vergleichen
 78 * 365 * 24
 nrow(tanken)
 ```
@@ -287,20 +286,17 @@ Grund: Öffnungszeiten.
 Es muss geprüft werden ob es im Datensatz überhaupt Zeilen außerhalb der Öffnungszeiten gibt, und dann muss berechnet werden, wie viele Stunden die Tankstellen insgesamt geöffnet haben.
 
 ```{r}
-# Öffnungs- und Schließzeiten in Stunden (Zahlen) umwandeln
 open_stunde  <- as.integer(sub(":00", "", tanken$opening_time))
 close_stunde <- as.integer(sub(":00", "", tanken$closing_time))
 
-# Prüfen, ob Messungen außerhalb der Öffnungszeiten liegen
+
 sum(stunde < open_stunde)
 sum(stunde >= close_stunde)
 
-# Eine Zeile pro Tankstelle und Tag holen, um alle Öffnungsstunden im Jahr zu summieren
 tag_info  <- tanken[!duplicated(tanken[, c("id", "date")]), ]
 tag_open  <- as.integer(sub(":00", "", tag_info$opening_time))
 tag_close <- as.integer(sub(":00", "", tag_info$closing_time))
 
-# Erwartete geöffnete Stunden und Differenz zu vorhandenen Zeilen
 sum(tag_close - tag_open)
 sum(tag_close - tag_open) - nrow(tanken)
 ```
@@ -310,10 +306,8 @@ Außerhalb der Öffnungszeiten gibt es 0 Zeilen. Insgesamt hatten alle Tankstell
 Allerdings fehlen auch innerhalb der Öffnungszeiten noch $506484 - 478274 = 28210$ Zeilen komplett. Um zu sehen, wann diese Zeilen fehlen, wird die erste Tankstelle an den ersten beiden Tagen näher betrachten. Des Weiteren wird geschaut für jede Stunde des Tages, wie viele geöffnete Stunden im Datensatz fehlen.
 
 ```{r}
-# Beispiel: Erste Tankstelle am 01.02.2025 (offen von 07:00 bis 22:00)
 tanken[1:14, c("date", "time", "opening_time", "closing_time", "e10_median")]
 
-# Für jede Stunde (0 bis 23) geöffnete Tankstellen-Tage minus vorhandene Zeilen rechnen
 offen_je_stunde <- sapply(0:23, function(h) sum(tag_open <= h & h < tag_close))
 offen_je_stunde - as.integer(table(tanken$time))
 ```
