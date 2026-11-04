@@ -18,9 +18,69 @@ Stand: `r format(Sys.Date(), format='%d.%m.%Y')`
 ## Wiederholung
 
 * Was versteht man unter dem geometrischen Mittel? Wann benutzt man es? 
+
+    **Antwort:**
+    Das geometrische Mittel ist die n-te Wurzel aus dem Produkt aller
+    (positiven) Werte:
+
+    `x_geo = (x1 * x2 * ... * xn)^(1/n)`
+
+    Man benutzt es für Wachstumsfaktoren und andere multiplikativ
+    verkettete Größen (Zinsen, Renditen, Preis- oder Indexentwicklung).
+
+    Durchschnittlicher Wachstumsfaktor: `f = (x_n / x_0)^(1/n)`.
+    Durchschnittliches Wachstum in Prozent: `(f - 1) * 100`.
+    Das arithmetische Mittel würde das Wachstum überschätzen.
+
 * Was versteht man unter dem harmonischen Mittel? Wann benutzt man es? 
+
+    **Antwort:**
+    Das harmonische Mittel ist der Kehrwert des arithmetischen Mittels
+    der Kehrwerte:
+
+    `x_harm = n / (1/x1 + 1/x2 + ... + 1/xn)`
+
+    Gewichtet (z. B. mit Strecken w_i):
+
+    `x_harm = (w1 + ... + wn) / (w1/x1 + ... + wn/xn)`
+
+    Man benutzt es für Verhältniszahlen (z. B. Geschwindigkeit in km/h),
+    wenn die Bezugsgröße im Nenner variiert, etwa bei gleichen Strecken
+    mit unterschiedlichem Tempo.
+    Die mittlere Geschwindigkeit ist dann Gesamtstrecke geteilt durch
+    Gesamtzeit.
+
 * Was sind Quantile?
+
+    **Antwort:**
+    Das q-Quantil teilt die geordnete Datenreihe so, dass mindestens
+    q * 100 % der Werte kleiner oder gleich dem Quantil und mindestens
+    (1 - q) * 100 % der Werte größer oder gleich dem Quantil sind.
+
+    Wichtige Spezialfälle:
+
+    * Quartile: Q1 (25 %), Q2 (50 %, Median), Q3 (75 %)
+    * Terzile (Drittelung), Dezile (Zehntelung), Perzentile
+      (Hundertstelung)
+
+    Quantile sind robust gegenüber Ausreißern.
+    In R: `quantile(x, probs, type = 2)`.
+
 * Wie konstruiert man einen Boxplot und wozu dient er?
+
+    **Antwort:**
+
+    * Die Box reicht von Q1 bis Q3, ihre Höhe ist der Quartilsabstand
+      `IQR = Q3 - Q1`.
+    * Ein Strich in der Box markiert den Median.
+    * Die Whisker reichen bis zum kleinsten bzw. größten Wert, der noch
+      innerhalb von 1,5 * IQR unter Q1 bzw. über Q3 liegt.
+    * Werte außerhalb davon werden einzeln als Punkte (Ausreißer)
+      eingezeichnet.
+
+    Der Boxplot zeigt Lage (Median), Streuung (IQR, Whisker), Schiefe
+    und Ausreißer auf einen Blick und eignet sich gut zum Vergleich
+    mehrerer Verteilungen.
 
 
 ## Aufgabe 5.1 (geometrisches Mittel, Quantile)
