@@ -1,0 +1,2228 @@
+<!DOCTYPE html>
+
+<html  dir="ltr" lang="de" xml:lang="de">
+<head>
+    <title>STATISTIK-235270-9+10: Tipps zur Arbeit mit RStudio | moodle htw berlin</title>
+    <link rel="shortcut icon" href="https://moodle.htw-berlin.de/theme/image.php/boost_union/theme/1789618795/favicon" />
+    <style type="text/css">.admin_settingspage_tabs_with_tertiary .dropdown-toggle { font-size: 1.875rem !important; }
+h2:has(+ .admin_settingspage_tabs_with_tertiary) { display: none; }</style><meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="keywords" content="moodle, STATISTIK-235270-9+10: Tipps zur Arbeit mit RStudio | moodle htw berlin" />
+<link rel="stylesheet" type="text/css" href="https://moodle.htw-berlin.de/theme/yui_combo.php?rollup/3.18.1/yui-moodlesimple-min.css" /><script id="firstthemesheet" type="text/css">/** Required in order to fix style inclusion problems in IE with YUI **/</script><link rel="stylesheet" type="text/css" href="https://moodle.htw-berlin.de/theme/styles.php/boost_union/1789618795_1789618807/all" />
+<link rel="stylesheet" type="text/css" href="https://moodle.htw-berlin.de/filter/syntaxhighlighter/styles/atom-one-light.min.css" />
+<script>
+//<![CDATA[
+var M = {}; M.yui = {};
+M.pageloadstarttime = new Date();
+M.cfg = {"wwwroot":"https:\/\/moodle.htw-berlin.de","apibase":"https:\/\/moodle.htw-berlin.de\/r.php\/api","homeurl":{},"sesskey":"OIjAg3DXxC","sessiontimeout":"14400","sessiontimeoutwarning":"1200","themerev":"1789618795","slasharguments":1,"theme":"boost_union","iconsystemmodule":"core\/icon_system_fontawesome","jsrev":"1789618795","admin":"admin","svgicons":true,"usertimezone":"Europa\/Berlin","language":"de","courseId":62293,"courseContextId":2673357,"contextid":2675742,"contextInstanceId":2260647,"langrev":1791079570,"templaterev":"1789618795","siteId":1,"userId":90599};var yui1ConfigFn = function(me) {if(/-skin|reset|fonts|grids|base/.test(me.name)){me.type='css';me.path=me.path.replace(/\.js/,'.css');me.path=me.path.replace(/\/yui2-skin/,'/assets/skins/sam/yui2-skin')}};
+var yui2ConfigFn = function(me) {var parts=me.name.replace(/^moodle-/,'').split('-'),component=parts.shift(),module=parts[0],min='-min';if(/-(skin|core)$/.test(me.name)){parts.pop();me.type='css';min=''}
+if(module){var filename=parts.join('-');me.path=component+'/'+module+'/'+filename+min+'.'+me.type}else{me.path=component+'/'+component+'.'+me.type}};
+YUI_config = {"debug":false,"base":"https:\/\/moodle.htw-berlin.de\/lib\/yuilib\/3.18.1\/","comboBase":"https:\/\/moodle.htw-berlin.de\/theme\/yui_combo.php?","combine":true,"filter":null,"insertBefore":"firstthemesheet","groups":{"yui2":{"base":"https:\/\/moodle.htw-berlin.de\/lib\/yuilib\/2in3\/2.9.0\/build\/","comboBase":"https:\/\/moodle.htw-berlin.de\/theme\/yui_combo.php?","combine":true,"ext":false,"root":"2in3\/2.9.0\/build\/","patterns":{"yui2-":{"group":"yui2","configFn":yui1ConfigFn}}},"moodle":{"name":"moodle","base":"https:\/\/moodle.htw-berlin.de\/theme\/yui_combo.php?m\/1789618795\/","combine":true,"comboBase":"https:\/\/moodle.htw-berlin.de\/theme\/yui_combo.php?","ext":false,"root":"m\/1789618795\/","patterns":{"moodle-":{"group":"moodle","configFn":yui2ConfigFn}},"filter":null,"modules":{"moodle-core-dragdrop":{"requires":["base","node","io","dom","dd","event-key","event-focus","moodle-core-notification"]},"moodle-core-actionmenu":{"requires":["base","event","node-event-simulate"]},"moodle-core-chooserdialogue":{"requires":["base","panel","moodle-core-notification"]},"moodle-core-handlebars":{"condition":{"trigger":"handlebars","when":"after"}},"moodle-core-blocks":{"requires":["base","node","io","dom","dd","dd-scroll","moodle-core-dragdrop","moodle-core-notification"]},"moodle-core-event":{"requires":["event-custom"]},"moodle-core-lockscroll":{"requires":["plugin","base-build"]},"moodle-core-notification":{"requires":["moodle-core-notification-dialogue","moodle-core-notification-alert","moodle-core-notification-confirm","moodle-core-notification-exception","moodle-core-notification-ajaxexception"]},"moodle-core-notification-dialogue":{"requires":["base","node","panel","escape","event-key","dd-plugin","moodle-core-widget-focusafterclose","moodle-core-lockscroll"]},"moodle-core-notification-alert":{"requires":["moodle-core-notification-dialogue"]},"moodle-core-notification-confirm":{"requires":["moodle-core-notification-dialogue"]},"moodle-core-notification-exception":{"requires":["moodle-core-notification-dialogue"]},"moodle-core-notification-ajaxexception":{"requires":["moodle-core-notification-dialogue"]},"moodle-core-maintenancemodetimer":{"requires":["base","node"]},"moodle-core_availability-form":{"requires":["base","node","event","event-delegate","panel","moodle-core-notification-dialogue","json"]},"moodle-course-categoryexpander":{"requires":["node","event-key"]},"moodle-course-dragdrop":{"requires":["base","node","io","dom","dd","dd-scroll","moodle-core-dragdrop","moodle-core-notification","moodle-course-coursebase","moodle-course-util"]},"moodle-course-util":{"requires":["node"],"use":["moodle-course-util-base"],"submodules":{"moodle-course-util-base":{},"moodle-course-util-section":{"requires":["node","moodle-course-util-base"]},"moodle-course-util-cm":{"requires":["node","moodle-course-util-base"]}}},"moodle-course-management":{"requires":["base","node","io-base","moodle-core-notification-exception","json-parse","dd-constrain","dd-proxy","dd-drop","dd-delegate","node-event-delegate"]},"moodle-form-dateselector":{"requires":["base","node","overlay","calendar"]},"moodle-form-shortforms":{"requires":["node","base","selector-css3"]},"moodle-question-searchform":{"requires":["base","node"]},"moodle-question-chooser":{"requires":["moodle-core-chooserdialogue"]},"moodle-availability_completion-form":{"requires":["base","node","event","moodle-core_availability-form"]},"moodle-availability_date-form":{"requires":["base","node","event","io","moodle-core_availability-form"]},"moodle-availability_grade-form":{"requires":["base","node","event","moodle-core_availability-form"]},"moodle-availability_group-form":{"requires":["base","node","event","moodle-core_availability-form"]},"moodle-availability_grouping-form":{"requires":["base","node","event","moodle-core_availability-form"]},"moodle-availability_profile-form":{"requires":["base","node","event","moodle-core_availability-form"]},"moodle-availability_xp-form":{"requires":["base","node","event","handlebars","moodle-core_availability-form"]},"moodle-mod_assign-history":{"requires":["node","transition"]},"moodle-mod_attendance-groupfilter":{"requires":["base","node"]},"moodle-mod_checklist-linkselect":{"requires":["node","event-valuechange"]},"moodle-mod_customcert-rearrange":{"requires":["dd-delegate","dd-drag"]},"moodle-mod_quiz-modform":{"requires":["base","node","event"]},"moodle-mod_quiz-dragdrop":{"requires":["base","node","io","dom","dd","dd-scroll","moodle-core-dragdrop","moodle-core-notification","moodle-mod_quiz-quizbase","moodle-mod_quiz-util-base","moodle-mod_quiz-util-page","moodle-mod_quiz-util-slot","moodle-course-util"]},"moodle-mod_quiz-util":{"requires":["node","moodle-core-actionmenu"],"use":["moodle-mod_quiz-util-base"],"submodules":{"moodle-mod_quiz-util-base":{},"moodle-mod_quiz-util-slot":{"requires":["node","moodle-mod_quiz-util-base"]},"moodle-mod_quiz-util-page":{"requires":["node","moodle-mod_quiz-util-base"]}}},"moodle-mod_quiz-autosave":{"requires":["base","node","event","event-valuechange","node-event-delegate","io-form","datatype-date-format"]},"moodle-mod_quiz-questionchooser":{"requires":["moodle-core-chooserdialogue","moodle-mod_quiz-util","querystring-parse"]},"moodle-mod_quiz-toolboxes":{"requires":["base","node","event","event-key","io","moodle-mod_quiz-quizbase","moodle-mod_quiz-util-slot","moodle-core-notification-ajaxexception"]},"moodle-mod_quiz-quizbase":{"requires":["base","node"]},"moodle-mod_scheduler-studentlist":{"requires":["base","node","event","io"]},"moodle-mod_scheduler-saveseen":{"requires":["base","node","event"]},"moodle-mod_scheduler-delselected":{"requires":["base","node","event"]},"moodle-message_airnotifier-toolboxes":{"requires":["base","node","io"]},"moodle-block_xp-rulepicker":{"requires":["base","node","handlebars","moodle-core-notification-dialogue"]},"moodle-block_xp-filters":{"requires":["base","node","moodle-core-dragdrop","moodle-core-notification-confirm","moodle-block_xp-rulepicker"]},"moodle-block_xp-notification":{"requires":["base","node","handlebars","button-plugin","moodle-core-notification-dialogue"]},"moodle-editor_atto-rangy":{"requires":[]},"moodle-editor_atto-editor":{"requires":["node","transition","io","overlay","escape","event","event-simulate","event-custom","node-event-html5","node-event-simulate","yui-throttle","moodle-core-event","moodle-core-notification-dialogue","moodle-editor_atto-rangy","handlebars","timers","querystring-stringify"]},"moodle-editor_atto-plugin":{"requires":["node","base","escape","event","event-outside","handlebars","event-custom","timers","moodle-editor_atto-menu"]},"moodle-editor_atto-menu":{"requires":["moodle-core-notification-dialogue","node","event","event-custom"]},"moodle-report_eventlist-eventfilter":{"requires":["base","event","node","node-event-delegate","datatable","autocomplete","autocomplete-filters"]},"moodle-report_loglive-fetchlogs":{"requires":["base","event","node","io","node-event-delegate"]},"moodle-gradereport_history-userselector":{"requires":["escape","event-delegate","event-key","handlebars","io-base","json-parse","moodle-core-notification-dialogue"]},"moodle-qbank_editquestion-chooser":{"requires":["moodle-core-chooserdialogue"]},"moodle-tool_lp-dragdrop-reorder":{"requires":["moodle-core-dragdrop"]},"moodle-assignfeedback_editpdf-editor":{"requires":["base","event","node","io","graphics","json","event-move","event-resize","transition","querystring-stringify-simple","moodle-core-notification-dialog","moodle-core-notification-alert","moodle-core-notification-warning","moodle-core-notification-exception","moodle-core-notification-ajaxexception"]},"moodle-atto_accessibilitychecker-button":{"requires":["color-base","moodle-editor_atto-plugin"]},"moodle-atto_accessibilityhelper-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_align-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_bold-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_c4l-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_charmap-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_clear-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_collapse-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_embedquestion-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_emojipicker-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_emoticon-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_equation-button":{"requires":["moodle-editor_atto-plugin","moodle-core-event","io","event-valuechange","tabview","array-extras"]},"moodle-atto_fullscreen-button":{"requires":["event-resize","moodle-editor_atto-plugin"]},"moodle-atto_h5p-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_html-codemirror":{"requires":["moodle-atto_html-codemirror-skin"]},"moodle-atto_html-beautify":{},"moodle-atto_html-button":{"requires":["promise","moodle-editor_atto-plugin","moodle-atto_html-beautify","moodle-atto_html-codemirror","event-valuechange"]},"moodle-atto_image-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_indent-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_italic-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_link-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_managefiles-usedfiles":{"requires":["node","escape"]},"moodle-atto_managefiles-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_media-button":{"requires":["moodle-editor_atto-plugin","moodle-form-shortforms"]},"moodle-atto_noautolink-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_orderedlist-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_recordrtc-recording":{"requires":["moodle-atto_recordrtc-button"]},"moodle-atto_recordrtc-button":{"requires":["moodle-editor_atto-plugin","moodle-atto_recordrtc-recording"]},"moodle-atto_rtl-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_strike-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_subscript-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_superscript-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_table-button":{"requires":["moodle-editor_atto-plugin","moodle-editor_atto-menu","event","event-valuechange"]},"moodle-atto_title-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_underline-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_undo-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_unorderedlist-button":{"requires":["moodle-editor_atto-plugin"]},"moodle-atto_vimp-button":{"requires":["moodle-editor_atto-plugin"]}}},"gallery":{"name":"gallery","base":"https:\/\/moodle.htw-berlin.de\/lib\/yuilib\/gallery\/","combine":true,"comboBase":"https:\/\/moodle.htw-berlin.de\/theme\/yui_combo.php?","ext":false,"root":"gallery\/1789618795\/","patterns":{"gallery-":{"group":"gallery"}}}},"modules":{"core_filepicker":{"name":"core_filepicker","fullpath":"https:\/\/moodle.htw-berlin.de\/lib\/javascript.php\/1789618795\/repository\/filepicker.js","requires":["base","node","node-event-simulate","json","async-queue","io-base","io-upload-iframe","io-form","yui2-treeview","panel","cookie","datatable","datatable-sort","resize-plugin","dd-plugin","escape","moodle-core_filepicker","moodle-core-notification-dialogue"]},"core_comment":{"name":"core_comment","fullpath":"https:\/\/moodle.htw-berlin.de\/lib\/javascript.php\/1789618795\/comment\/comment.js","requires":["base","io-base","node","json","yui2-animation","overlay","escape"]}},"logInclude":[],"logExclude":[],"logLevel":null};
+M.yui.loader = {modules: {}};
+
+//]]>
+</script>
+
+<meta name="robots" content="noindex" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+</head>
+<body  id="page-mod-page-view" class="format-topics limitedwidth  path-mod path-mod-page safari dir-ltr lang-de yui-skin-sam yui3-skin-sam moodle-htw-berlin-de pagelayout-incourse course-62293 context-2675742 cmid-2260647 cm-type-page category-5513 theme uses-drawers nocourseindexcmicons theme_boost-union-footerbuttondesktop">
+<div class="toast-wrapper mx-auto py-0 fixed-top" role="status" aria-live="polite"></div>
+<div id="page-wrapper" class="d-print-block">
+
+    <div>
+    <a class="sr-only sr-only-focusable" href="#maincontent">Zum Hauptinhalt</a>
+</div><script src="https://moodle.htw-berlin.de/lib/javascript.php/1789618795/lib/polyfills/polyfill.js"></script>
+<script src="https://moodle.htw-berlin.de/theme/yui_combo.php?rollup/3.18.1/yui-moodlesimple-min.js"></script><script src="https://moodle.htw-berlin.de/lib/javascript.php/1789618795/lib/javascript-static.js"></script>
+<script>
+//<![CDATA[
+document.body.className += ' jsenabled';
+//]]>
+</script>
+
+
+
+    
+    <nav class="navbar fixed-top navbar-light bg-white navbar-expand " aria-label="Site-Navigation">
+        <div class="container-fluid">
+            <button class="navbar-toggler aabtn d-block d-md-none px-1 my-1 border-0" data-toggler="drawers" data-action="toggle" data-target="theme_boost-drawers-primary">
+                <span class="navbar-toggler-icon"></span>
+                <span class="sr-only">Website-Übersicht</span>
+            </button>
+    
+            <a href="https://moodle.htw-berlin.de/my/" class="navbar-brand align-items-center m-0 me-4 p-0 aabtn   d-none d-md-flex  ">
+    
+                    <img src="https://moodle.htw-berlin.de/pluginfile.php/1/theme_boost_union/logocompact/300x300/1789618795/Logo_HTW_Moodle.png" class="logo me-1" alt="moodle htw berlin">
+            </a>
+                <div class="primary-navigation">
+                    <nav class="moremenu navigation">
+                        <ul id="moremenu-6ac35b152a484-navbar-nav" role="menubar" class="nav more-nav navbar-nav">
+                                        <li data-key="myhome" class="nav-item " role="none" data-forceintomoremenu="false">
+                                                    <a role="menuitem" class="nav-link   "
+                                                        href="https://moodle.htw-berlin.de/my/"
+                                                        
+                                                        
+                                                        
+                                                        data-disableactive="true"
+                                                        tabindex="-1"
+                                                    >
+                                                        Dashboard
+                                                    </a>
+                                        </li>
+                                        <li class="dropdown theme-boost-union-smartmenu-carousel nav-item  " role="none" data-forceintomoremenu="false">
+                                            <a class="dropdown-toggle nav-link  " id="drop-down-6ac35b152a0a2" role="menuitem" data-toggle="dropdown"
+                                                aria-haspopup="true" aria-expanded="false" href="#" aria-controls="drop-down-menu-6ac35b152a0a2"
+                                                
+                                                
+                                                
+                                                tabindex="-1"
+                                            >
+                                                Support
+                                            </a>
+                                            <div class="dropdown-menu boost-union-moremenu" role="menu" id="drop-down-menu-6ac35b152a0a2" aria-labelledby="drop-down-6ac35b152a0a2">
+                                                <div data-toggle="smartmenu-carousel" class="carousel slide" data-touch="false" data-interval="false" data-keyboard="false">
+                                                    <div class="carousel-inner">
+                                                                    <a class="dropdown-item " role="menuitem" href="https://moodle.htw-berlin.de/course/view.php?id=12281" 
+                                                                        
+                                                                        
+                                                                        data-disableactive="true"
+                                                                        tabindex="-1"
+                                                                    >
+                                                                         Supportanfragen und Material
+                                                                    </a>
+                                                                    <a class="dropdown-item " role="menuitem" href="https://moodle.htw-berlin.de/course/view.php?id=12205" 
+                                                                        
+                                                                        
+                                                                        data-disableactive="true"
+                                                                        tabindex="-1"
+                                                                    >
+                                                                         Datenschutz und Privatsphäre
+                                                                    </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="dropdown theme-boost-union-smartmenu-carousel nav-item  " role="none" data-forceintomoremenu="false">
+                                            <a class="dropdown-toggle nav-link  " id="drop-down-6ac35b152a373" role="menuitem" data-toggle="dropdown"
+                                                aria-haspopup="true" aria-expanded="false" href="#" aria-controls="drop-down-menu-6ac35b152a373"
+                                                
+                                                
+                                                
+                                                tabindex="-1"
+                                            >
+                                                Weiterbildungen
+                                            </a>
+                                            <div class="dropdown-menu boost-union-moremenu" role="menu" id="drop-down-menu-6ac35b152a373" aria-labelledby="drop-down-6ac35b152a373">
+                                                <div data-toggle="smartmenu-carousel" class="carousel slide" data-touch="false" data-interval="false" data-keyboard="false">
+                                                    <div class="carousel-inner">
+                                                                    <a class="dropdown-item " role="menuitem" href="https://moodle.htw-berlin.de/course/index.php?categoryid=5476" 
+                                                                        
+                                                                        
+                                                                        data-disableactive="true"
+                                                                        tabindex="-1"
+                                                                    >
+                                                                         Angebote für Lehrende
+                                                                    </a>
+                                                                    <a class="dropdown-item " role="menuitem" href="https://moodle.htw-berlin.de/course/index.php?categoryid=5432" 
+                                                                        
+                                                                        
+                                                                        data-disableactive="true"
+                                                                        tabindex="-1"
+                                                                    >
+                                                                         Angebote im Bereich Personalentwicklung
+                                                                    </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                        <li class="dropdown theme-boost-union-smartmenu-carousel nav-item  " role="none" data-forceintomoremenu="false">
+                                            <a class="dropdown-toggle nav-link  " id="drop-down-6ac35b152a392" role="menuitem" data-toggle="dropdown"
+                                                aria-haspopup="true" aria-expanded="false" href="#" aria-controls="drop-down-menu-6ac35b152a392"
+                                                
+                                                
+                                                
+                                                tabindex="-1"
+                                            >
+                                                Links
+                                            </a>
+                                            <div class="dropdown-menu boost-union-moremenu" role="menu" id="drop-down-menu-6ac35b152a392" aria-labelledby="drop-down-6ac35b152a392">
+                                                <div data-toggle="smartmenu-carousel" class="carousel slide" data-touch="false" data-interval="false" data-keyboard="false">
+                                                    <div class="carousel-inner">
+                                                                    <a class="dropdown-item " role="menuitem" href="https://lsf.htw-berlin.de" 
+                                                                        
+                                                                        
+                                                                        data-disableactive="true"
+                                                                        tabindex="-1"
+                                                                    >
+                                                                         LSF
+                                                                    </a>
+                                                                    <a class="dropdown-item " role="menuitem" href="https://bibliothek.htw-berlin.de" 
+                                                                        
+                                                                        
+                                                                        data-disableactive="true"
+                                                                        tabindex="-1"
+                                                                    >
+                                                                         Bibliothek
+                                                                    </a>
+                                                                    <a class="dropdown-item " role="menuitem" href="https://mediathek.htw-berlin.de" 
+                                                                        
+                                                                        
+                                                                        data-disableactive="true"
+                                                                        tabindex="-1"
+                                                                    >
+                                                                         Mediathek
+                                                                    </a>
+                                                                    <a class="dropdown-item " role="menuitem" href="https://join.rz.htw-berlin.de" 
+                                                                        
+                                                                        
+                                                                        data-disableactive="true"
+                                                                        tabindex="-1"
+                                                                    >
+                                                                         Konferenztool
+                                                                    </a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </li>
+                                <li role="none" class="nav-item dropdown dropdownmoremenu d-none" data-region="morebutton">
+                                    <a class="dropdown-toggle nav-link " href="#" id="moremenu-dropdown-6ac35b152a484" role="menuitem" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" tabindex="-1">
+                                        Mehr
+                                    </a>
+                                    <ul class="dropdown-menu dropdown-menu-left" data-region="moredropdown" aria-labelledby="moremenu-dropdown-6ac35b152a484" role="menu">
+                                    </ul>
+                                </li>
+                        </ul>
+                    </nav>
+                </div>
+    
+    
+            <div id="usernavigation" class="navbar-nav ms-auto h-100">
+                <div class="popover-region collapsed popover-region-notifications"
+    id="nav-notification-popover-container" data-userid="90599"
+    data-region="popover-region">
+    <div class="popover-region-toggle nav-link icon-no-margin"
+        data-region="popover-region-toggle"
+        aria-controls="popover-region-container-6ac35b152d4286ac35b152387b6"
+        aria-haspopup="true"
+        aria-expanded="false"
+        aria-label=" Mitteilungsfenster ohne neue Systemnachrichten anzeigen   "
+        title=" Mitteilungsfenster ohne neue Systemnachrichten anzeigen   "
+        tabindex="0"
+        role="button">
+                <i class="icon fa fa-bell fa-fw " aria-hidden="true" ></i>
+        <div
+            class="count-container hidden"
+            data-region="count-container"
+            aria-hidden=true
+        >
+            0
+        </div>
+
+    </div>
+    <div         aria-modal="true"
+        tabindex="-1"
+
+        id="popover-region-container-6ac35b152d4286ac35b152387b6"
+        class="popover-region-container"
+        data-region="popover-region-container"
+        aria-hidden="true"
+        aria-label="Mitteilungsfenster"
+        role="dialog">
+        <div class="popover-region-header-container">
+            <h3 class="popover-region-header-text" data-region="popover-region-header-text">Systemnachrichten</h3>
+            <div class="popover-region-header-actions" data-region="popover-region-header-actions">        <a class="mark-all-read-button btn btn-sm btn-link m-0 py-0 icon-no-margin"
+           href="#"
+           title="Alle als gelesen markieren"
+           data-action="mark-all-read"
+           role="button"
+           aria-label="Alle als gelesen markieren">
+            <span class="normal-icon"><i class="icon fa fa-check fa-fw " aria-hidden="true" ></i></span>
+            <span class="loading-icon icon-no-margin"><i class="icon fa fa-spinner fa-spin fa-fw "  title="Laden ..." role="img" aria-label="Laden ..."></i></span>
+            <span aria-live="polite" class="sr-only" data-region="notification-read-feedback"></span>
+        </a>
+            <a href="https://moodle.htw-berlin.de/message/notificationpreferences.php"
+               title="Systemnachrichten"
+               aria-label="Systemnachrichten"
+               class="btn btn-sm btn-link m-0 py-0 icon-no-margin" >
+                <i class="icon fa fa-gear fa-fw " aria-hidden="true" ></i></a>
+        <button type="button" class="btn btn-sm btn-link m-0 py-0 icon-no-margin" aria-label="Schließen" title="Schließen" data-action="close-notification-popover">
+            <i class="icon fa fa-xmark fa-fw " aria-hidden="true" ></i>
+        </button>
+</div>
+        </div>
+        <div class="popover-region-content-container" data-region="popover-region-content-container">
+            <div class="popover-region-content" data-region="popover-region-content">
+                        <div class="all-notifications"
+            data-region="all-notifications"
+            role="log"
+            aria-busy="false"
+            aria-atomic="false"
+            aria-relevant="additions"></div>
+        <div class="empty-message" tabindex="0" data-region="empty-message">Keine Systemnachrichten</div>
+
+            </div>
+            <span class="loading-icon icon-no-margin"><i class="icon fa fa-spinner fa-spin fa-fw "  title="Laden ..." role="img" aria-label="Laden ..."></i></span>
+        </div>
+                <a class="see-all-link"
+                    href="https://moodle.htw-berlin.de/message/output/popup/notifications.php">
+                    <div class="popover-region-footer-container">
+                        <div class="popover-region-seeall-text">Alle anzeigen</div>
+                    </div>
+                </a>
+    </div>
+</div><div class="popover-region collapsed" data-region="popover-region-messages">
+    <a
+        id="message-drawer-toggle-6ac35b152e7526ac35b152387b7"
+        class="nav-link popover-region-toggle position-relative icon-no-margin"
+        href="#"
+        aria-label="Mitteilungen"
+        title="Mitteilungen"
+        role="button"
+        aria-expanded="false"
+        aria-describedby="unread-messages-count-6ac35b152e7526ac35b152387b7"
+    >
+        <i class="icon fa fa-message fa-fw " aria-hidden="true" ></i>
+        <div
+            class="count-container hidden"
+            data-region="count-container"
+        >
+            <span aria-hidden="true">0</span>
+            <span class="sr-only" id="unread-messages-count-6ac35b152e7526ac35b152387b7">0 ungelesene Diskussionen</span>
+        </div>
+    </a>
+    <span class="sr-only sr-only-focusable" data-region="jumpto" tabindex="-1"></span></div>
+                <div class="d-flex align-items-stretch usermenu-container" data-region="usermenu">
+                        <div class="usermenu">
+                                <div class="dropdown show">
+                                    <a href="#" role="button" id="user-menu-toggle" data-toggle="dropdown" aria-label="Nutzermenü"
+                                       aria-haspopup="true" aria-controls="user-action-menu" class="btn dropdown-toggle">
+                                        <span class="userbutton">
+                                            <span class="avatars">
+                                                    <span class="avatar current">
+                                                        <span class="userinitials size-35" title="Karimi, Anahita" aria-label="Karimi, Anahita" role="img">A</span>
+                                                    </span>
+                                            </span>
+                                        </span>
+                                    </a>
+                                    <div id="user-action-menu" class="dropdown-menu dropdown-menu-right">
+                                        <div id="usermenu-carousel" class="carousel slide" data-touch="false" data-interval="false" data-keyboard="false">
+                                            <div class="carousel-inner">
+                                                <div id="carousel-item-main" class="carousel-item active" role="menu" tabindex="-1" aria-label="Nutzer/in">
+                                                            <a href="https://moodle.htw-berlin.de/user/profile.php" class="dropdown-item " role="menuitem" tabindex="-1"  >
+                                                                    
+                                                                Profil
+                                                            </a>
+                                                        
+                                                            <a href="https://moodle.htw-berlin.de/grade/report/overview/index.php" class="dropdown-item " role="menuitem" tabindex="-1"  >
+                                                                    
+                                                                Bewertungen
+                                                            </a>
+                                                        
+                                                            <a href="https://moodle.htw-berlin.de/calendar/view.php?view=month" class="dropdown-item " role="menuitem" tabindex="-1"  >
+                                                                    
+                                                                Kalender
+                                                            </a>
+                                                        
+                                                            <a href="https://moodle.htw-berlin.de/message/index.php" class="dropdown-item " role="menuitem" tabindex="-1"  >
+                                                                    
+                                                                Mitteilungen
+                                                            </a>
+                                                        
+                                                            <a href="https://moodle.htw-berlin.de/reportbuilder/index.php" class="dropdown-item " role="menuitem" tabindex="-1"  >
+                                                                    
+                                                                Berichte
+                                                            </a>
+                                                        
+                                                        <div class="dropdown-divider"></div>
+                                                            <a href="https://moodle.htw-berlin.de/user/preferences.php" class="dropdown-item " role="menuitem" tabindex="-1"  >
+                                                                    
+                                                                Einstellungen
+                                                            </a>
+                                                        
+                                                            <a href="#" class="carousel-navigation-link dropdown-item " role="menuitem" tabindex="-1" data-carousel-target-id="carousel-item-6ac35b152a742" 
+                                                            >
+                                                                    
+                                                                Sprache
+                                                            </a>
+                                                        <div class="dropdown-divider"></div>
+                                                            <a href="https://moodle.htw-berlin.de/login/logout.php?sesskey=OIjAg3DXxC" class="dropdown-item " role="menuitem" tabindex="-1"  >
+                                                                    
+                                                                Abmelden
+                                                            </a>
+                                                        
+                                                </div>
+                                                    <div id="carousel-item-6ac35b152a742" role="menu" class="carousel-item submenu" tabindex="-1" aria-label="Sprachwahl">
+                                                        <div class="d-flex flex-column h-100">
+                                                            <div class="header">
+                                                                <button type="button" class="btn btn-icon carousel-navigation-link text-decoration-none text-body" data-carousel-target-id="carousel-item-main" aria-label="Zurück zum Nutzermenü">
+                                                                    <span class="dir-rtl-hide"><img class="icon " alt="" aria-hidden="true" src="https://moodle.htw-berlin.de/theme/image.php/boost_union/core/1789618795/i/arrow-left" /></span>
+                                                                    <span class="dir-ltr-hide"><img class="icon " alt="" aria-hidden="true" src="https://moodle.htw-berlin.de/theme/image.php/boost_union/core/1789618795/i/arrow-right" /></span>
+                                                                </button>
+                                                                <span class="ps-2" id="carousel-item-title-6ac35b152a742">Sprachwahl</span>
+                                                            </div>
+                                                            <div class="dropdown-divider"></div>
+                                                            <div class="items h-100 overflow-auto" role="menu" aria-labelledby="carousel-item-title-6ac35b152a742">
+                                                                
+                                                                            <a href="#" class="dropdown-item  ps-5" role="menuitem" tabindex="-1" aria-current="true"
+                                                                                
+                                                                                >
+                                                                                Deutsch ‎(de)‎
+                                                                            </a>
+                                                                        
+                                                                
+                                                                            <a href="https://moodle.htw-berlin.de/mod/page/view.php?id=2260647&amp;lang=en" class="dropdown-item  ps-5" role="menuitem" tabindex="-1" 
+                                                                                lang="en"   
+                                                                                >
+                                                                                English ‎(en)‎
+                                                                            </a>
+                                                                        
+                                                                
+                                                                            <a href="https://moodle.htw-berlin.de/mod/page/view.php?id=2260647&amp;lang=es" class="dropdown-item  ps-5" role="menuitem" tabindex="-1" 
+                                                                                lang="es"   
+                                                                                >
+                                                                                Español - Internacional ‎(es)‎
+                                                                            </a>
+                                                                        
+                                                                
+                                                                            <a href="https://moodle.htw-berlin.de/mod/page/view.php?id=2260647&amp;lang=fr" class="dropdown-item  ps-5" role="menuitem" tabindex="-1" 
+                                                                                lang="fr"   
+                                                                                >
+                                                                                Français ‎(fr)‎
+                                                                            </a>
+                                                                        
+                                                                
+                                                                            <a href="https://moodle.htw-berlin.de/mod/page/view.php?id=2260647&amp;lang=ru" class="dropdown-item  ps-5" role="menuitem" tabindex="-1" 
+                                                                                lang="ru"   
+                                                                                >
+                                                                                Русский ‎(ru)‎
+                                                                            </a>
+                                                                        
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                        </div>
+                </div>
+                
+    
+            </div>
+        </div>
+    </nav>
+    
+<div  class="drawer   drawer-left  drawer-primary d-print-none not-initialized" data-region="fixed-drawer" id="theme_boost-drawers-primary" data-preference="" data-state="show-drawer-primary" data-forceopen="0" data-close-on-resize="1">
+    <div class="drawerheader">
+        <button
+            class="btn drawertoggle icon-no-margin hidden"
+            data-toggler="drawers"
+            data-action="closedrawer"
+            data-target="theme_boost-drawers-primary"
+            data-toggle="tooltip"
+            data-placement="right"
+            title="Leiste schließen"
+            aria-label="Leiste schließen"
+        >
+            <i class="icon fa fa-xmark fa-fw " aria-hidden="true" ></i>
+        </button>
+                <a
+            href="https://moodle.htw-berlin.de/my/"
+            title="moodle htw berlin"
+            data-region="site-home-link"
+            class="aabtn text-reset d-flex align-items-center h-100"
+        >
+                <img src="https://moodle.htw-berlin.de/pluginfile.php/1/theme_boost_union/logocompact/300x300/1789618795/Logo_HTW_Moodle.png" class="logo" alt="moodle htw berlin">
+        </a>
+
+        <div class="drawerheadercontent hidden">
+            
+        </div>
+    </div>
+    <div class="drawercontent drag-container" data-usertour="scroller">
+                <div class="list-group">
+                <a href="https://moodle.htw-berlin.de/my/"  class=" list-group-item list-group-item-action  "  >
+                    Dashboard
+                </a>
+                    
+                    <a id="drop-down-1" href="#" class=" list-group-item list-group-item-action icons-collapse-expand collapsed d-flex" title="" data-toggle="collapse" data-target="#drop-down-menu-1" aria-expanded="false" aria-controls="drop-down-menu-1">
+                        Support
+                        <span class="ms-auto expanded-icon icon-no-margin mx-2">
+                            <i class="icon fa fa-chevron-down fa-fw " aria-hidden="true" ></i>
+                            <span class="sr-only">
+                                Einklappen
+                            </span>
+                        </span>
+                        <span class="ms-auto collapsed-icon icon-no-margin mx-2">
+                            <i class="icon fa fa-chevron-right fa-fw " aria-hidden="true" ></i>
+                            <span class="sr-only">
+                                Ausklappen
+                            </span>
+                        </span>
+                    </a>
+                    <div class="collapse list-group-item p-0 border-0" role="menu" id="drop-down-menu-1" aria-labelledby="drop-down-1">
+                            <!-- Third level child support - Custom -->
+                    
+                                    <a href="https://moodle.htw-berlin.de/course/view.php?id=12281"  class="ps-5 bg-light list-group-item list-group-item-action " >
+                    
+                                         Supportanfragen und Material
+                                    </a>
+                    
+                            <!-- Third level child support - Custom -->
+                    
+                                    <a href="https://moodle.htw-berlin.de/course/view.php?id=12205"  class="ps-5 bg-light list-group-item list-group-item-action " >
+                    
+                                         Datenschutz und Privatsphäre
+                                    </a>
+                    
+                    </div>
+                    
+                    <a id="drop-down-4" href="#" class=" list-group-item list-group-item-action icons-collapse-expand collapsed d-flex" title="" data-toggle="collapse" data-target="#drop-down-menu-4" aria-expanded="false" aria-controls="drop-down-menu-4">
+                        Weiterbildungen
+                        <span class="ms-auto expanded-icon icon-no-margin mx-2">
+                            <i class="icon fa fa-chevron-down fa-fw " aria-hidden="true" ></i>
+                            <span class="sr-only">
+                                Einklappen
+                            </span>
+                        </span>
+                        <span class="ms-auto collapsed-icon icon-no-margin mx-2">
+                            <i class="icon fa fa-chevron-right fa-fw " aria-hidden="true" ></i>
+                            <span class="sr-only">
+                                Ausklappen
+                            </span>
+                        </span>
+                    </a>
+                    <div class="collapse list-group-item p-0 border-0" role="menu" id="drop-down-menu-4" aria-labelledby="drop-down-4">
+                            <!-- Third level child support - Custom -->
+                    
+                                    <a href="https://moodle.htw-berlin.de/course/index.php?categoryid=5476"  class="ps-5 bg-light list-group-item list-group-item-action " >
+                    
+                                         Angebote für Lehrende
+                                    </a>
+                    
+                            <!-- Third level child support - Custom -->
+                    
+                                    <a href="https://moodle.htw-berlin.de/course/index.php?categoryid=5432"  class="ps-5 bg-light list-group-item list-group-item-action " >
+                    
+                                         Angebote im Bereich Personalentwicklung
+                                    </a>
+                    
+                    </div>
+                    
+                    <a id="drop-down-7" href="#" class=" list-group-item list-group-item-action icons-collapse-expand collapsed d-flex" title="" data-toggle="collapse" data-target="#drop-down-menu-7" aria-expanded="false" aria-controls="drop-down-menu-7">
+                        Links
+                        <span class="ms-auto expanded-icon icon-no-margin mx-2">
+                            <i class="icon fa fa-chevron-down fa-fw " aria-hidden="true" ></i>
+                            <span class="sr-only">
+                                Einklappen
+                            </span>
+                        </span>
+                        <span class="ms-auto collapsed-icon icon-no-margin mx-2">
+                            <i class="icon fa fa-chevron-right fa-fw " aria-hidden="true" ></i>
+                            <span class="sr-only">
+                                Ausklappen
+                            </span>
+                        </span>
+                    </a>
+                    <div class="collapse list-group-item p-0 border-0" role="menu" id="drop-down-menu-7" aria-labelledby="drop-down-7">
+                            <!-- Third level child support - Custom -->
+                    
+                                    <a href="https://lsf.htw-berlin.de"  class="ps-5 bg-light list-group-item list-group-item-action " >
+                    
+                                         LSF
+                                    </a>
+                    
+                            <!-- Third level child support - Custom -->
+                    
+                                    <a href="https://bibliothek.htw-berlin.de"  class="ps-5 bg-light list-group-item list-group-item-action " >
+                    
+                                         Bibliothek
+                                    </a>
+                    
+                            <!-- Third level child support - Custom -->
+                    
+                                    <a href="https://mediathek.htw-berlin.de"  class="ps-5 bg-light list-group-item list-group-item-action " >
+                    
+                                         Mediathek
+                                    </a>
+                    
+                            <!-- Third level child support - Custom -->
+                    
+                                    <a href="https://join.rz.htw-berlin.de"  class="ps-5 bg-light list-group-item list-group-item-action " >
+                    
+                                         Konferenztool
+                                    </a>
+                    
+                    </div>
+        </div>
+
+    </div>
+</div>
+        <div  class="drawer drawer-left  d-print-none not-initialized" data-region="fixed-drawer" id="theme_boost-drawers-courseindex" data-preference="drawer-open-index" data-state="show-drawer-left" data-forceopen="0" data-close-on-resize="0">
+    <div class="drawerheader">
+        <button
+            class="btn drawertoggle icon-no-margin hidden"
+            data-toggler="drawers"
+            data-action="closedrawer"
+            data-target="theme_boost-drawers-courseindex"
+            data-toggle="tooltip"
+            data-placement="right"
+            title="Kursindex schließen"
+            aria-label="Kursindex schließen"
+        >
+            <i class="icon fa fa-xmark fa-fw " aria-hidden="true" ></i>
+        </button>
+        
+        <div class="drawerheadercontent hidden">
+                            <div id="courseindexdrawercontrols" class="dropdown">
+                    <button class="btn btn-icon rounded-circle mx-2"
+                            id="courseindexdrawercontrolsmenubutton"
+                            type="button"
+                            data-toggle="dropdown"
+                            aria-haspopup="true"
+                            aria-expanded="false"
+                            title="Optionen für den Kursindex"
+                            aria-label="Optionen für den Kursindex"
+                            aria-controls="courseindexdrawercontrolsmenu">
+                        <i class="icon fa fa-ellipsis-v fa-fw m-0" aria-hidden="true"></i>
+                    </button>
+                    <div class="dropdown-menu dropdown-menu-right" role="menu" id="courseindexdrawercontrolsmenu" aria-labelledby="courseindexdrawercontrolsmenubutton">
+                        <a class="dropdown-item"
+                           href="#"
+                           data-action="expandallcourseindexsections"
+                           role="menuitem"
+                        >
+                            <i class="icon fa fa-angles-down fa-fw " aria-hidden="true" ></i>
+                            Alles aufklappen
+                        </a>
+                        <a class="dropdown-item"
+                           href="#"
+                           data-action="collapseallcourseindexsections"
+                           role="menuitem"
+                        >
+                            <span class="dir-rtl-hide"><i class="icon fa fa-angles-right fa-fw " aria-hidden="true" ></i></span>
+                            <span class="dir-ltr-hide"><i class="icon fa fa-angles-left fa-fw " aria-hidden="true" ></i></span>
+                            Alles einklappen
+                        </a>
+                    </div>
+                </div>
+
+        </div>
+    </div>
+    <div class="drawercontent drag-container" data-usertour="scroller">
+                        <nav id="courseindex" class="courseindex">
+    <div id="courseindex-content">
+        <div data-region="loading-placeholder-content" aria-hidden="true" id="course-index-placeholder">
+            <ul class="placeholders list-unstyled px-5">
+                <li>
+                    <div class="col-md-6 p-0 d-flex align-items-center">
+                        <div class="bg-pulse-grey rounded-circle me-2"></div>
+                        <div class="bg-pulse-grey w-100"></div>
+                    </div>
+                </li>
+                <li>
+                    <div class="col-md-6 p-0 d-flex align-items-center">
+                        <div class="bg-pulse-grey rounded-circle me-2"></div>
+                        <div class="bg-pulse-grey w-100"></div>
+                    </div>
+                </li>
+                <li>
+                    <div class="col-md-6 p-0 d-flex align-items-center">
+                        <div class="bg-pulse-grey rounded-circle me-2"></div>
+                        <div class="bg-pulse-grey w-100"></div>
+                    </div>
+                </li>
+                <li>
+                    <div class="col-md-6 p-0 d-flex align-items-center">
+                        <div class="bg-pulse-grey rounded-circle me-2"></div>
+                        <div class="bg-pulse-grey w-100"></div>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+    </div>
+</div>
+
+
+    <div id="page" data-region="mainpage" data-usertour="scroller" class="drawers   drag-container">
+
+
+
+        <div class="main-inner-wrapper main-inner-outside-none main-inner-outside-nextmaincontent">
+
+        <div id="topofscroll" class="main-inner">
+            <div class="drawer-toggles d-flex">
+                    <div class="drawer-toggler drawer-left-toggle open-nav d-print-none">
+                        <button
+                            class="btn icon-no-margin"
+                            data-toggler="drawers"
+                            data-action="toggle"
+                            data-target="theme_boost-drawers-courseindex"
+                            data-toggle="tooltip"
+                            data-placement="right"
+                            title="Kursindex öffnen"
+                        >
+                            <span class="sr-only">Kursindex öffnen</span>
+                            <i class="icon fa fa-list fa-fw " aria-hidden="true" ></i>
+                        </button>
+                    </div>
+            </div>
+            
+            
+            <header id="page-header" class="header-maxwidth d-print-none">
+    <div class="w-100">
+        <div class="d-flex flex-wrap">
+            <div id="page-navbar">
+                <nav aria-label="Navigationsleiste">
+    <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="https://moodle.htw-berlin.de/course/view.php?id=62293"
+                        
+                        title="B3.5 Statistik (SL) - 1. Zug + 2. Zug - WiSe2026/27"
+                        
+                    >
+                        STATISTIK-235270-9+10
+                    </a>
+                </li>
+        
+                <li class="breadcrumb-item">
+                    <a href="https://moodle.htw-berlin.de/course/section.php?id=599411"
+                        
+                        
+                        data-section-name-for="599411" 
+                    >
+                        R, RStudio und Kurs "Introduction to R"
+                    </a>
+                </li>
+        
+                <li class="breadcrumb-item">
+                    <span >
+                        Tipps zur Arbeit mit RStudio
+                    </span>
+                </li>
+        </ol>
+</nav>
+            </div>
+            <div class="ms-auto d-flex">
+                
+            </div>
+            <div id="course-header">
+                
+            </div>
+        </div>
+                <div class="d-flex align-items-center">
+                    <div class="me-auto d-flex flex-column">
+                        <div>
+                            <div class="page-context-header d-flex flex-wrap align-items-center mb-2">
+    <div class="page-header-image">
+        <div class="content activityiconcontainer icon-size-6 modicon_page"><img class="icon activityicon " aria-hidden="true" src="https://moodle.htw-berlin.de/theme/image.php/boost_union/page/1789618795/monologo?filtericon=1" alt="" /></div>
+    </div>
+    <div class="page-header-headings">
+        <h1 class="h2 mb-0">Tipps zur Arbeit mit RStudio</h1>
+    </div>
+</div>
+                        </div>
+                        <div>
+                        </div>
+                    </div>
+                    <div class="header-actions-container ms-auto" data-region="header-actions-container">
+                    </div>
+                </div>
+    </div>
+</header>
+            <span class="notifications" id="user-notifications"></span>
+            <div id="page-content" class="pb-3 d-print-block">
+                <div id="region-main-box">
+                    <div id="region-main">
+
+                        
+                            <span id="maincontent" tabindex="-1"></span>
+                            <div class="activity-header" data-for="page-activity-header">
+                                    <span class="sr-only">Abschlussbedingungen</span>
+                                    <div data-region="activity-information" data-activityname="Tipps zur Arbeit mit RStudio" class="activity-information">
+
+
+</div>
+</div>
+                        
+                        <div role="main"><div class="box py-3 generalbox center clearfix"><div class="no-overflow"><h3>Umlaute kaputt</h3>
+<p>Es kann vorkommen, dass eine Datei mit einer falschen Zeichenkodierung geöffnet wird. Dann sind z.B. die Umlaute und einige Sonderzeichen kaputt. Das kann Problem kann leicht behoben werden, indem man die Datei <strong>vor dem weiteren Bearbeiten</strong> mit UTF-8-Kodierung neu öffnet:</p>
+<p></p>
+<p><img class="img-fluid" src="https://moodle.htw-berlin.de/pluginfile.php/2675742/mod_page/content/10/Umlaute_in_RStudio.gif" alt="Umlaute in RStudio" width="800" height="624"></p>
+<p></p>
+<h3> </h3>
+<h3>HTML aus RMarkdown-Dokument erstellen</h3>
+<p>Aus RMarkdown-Dokumente können mit <strong>Knit</strong> zu HTML-Dokumente erzeugt werden. HTML-Dokumente werden uns in dieser Veranstaltung ausreichen. Für interessierte: Es können auch PDF-Dokumente erzeugt werden. Dafür muss jedoch LaTeX installiert sein.</p>
+<p></p>
+<p><img class="img-fluid" src="https://moodle.htw-berlin.de/pluginfile.php/2675742/mod_page/content/10/RMarkdown_zu_HTML.gif" alt="RMarkdown zu HTML" width="800" height="578"></p>
+<p></p>
+<h3> </h3>
+<h3>Neue R-Umgebung in RMarkdown-Dokument hinzufügen</h3>
+<p>In einem RMarkdown-Dokument kann man leicht eine neue R-Umgebung hinzufügen. Entweder mit dem Shortcut <strong>Strg + Alt + i</strong> (bzw. mit dem Pedant bei nicht-deutschen Tastaturen oder Macs) oder über die Oberfläche von RStudio, wie folgend demonstiert:</p>
+<p></p>
+<p><img class="img-fluid" src="https://moodle.htw-berlin.de/pluginfile.php/2675742/mod_page/content/10/R-Umgebung_hinzufuegen.gif" alt="R-Umgebung hinzufügen" width="800" height="578"></p>
+<p></p>
+<h3>RStudio auf Laborrechnern in TA A 013</h3>
+<p><span style="font-size: 0.9375rem;">Die Laborrechner wurden zum Wintersemester 2026/27 auf Linux umgestellt, auf denen Sie aber lokale Versionen von RStudio finden. Wenn Sie z.B. von RStudio aus Dateien im voreingestellten Homeverzeichnis speichern, sind diese beim nächsten Einloggen noch verhanden. Alternativ ist auch Ihr studentisches Netzlaufwerk verfügbar, auf das Sie von allen Plattformen zugreifen können. </span></p></div></div><div class="modified">Zuletzt geändert: Freitag, 2. Oktober 2026, 13:25</div></div>
+                        
+                        
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        </div>
+
+
+
+        
+        <footer id="page-footer" class="footer-popover bg-white">
+            <div data-region="footer-container-popover">
+                    <button class="btn btn-icon bg-secondary icon-no-margin btn-footer-popover" data-action="footer-popover" aria-label="Fußbereich anzeigen">
+                        <i class="icon fa fa-question fa-fw " aria-hidden="true" ></i>
+                    </button>
+                <div id="boost-union-footer-buttons">
+                </div>
+            </div>
+                <div class="footer-content-popover container" data-region="footer-content-popover">
+                        <div class="footer-section p-3 border-bottom">
+        
+        
+                                <div class="footer-support-link theme_boost_union_footer_imprintlink">
+                                    <a href="https://moodle.htw-berlin.de/theme/boost_union/pages/imprint.php"><i class="icon fa fa-building-o fa-fw " aria-hidden="true"></i>Impressum</a>
+                                </div>
+        
+                                <div class="footer-support-link theme_boost_union_footer_contactlink">
+                                    <a href="https://moodle.htw-berlin.de/theme/boost_union/pages/contact.php"><i class="icon fa fa-address-card fa-fw " aria-hidden="true"></i>HTW-Moodlesupport</a>
+                                </div>
+        
+        
+        
+        
+        
+                        </div>
+                        <div class="footer-section p-3 border-bottom">
+                            <div class="logininfo">
+                                <div class="logininfo">Sie sind angemeldet als <a href="https://moodle.htw-berlin.de/user/profile.php?id=90599">Karimi, Anahita</a> (<a href="https://moodle.htw-berlin.de/login/logout.php?sesskey=OIjAg3DXxC">Abmelden</a>)</div>
+                            </div>
+                        </div>
+                    <div class="tool_usertours-resettourcontainer"></div>
+                    
+                        <div class="footer-section p-3 border-bottom">
+                            <div>Powered by <a href="https://moodle.com">Moodle</a></div>
+                        </div>
+                    <script>
+//<![CDATA[
+var require = {
+    baseUrl : 'https://moodle.htw-berlin.de/lib/requirejs.php/1789618795/',
+    // We only support AMD modules with an explicit define() statement.
+    enforceDefine: true,
+    skipDataMain: true,
+    waitSeconds : 0,
+
+    paths: {
+        jquery: 'https://moodle.htw-berlin.de/lib/javascript.php/1789618795/lib/jquery/jquery-3.7.1.min',
+        jqueryui: 'https://moodle.htw-berlin.de/lib/javascript.php/1789618795/lib/jquery/ui-1.13.2/jquery-ui.min',
+        jqueryprivate: 'https://moodle.htw-berlin.de/lib/javascript.php/1789618795/lib/requirejs/jquery-private'
+    },
+
+    // Custom jquery config map.
+    map: {
+      // '*' means all modules will get 'jqueryprivate'
+      // for their 'jquery' dependency.
+      '*': { jquery: 'jqueryprivate' },
+
+      // 'jquery-private' wants the real jQuery module
+      // though. If this line was not here, there would
+      // be an unresolvable cyclic dependency.
+      jqueryprivate: { jquery: 'jquery' }
+    }
+};
+
+//]]>
+</script>
+<script src="https://moodle.htw-berlin.de/lib/javascript.php/1789618795/lib/requirejs/require.min.js"></script>
+<script>
+//<![CDATA[
+M.util.js_pending("core/first");
+require(['core/first'], function() {
+require(['core/prefetch'])
+;
+require(["media_videojs/loader"], function(loader) {
+    loader.setUp('de');
+});;
+M.util.js_pending('filter_mathjaxloader/loader'); require(['filter_mathjaxloader/loader'], function(amd) {amd.configure({"mathjaxconfig":"MathJax.Hub.Config({\r\n    config: [\"Accessible.js\", \"Safe.js\"],\r\n    errorSettings: { message: [\"!\"] },\r\n    skipStartupTypeset: true,\r\n    messageStyle: \"none\"\r\n});\r\n","lang":"de"}); M.util.js_complete('filter_mathjaxloader/loader');});;
+M.util.js_pending('filter_glossary/autolinker'); require(['filter_glossary/autolinker'], function(amd) {amd.init(); M.util.js_complete('filter_glossary/autolinker');});;
+M.util.js_pending('core_courseformat/courseeditor'); require(['core_courseformat/courseeditor'], function(amd) {amd.setViewFormat("62293", {"editing":false,"supportscomponents":true,"statekey":"1791165722_1791187225","overriddenStrings":[]}); M.util.js_complete('core_courseformat/courseeditor');});;
+
+require(['core_courseformat/local/courseindex/placeholder'], function(component) {
+    component.init('course-index-placeholder');
+});
+;
+
+require(['core_courseformat/local/courseindex/drawer'], function(component) {
+    component.init('courseindex');
+});
+;
+function legacy_activity_onclick_handler_1(e) { e.halt(); window.open('https://moodle.htw-berlin.de/mod/resource/view.php?id=2260645&redirect=1'); return false; };
+function legacy_activity_onclick_handler_2(e) { e.halt(); window.open('https://moodle.htw-berlin.de/mod/url/view.php?id=2260646&redirect=1'); return false; };
+function legacy_activity_onclick_handler_3(e) { e.halt(); window.open('https://moodle.htw-berlin.de/mod/resource/view.php?id=2260648&redirect=1'); return false; };
+function legacy_activity_onclick_handler_4(e) { e.halt(); window.open('https://moodle.htw-berlin.de/mod/resource/view.php?id=2260649&redirect=1'); return false; };
+M.util.js_pending('core_courseformat/local/content/activity_header'); require(['core_courseformat/local/content/activity_header'], function(amd) {amd.init(); M.util.js_complete('core_courseformat/local/content/activity_header');});;
+M.util.js_pending('theme_boost_union/backtotopbutton'); require(['theme_boost_union/backtotopbutton'], function(amd) {amd.init(); M.util.js_complete('theme_boost_union/backtotopbutton');});;
+M.util.js_pending('theme_boost_union/footerbuttons'); require(['theme_boost_union/footerbuttons'], function(amd) {amd.init(); M.util.js_complete('theme_boost_union/footerbuttons');});;
+
+    require(['core/moremenu'], function(moremenu) {
+        moremenu(document.querySelector('#moremenu-6ac35b152a484-navbar-nav'));
+    });
+;
+
+require(['jquery', 'message_popup/notification_popover_controller'], function($, Controller) {
+    var container = $('#nav-notification-popover-container');
+    var controller = new Controller(container);
+    controller.registerEventListeners();
+    controller.registerListNavigationEventListeners();
+});
+;
+
+require(
+[
+    'jquery',
+    'core_message/message_popover'
+],
+function(
+    $,
+    Popover
+) {
+    var toggle = $('#message-drawer-toggle-6ac35b152e7526ac35b152387b7');
+    Popover.init(toggle);
+});
+;
+
+    require(['core/usermenu'], function(UserMenu) {
+        UserMenu.init();
+    });
+;
+
+M.util.js_pending('theme_boost/drawers:load');
+require(['theme_boost/drawers'], function() {
+    M.util.js_complete('theme_boost/drawers:load');
+});
+;
+
+    require(['theme_boost/courseindexdrawercontrols'], function(component) {
+    component.init('courseindexdrawercontrols');
+    });
+;
+
+M.util.js_pending('theme_boost/drawers:load');
+require(['theme_boost/drawers'], function() {
+    M.util.js_complete('theme_boost/drawers:load');
+});
+;
+
+  require(['theme_boost/footer-popover'], function(FooterPopover) {
+      FooterPopover.init();
+  });
+;
+
+require(['jquery', 'core_message/message_drawer'], function($, MessageDrawer) {
+    var root = $('#message-drawer-6ac35b1530d226ac35b152387b8');
+    MessageDrawer.init(root, '6ac35b1530d226ac35b152387b8', false);
+});
+;
+
+M.util.js_pending('theme_boost/loader');
+require(['theme_boost/loader', 'theme_boost/drawer'], function(Loader, Drawer) {
+    Drawer.init();
+    M.util.js_complete('theme_boost/loader');
+
+
+});
+;
+M.util.js_pending('core/notification'); require(['core/notification'], function(amd) {amd.init(2675742, []); M.util.js_complete('core/notification');});;
+M.util.js_pending('core/log'); require(['core/log'], function(amd) {amd.setConfig({"level":"warn"}); M.util.js_complete('core/log');});;
+M.util.js_pending('core/page_global'); require(['core/page_global'], function(amd) {amd.init(); M.util.js_complete('core/page_global');});;
+M.util.js_pending('core/utility'); require(['core/utility'], function(amd) {M.util.js_complete('core/utility');});;
+M.util.js_pending('core/storage_validation'); require(['core/storage_validation'], function(amd) {amd.init(1791186505); M.util.js_complete('core/storage_validation');});
+    M.util.js_complete("core/first");
+});
+//]]>
+</script>
+<script src="https://moodle.htw-berlin.de/lib/MathJax/MathJax.js?delayStartupUntil=configured"></script>
+<script>
+//<![CDATA[
+M.str = {"moodle":{"lastmodified":"Zuletzt ge\u00e4ndert","name":"Name","error":"Fehler","info":"Infos","yes":"Ja","no":"Nein","cancel":"Abbrechen","confirm":"Best\u00e4tigen","areyousure":"Sind Sie sicher?","closebuttontitle":"Schlie\u00dfen","unknownerror":"Unbekannter Fehler","file":"Datei","url":"URL","collapseall":"Alles einklappen","expandall":"Alles aufklappen"},"repository":{"type":"Typ","size":"Gr\u00f6\u00dfe","invalidjson":"Ung\u00fcltiger JSON-Text","nofilesattached":"Keine Datei","filepicker":"Dateiauswahl","logout":"Abmelden","nofilesavailable":"Keine Dateien vorhanden","norepositoriesavailable":"Sie k\u00f6nnen hier zur Zeit keine Dateien hochladen.","fileexistsdialogheader":"Datei bereits vorhanden","fileexistsdialog_editor":"Eine Datei mit diesem Namen wurde bereits an den Text angeh\u00e4ngt, den Sie gerade bearbeiten","fileexistsdialog_filemanager":"Eine Datei mit diesem Namen wurde bereits an den Text angeh\u00e4ngt","renameto":"Nach '{$a}' umbenennen","referencesexist":"Es gibt {$a} Links zu dieser Datei.","select":"W\u00e4hlen Sie"},"admin":{"confirmdeletecomments":"M\u00f6chten Sie die ausgew\u00e4hlten Kommentare wirklich l\u00f6schen?","confirmation":"Best\u00e4tigung"},"debug":{"debuginfo":"Debug-Info","line":"Zeile","stacktrace":"Stack trace"},"langconfig":{"labelsep":":\u00a0"}};
+//]]>
+</script>
+<script>
+//<![CDATA[
+(function() {M.util.help_popups.setup(Y);
+ M.util.js_pending('random6ac35b152387b9'); Y.on('domready', function() { M.util.js_complete("init");  M.util.js_complete('random6ac35b152387b9'); });
+})();
+//]]>
+</script>
+
+                </div>
+        
+            <div class="footer-content-debugging footer-dark bg-dark text-light">
+                <div class="container-fluid footer-dark-inner">
+                    
+                </div>
+            </div>
+        
+        </footer>
+        
+            <div id="footnote" class="py-3">
+                <div class="container-fluid px-0">
+                    <p><a href="https://moodle.htw-berlin.de/theme/boost_union/pages/page2.php">Datenschutzerklärung</a> | <a href="http://www.htw-berlin.de/">© 2023 HTW Berlin</a></p>
+                </div>
+                    <div class="container-fluid px-0 d-flex flex-wrap mt-1">
+                            <span class="theme_boost_union_footnote_link theme_boost_union_footnote_imprintlink">
+                                <a href="https://moodle.htw-berlin.de/theme/boost_union/pages/imprint.php">Impressum</a>
+                            </span>
+                    </div>
+            </div>
+    </div>
+    <div
+    id="drawer-6ac35b1530d226ac35b152387b8"
+    class=" drawer bg-white hidden"
+    aria-hidden="true"
+    data-region="right-hand-drawer"
+    role="dialog"
+    tabindex="-1"
+            aria-modal="true"
+        aria-labelledby="message-drawer-header-6ac35b1530d226ac35b152387b8"
+
+>
+            <div id="message-drawer-6ac35b1530d226ac35b152387b8" class="message-app" data-region="message-drawer" role="region">
+            <h2 class="sr-only">Mitteilungen</h2>
+            <div class="closewidget text-end pe-2">
+                <a class="text-dark btn-link" data-action="closedrawer" href="#"
+                   title="Schließen" aria-label="Schließen"
+                >
+                    <i class="icon fa fa-xmark fa-fw " aria-hidden="true" ></i>
+                </a>
+            </div>
+            <div class="header-container position-relative" data-region="header-container">
+                <div class="hidden border-bottom p-1 px-sm-2" aria-hidden="true" data-region="view-contacts">
+                    <div class="d-flex align-items-center">
+                        <div class="align-self-stretch">
+                            <a class="h-100 d-flex align-items-center me-2" href="#" data-route-back role="button">
+                                <div class="icon-back-in-drawer">
+                                    <span class="dir-rtl-hide"><i class="icon fa fa-chevron-left fa-fw " aria-hidden="true" ></i></span>
+                                    <span class="dir-ltr-hide"><i class="icon fa fa-chevron-right fa-fw " aria-hidden="true" ></i></span>
+                                </div>
+                                <div class="icon-back-in-app">
+                                    <span class="dir-rtl-hide"><i class="icon fa fa-xmark fa-fw " aria-hidden="true" ></i></span>
+                                </div>                            </a>
+                        </div>
+                        <div>
+                            Kontakte
+                        </div>
+                        <div class="ms-auto">
+                            <a href="#" data-route="view-search" role="button" aria-label="Suchen">
+                                <i class="icon fa fa-magnifying-glass fa-fw " aria-hidden="true" ></i>
+                            </a>
+                        </div>
+                    </div>
+                </div>                
+                <div
+                    class="hidden bg-white position-relative border-bottom p-1 px-sm-2"
+                    aria-hidden="true"
+                    data-region="view-conversation"
+                >
+                    <div class="hidden" data-region="header-content"></div>
+                    <div class="hidden" data-region="header-edit-mode">
+                        
+                        <div class="d-flex p-2 align-items-center">
+                            Ausgewählte Mitteilungen:
+                            <span class="ms-1" data-region="message-selected-court">1</span>
+                            <button type="button" class="ms-auto btn-close" aria-label="Mitteilungsauswahl abbrechen"
+                                data-action="cancel-edit-mode">
+                                    <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div data-region="header-placeholder">
+                        <div class="d-flex">
+                            <div
+                                class="ms-2 rounded-circle bg-pulse-grey align-self-center"
+                                style="height: 38px; width: 38px"
+                            >
+                            </div>
+                            <div class="ms-2 " style="flex: 1">
+                                <div
+                                    class="mt-1 bg-pulse-grey w-75"
+                                    style="height: 16px;"
+                                >
+                                </div>
+                            </div>
+                            <div
+                                class="ms-2 bg-pulse-grey align-self-center"
+                                style="height: 16px; width: 20px"
+                            >
+                            </div>
+                        </div>
+                    </div>
+                    <div
+                        class="hidden position-absolute z-index-1"
+                        data-region="confirm-dialogue-container"
+                        style="top: 0; bottom: -1px; right: 0; left: 0; background: rgba(0,0,0,0.3);"
+                    ></div>
+                </div>                <div class="border-bottom p-1 px-sm-2" aria-hidden="false"  data-region="view-overview">
+                    <div class="d-flex align-items-center">
+                        <div class="input-group simplesearchform" role="group" aria-labelledby="messageoverviewgrouplabel">
+                            <span class="sr-only" id="messageoverviewgrouplabel">Personen und Mitteilungen suchen</span>
+                            <input
+                                type="text"
+                                class="form-control"
+                                placeholder="Suchen"
+                                aria-label="Suchen"
+                                data-region="view-overview-search-input"
+                            >
+                            <div class="input-group-append">
+                                <span class="icon-no-margin btn btn-submit">
+                                    <i class="icon fa fa-magnifying-glass fa-fw " aria-hidden="true" ></i>
+                                </span>
+                            </div>
+                        </div>
+                        <div class="ms-2">
+                            <a
+                                href="#"
+                                data-route="view-settings"
+                                data-route-param="90599"
+                                aria-label="Einstellungen"
+                                role="button"
+                            >
+                                <i class="icon fa fa-gear fa-fw " aria-hidden="true" ></i>
+                            </a>
+                        </div>
+                    </div>
+                    <div class="text-end mt-sm-3">
+                        <a href="#" data-route="view-contacts" role="button">
+                            <i class="icon fa fa-user fa-fw " aria-hidden="true" ></i>
+                            Kontakte
+                            <span
+                                class="badge bg-primary text-white ms-2 hidden"
+                                data-region="contact-request-count"
+                            >
+                                <span aria-hidden="true">0</span>
+                                <span class="sr-only">Es gibt 0 anstehende Kontaktanfragen.</span>
+                            </span>
+                        </a>
+                    </div>
+                </div>
+                
+                <div class="hidden border-bottom p-1 px-sm-2 view-search"  aria-hidden="true" data-region="view-search">
+                    <div class="d-flex align-items-center">
+                        <a
+                            class="me-2 align-self-stretch d-flex align-items-center"
+                            href="#"
+                            data-route-back
+                            data-action="cancel-search"
+                            role="button"
+                        >
+                            <div class="icon-back-in-drawer">
+                                <span class="dir-rtl-hide"><i class="icon fa fa-chevron-left fa-fw " aria-hidden="true" ></i></span>
+                                <span class="dir-ltr-hide"><i class="icon fa fa-chevron-right fa-fw " aria-hidden="true" ></i></span>
+                            </div>
+                            <div class="icon-back-in-app">
+                                <span class="dir-rtl-hide"><i class="icon fa fa-xmark fa-fw " aria-hidden="true" ></i></span>
+                            </div>                        </a>
+                        <div class="input-group simplesearchform" role="group" aria-labelledby="messagesearchgrouplabel">
+                            <span class="sr-only" id="messagesearchgrouplabel">Personen und Mitteilungen suchen</span>
+                            <input
+                                type="text"
+                                class="form-control"
+                                placeholder="Suchen"
+                                aria-label="Suchen"
+                                data-region="search-input"
+                            >
+                            <div class="input-group-append">
+                                <button
+                                    class="btn btn-submit icon-no-margin"
+                                    type="button"
+                                    data-action="search"
+                                    aria-label="Suche durchführen"
+                                    title="Suche durchführen"
+                                >
+                                    <span data-region="search-icon-container">
+                                        <i class="icon fa fa-magnifying-glass fa-fw " aria-hidden="true" ></i>
+                                    </span>
+                                    <span class="hidden" data-region="loading-icon-container">
+                                        <span class="loading-icon icon-no-margin"><i class="icon fa fa-spinner fa-spin fa-fw "  title="Laden ..." role="img" aria-label="Laden ..."></i></span>
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="hidden border-bottom p-1 px-sm-2 pb-sm-3" aria-hidden="true" data-region="view-settings">
+                    <div class="d-flex align-items-center">
+                        <div class="align-self-stretch" >
+                            <a class="h-100 d-flex me-2 align-items-center" href="#" data-route-back role="button">
+                                <div class="icon-back-in-drawer">
+                                    <span class="dir-rtl-hide"><i class="icon fa fa-chevron-left fa-fw " aria-hidden="true" ></i></span>
+                                    <span class="dir-ltr-hide"><i class="icon fa fa-chevron-right fa-fw " aria-hidden="true" ></i></span>
+                                </div>
+                                <div class="icon-back-in-app">
+                                    <span class="dir-rtl-hide"><i class="icon fa fa-xmark fa-fw " aria-hidden="true" ></i></span>
+                                </div>                            </a>
+                        </div>
+                        <div>
+                            Einstellungen
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="body-container position-relative" data-region="body-container">
+                
+                <div
+                    class="hidden"
+                    data-region="view-contact"
+                    aria-hidden="true"
+                >
+                    <div class="p-2 pt-3" data-region="content-container"></div>
+                </div>                <div class="hidden h-100" data-region="view-contacts" aria-hidden="true" data-user-id="90599">
+                    <div class="d-flex flex-column h-100">
+                        <div class="p-3 border-bottom">
+                            <ul class="nav nav-pills nav-fill" role="tablist">
+                                <li class="nav-item">
+                                    <a
+                                        id="contacts-tab-6ac35b1530d226ac35b152387b8"
+                                        class="nav-link active"
+                                        href="#contacts-tab-panel-6ac35b1530d226ac35b152387b8"
+                                        data-toggle="tab"
+                                        data-action="show-contacts-section"
+                                        role="tab"
+                                        aria-controls="contacts-tab-panel-6ac35b1530d226ac35b152387b8"
+                                        aria-selected="true"
+                                    >
+                                        Kontakte
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a
+                                        id="requests-tab-6ac35b1530d226ac35b152387b8"
+                                        class="nav-link"
+                                        href="#requests-tab-panel-6ac35b1530d226ac35b152387b8"
+                                        data-toggle="tab"
+                                        data-action="show-requests-section"
+                                        role="tab"
+                                        aria-controls="requests-tab-panel-6ac35b1530d226ac35b152387b8"
+                                        aria-selected="false"
+                                    >
+                                        Anfragen
+                                        <span class="badge bg-primary text-white ms-2 hidden"
+                                            data-region="contact-request-count"
+                                        >
+                                            <span aria-hidden="true">0</span>
+                                            <span class="sr-only">Es gibt 0 anstehende Kontaktanfragen.</span>
+                                        </span>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="tab-content d-flex flex-column h-100">
+                                            <div
+                    class="tab-pane fade show active h-100 lazy-load-list"
+                    aria-live="polite"
+                    data-region="lazy-load-list"
+                    data-user-id="90599"
+                                        id="contacts-tab-panel-6ac35b1530d226ac35b152387b8"
+                    data-section="contacts"
+                    role="tabpanel"
+                    aria-labelledby="contacts-tab-6ac35b1530d226ac35b152387b8"
+
+                >
+                    
+                    <div class="hidden text-center p-2" data-region="empty-message-container">
+                        Keine Kontakte
+                    </div>
+                    <div class="hidden list-group" data-region="content-container">
+                        
+                    </div>
+                    <div class="list-group" data-region="placeholder-container">
+                        
+                    </div>
+                    <div class="w-100 text-center p-3 hidden" data-region="loading-icon-container" >
+                        <span class="loading-icon icon-no-margin"><i class="icon fa fa-spinner fa-spin fa-fw "  title="Laden ..." role="img" aria-label="Laden ..."></i></span>
+                    </div>
+                </div>
+                
+                                            <div
+                    class="tab-pane fade h-100 lazy-load-list"
+                    aria-live="polite"
+                    data-region="lazy-load-list"
+                    data-user-id="90599"
+                                        id="requests-tab-panel-6ac35b1530d226ac35b152387b8"
+                    data-section="requests"
+                    role="tabpanel"
+                    aria-labelledby="requests-tab-6ac35b1530d226ac35b152387b8"
+
+                >
+                    
+                    <div class="hidden text-center p-2" data-region="empty-message-container">
+                        Keine Kontaktanfragen
+                    </div>
+                    <div class="hidden list-group" data-region="content-container">
+                        
+                    </div>
+                    <div class="list-group" data-region="placeholder-container">
+                        
+                    </div>
+                    <div class="w-100 text-center p-3 hidden" data-region="loading-icon-container" >
+                        <span class="loading-icon icon-no-margin"><i class="icon fa fa-spinner fa-spin fa-fw "  title="Laden ..." role="img" aria-label="Laden ..."></i></span>
+                    </div>
+                </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div
+                    class="view-conversation hidden h-100"
+                    aria-hidden="true"
+                    data-region="view-conversation"
+                    data-user-id="90599"
+                    data-midnight="1791151200"
+                    data-message-poll-min="10"
+                    data-message-poll-max="120"
+                    data-message-poll-after-max="300"
+                    style="overflow-y: auto; overflow-x: hidden"
+                >
+                    <div class="position-relative h-100" data-region="content-container" style="overflow-y: auto; overflow-x: hidden">
+                        <div class="content-message-container hidden h-100 px-2 pt-0" data-region="content-message-container" role="log" style="overflow-y: auto; overflow-x: hidden">
+                            <div class="py-3 border-bottom text-center hidden" data-region="contact-request-sent-message-container">
+                                <p class="m-0">Kontaktanfrage gesendet</p>
+                                <p class="font-italic font-weight-light" data-region="text"></p>
+                            </div>
+                            <div class="p-3 text-center hidden" data-region="self-conversation-message-container">
+                                <p class="m-0">Persönlicher Bereich</p>
+                                <p class="font-italic font-weight-light" data-region="text">Speichern Sie Entwürfe von Nachrichten, Links, Notizen usw. für einen späteren Zugriff.</p>
+                           </div>
+                            <div class="hidden text-center p-3" data-region="more-messages-loading-icon-container"><span class="loading-icon icon-no-margin"><i class="icon fa fa-spinner fa-spin fa-fw "  title="Laden ..." role="img" aria-label="Laden ..."></i></span>
+</div>
+                        </div>
+                        <div class="p-4 w-100 h-100 hidden position-absolute z-index-1" data-region="confirm-dialogue-container" style="top: 0; background: rgba(0,0,0,0.3);">
+                            
+                            <div class="p-3 bg-white" data-region="confirm-dialogue" role="alert">
+                                <p class="text-muted" data-region="dialogue-text"></p>
+                                <div class="mb-2 custom-control custom-checkbox hidden" data-region="delete-messages-for-all-users-toggle-container">
+                                    <input type="checkbox" class="custom-control-input" id="delete-messages-for-all-users" data-region="delete-messages-for-all-users-toggle">
+                                    <label class="custom-control-label text-muted" for="delete-messages-for-all-users">
+                                        Für mich und alle anderen löschen
+                                    </label>
+                                </div>
+                                <button type="button" class="btn btn-primary btn-block hidden" data-action="confirm-block">
+                                    <span data-region="dialogue-button-text">Blockieren</span>
+                                    <span class="hidden" data-region="loading-icon-container"><span class="loading-icon icon-no-margin"><i class="icon fa fa-spinner fa-spin fa-fw "  title="Laden ..." role="img" aria-label="Laden ..."></i></span>
+</span>
+                                </button>
+                                <button type="button" class="btn btn-primary btn-block hidden" data-action="confirm-unblock">
+                                    <span data-region="dialogue-button-text">Blockierung aufheben</span>
+                                    <span class="hidden" data-region="loading-icon-container"><span class="loading-icon icon-no-margin"><i class="icon fa fa-spinner fa-spin fa-fw "  title="Laden ..." role="img" aria-label="Laden ..."></i></span>
+</span>
+                                </button>
+                                <button type="button" class="btn btn-primary btn-block hidden" data-action="confirm-remove-contact">
+                                    <span data-region="dialogue-button-text">Entfernen</span>
+                                    <span class="hidden" data-region="loading-icon-container"><span class="loading-icon icon-no-margin"><i class="icon fa fa-spinner fa-spin fa-fw "  title="Laden ..." role="img" aria-label="Laden ..."></i></span>
+</span>
+                                </button>
+                                <button type="button" class="btn btn-primary btn-block hidden" data-action="confirm-add-contact">
+                                    <span data-region="dialogue-button-text">Hinzufügen</span>
+                                    <span class="hidden" data-region="loading-icon-container"><span class="loading-icon icon-no-margin"><i class="icon fa fa-spinner fa-spin fa-fw "  title="Laden ..." role="img" aria-label="Laden ..."></i></span>
+</span>
+                                </button>
+                                <button type="button" class="btn btn-primary btn-block hidden" data-action="confirm-delete-selected-messages">
+                                    <span data-region="dialogue-button-text">Löschen</span>
+                                    <span class="hidden" data-region="loading-icon-container"><span class="loading-icon icon-no-margin"><i class="icon fa fa-spinner fa-spin fa-fw "  title="Laden ..." role="img" aria-label="Laden ..."></i></span>
+</span>
+                                </button>
+                                <button type="button" class="btn btn-primary btn-block hidden" data-action="confirm-delete-conversation">
+                                    <span data-region="dialogue-button-text">Löschen</span>
+                                    <span class="hidden" data-region="loading-icon-container"><span class="loading-icon icon-no-margin"><i class="icon fa fa-spinner fa-spin fa-fw "  title="Laden ..." role="img" aria-label="Laden ..."></i></span>
+</span>
+                                </button>
+                                <button type="button" class="btn btn-primary btn-block hidden" data-action="request-add-contact">
+                                    <span data-region="dialogue-button-text">Kontaktanfrage senden</span>
+                                    <span class="hidden" data-region="loading-icon-container"><span class="loading-icon icon-no-margin"><i class="icon fa fa-spinner fa-spin fa-fw "  title="Laden ..." role="img" aria-label="Laden ..."></i></span>
+</span>
+                                </button>
+                                <button type="button" class="btn btn-primary btn-block hidden" data-action="accept-contact-request">
+                                    <span data-region="dialogue-button-text">Annehmen und zu Kontakten hinzufügen</span>
+                                    <span class="hidden" data-region="loading-icon-container"><span class="loading-icon icon-no-margin"><i class="icon fa fa-spinner fa-spin fa-fw "  title="Laden ..." role="img" aria-label="Laden ..."></i></span>
+</span>
+                                </button>
+                                <button type="button" class="btn btn-secondary btn-block hidden" data-action="decline-contact-request">
+                                    <span data-region="dialogue-button-text">Ablehnen</span>
+                                    <span class="hidden" data-region="loading-icon-container"><span class="loading-icon icon-no-margin"><i class="icon fa fa-spinner fa-spin fa-fw "  title="Laden ..." role="img" aria-label="Laden ..."></i></span>
+</span>
+                                </button>
+                                <button type="button" class="btn btn-primary btn-block" data-action="okay-confirm">OK</button>
+                                <button type="button" class="btn btn-secondary btn-block" data-action="cancel-confirm">Abbrechen</button>
+                            </div>
+                        </div>
+                        <div class="px-2 pb-2 pt-0" data-region="content-placeholder">
+                            <div class="h-100 d-flex flex-column">
+                                <div
+                                    class="px-2 pb-2 pt-0 bg-light h-100"
+                                    style="overflow-y: auto"
+                                >
+                                    <div class="mt-4">
+                                        <div class="mb-4">
+                                            <div class="mx-auto bg-white" style="height: 25px; width: 100px"></div>
+                                        </div>
+                                        <div class="d-flex flex-column p-2 bg-white rounded mb-2">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <div class="me-2">
+                                                    <div class="rounded-circle bg-pulse-grey" style="height: 35px; width: 35px"></div>
+                                                </div>
+                                                <div class="me-4 w-75 bg-pulse-grey" style="height: 16px"></div>
+                                                <div class="ms-auto bg-pulse-grey" style="width: 35px; height: 16px"></div>
+                                            </div>
+                                            <div class="bg-pulse-grey w-100" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-75 mt-2" style="height: 16px"></div>
+                                        </div>
+                                        <div class="d-flex flex-column p-2 bg-white rounded mb-2">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <div class="me-2">
+                                                    <div class="rounded-circle bg-pulse-grey" style="height: 35px; width: 35px"></div>
+                                                </div>
+                                                <div class="me-4 w-75 bg-pulse-grey" style="height: 16px"></div>
+                                                <div class="ms-auto bg-pulse-grey" style="width: 35px; height: 16px"></div>
+                                            </div>
+                                            <div class="bg-pulse-grey w-100" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-75 mt-2" style="height: 16px"></div>
+                                        </div>
+                                        <div class="d-flex flex-column p-2 bg-white rounded mb-2">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <div class="me-2">
+                                                    <div class="rounded-circle bg-pulse-grey" style="height: 35px; width: 35px"></div>
+                                                </div>
+                                                <div class="me-4 w-75 bg-pulse-grey" style="height: 16px"></div>
+                                                <div class="ms-auto bg-pulse-grey" style="width: 35px; height: 16px"></div>
+                                            </div>
+                                            <div class="bg-pulse-grey w-100" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-75 mt-2" style="height: 16px"></div>
+                                        </div>
+                                    </div>                                    <div class="mt-4">
+                                        <div class="mb-4">
+                                            <div class="mx-auto bg-white" style="height: 25px; width: 100px"></div>
+                                        </div>
+                                        <div class="d-flex flex-column p-2 bg-white rounded mb-2">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <div class="me-2">
+                                                    <div class="rounded-circle bg-pulse-grey" style="height: 35px; width: 35px"></div>
+                                                </div>
+                                                <div class="me-4 w-75 bg-pulse-grey" style="height: 16px"></div>
+                                                <div class="ms-auto bg-pulse-grey" style="width: 35px; height: 16px"></div>
+                                            </div>
+                                            <div class="bg-pulse-grey w-100" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-75 mt-2" style="height: 16px"></div>
+                                        </div>
+                                        <div class="d-flex flex-column p-2 bg-white rounded mb-2">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <div class="me-2">
+                                                    <div class="rounded-circle bg-pulse-grey" style="height: 35px; width: 35px"></div>
+                                                </div>
+                                                <div class="me-4 w-75 bg-pulse-grey" style="height: 16px"></div>
+                                                <div class="ms-auto bg-pulse-grey" style="width: 35px; height: 16px"></div>
+                                            </div>
+                                            <div class="bg-pulse-grey w-100" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-75 mt-2" style="height: 16px"></div>
+                                        </div>
+                                        <div class="d-flex flex-column p-2 bg-white rounded mb-2">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <div class="me-2">
+                                                    <div class="rounded-circle bg-pulse-grey" style="height: 35px; width: 35px"></div>
+                                                </div>
+                                                <div class="me-4 w-75 bg-pulse-grey" style="height: 16px"></div>
+                                                <div class="ms-auto bg-pulse-grey" style="width: 35px; height: 16px"></div>
+                                            </div>
+                                            <div class="bg-pulse-grey w-100" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-75 mt-2" style="height: 16px"></div>
+                                        </div>
+                                    </div>                                    <div class="mt-4">
+                                        <div class="mb-4">
+                                            <div class="mx-auto bg-white" style="height: 25px; width: 100px"></div>
+                                        </div>
+                                        <div class="d-flex flex-column p-2 bg-white rounded mb-2">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <div class="me-2">
+                                                    <div class="rounded-circle bg-pulse-grey" style="height: 35px; width: 35px"></div>
+                                                </div>
+                                                <div class="me-4 w-75 bg-pulse-grey" style="height: 16px"></div>
+                                                <div class="ms-auto bg-pulse-grey" style="width: 35px; height: 16px"></div>
+                                            </div>
+                                            <div class="bg-pulse-grey w-100" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-75 mt-2" style="height: 16px"></div>
+                                        </div>
+                                        <div class="d-flex flex-column p-2 bg-white rounded mb-2">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <div class="me-2">
+                                                    <div class="rounded-circle bg-pulse-grey" style="height: 35px; width: 35px"></div>
+                                                </div>
+                                                <div class="me-4 w-75 bg-pulse-grey" style="height: 16px"></div>
+                                                <div class="ms-auto bg-pulse-grey" style="width: 35px; height: 16px"></div>
+                                            </div>
+                                            <div class="bg-pulse-grey w-100" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-75 mt-2" style="height: 16px"></div>
+                                        </div>
+                                        <div class="d-flex flex-column p-2 bg-white rounded mb-2">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <div class="me-2">
+                                                    <div class="rounded-circle bg-pulse-grey" style="height: 35px; width: 35px"></div>
+                                                </div>
+                                                <div class="me-4 w-75 bg-pulse-grey" style="height: 16px"></div>
+                                                <div class="ms-auto bg-pulse-grey" style="width: 35px; height: 16px"></div>
+                                            </div>
+                                            <div class="bg-pulse-grey w-100" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-75 mt-2" style="height: 16px"></div>
+                                        </div>
+                                    </div>                                    <div class="mt-4">
+                                        <div class="mb-4">
+                                            <div class="mx-auto bg-white" style="height: 25px; width: 100px"></div>
+                                        </div>
+                                        <div class="d-flex flex-column p-2 bg-white rounded mb-2">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <div class="me-2">
+                                                    <div class="rounded-circle bg-pulse-grey" style="height: 35px; width: 35px"></div>
+                                                </div>
+                                                <div class="me-4 w-75 bg-pulse-grey" style="height: 16px"></div>
+                                                <div class="ms-auto bg-pulse-grey" style="width: 35px; height: 16px"></div>
+                                            </div>
+                                            <div class="bg-pulse-grey w-100" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-75 mt-2" style="height: 16px"></div>
+                                        </div>
+                                        <div class="d-flex flex-column p-2 bg-white rounded mb-2">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <div class="me-2">
+                                                    <div class="rounded-circle bg-pulse-grey" style="height: 35px; width: 35px"></div>
+                                                </div>
+                                                <div class="me-4 w-75 bg-pulse-grey" style="height: 16px"></div>
+                                                <div class="ms-auto bg-pulse-grey" style="width: 35px; height: 16px"></div>
+                                            </div>
+                                            <div class="bg-pulse-grey w-100" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-75 mt-2" style="height: 16px"></div>
+                                        </div>
+                                        <div class="d-flex flex-column p-2 bg-white rounded mb-2">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <div class="me-2">
+                                                    <div class="rounded-circle bg-pulse-grey" style="height: 35px; width: 35px"></div>
+                                                </div>
+                                                <div class="me-4 w-75 bg-pulse-grey" style="height: 16px"></div>
+                                                <div class="ms-auto bg-pulse-grey" style="width: 35px; height: 16px"></div>
+                                            </div>
+                                            <div class="bg-pulse-grey w-100" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-75 mt-2" style="height: 16px"></div>
+                                        </div>
+                                    </div>                                    <div class="mt-4">
+                                        <div class="mb-4">
+                                            <div class="mx-auto bg-white" style="height: 25px; width: 100px"></div>
+                                        </div>
+                                        <div class="d-flex flex-column p-2 bg-white rounded mb-2">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <div class="me-2">
+                                                    <div class="rounded-circle bg-pulse-grey" style="height: 35px; width: 35px"></div>
+                                                </div>
+                                                <div class="me-4 w-75 bg-pulse-grey" style="height: 16px"></div>
+                                                <div class="ms-auto bg-pulse-grey" style="width: 35px; height: 16px"></div>
+                                            </div>
+                                            <div class="bg-pulse-grey w-100" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-75 mt-2" style="height: 16px"></div>
+                                        </div>
+                                        <div class="d-flex flex-column p-2 bg-white rounded mb-2">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <div class="me-2">
+                                                    <div class="rounded-circle bg-pulse-grey" style="height: 35px; width: 35px"></div>
+                                                </div>
+                                                <div class="me-4 w-75 bg-pulse-grey" style="height: 16px"></div>
+                                                <div class="ms-auto bg-pulse-grey" style="width: 35px; height: 16px"></div>
+                                            </div>
+                                            <div class="bg-pulse-grey w-100" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-75 mt-2" style="height: 16px"></div>
+                                        </div>
+                                        <div class="d-flex flex-column p-2 bg-white rounded mb-2">
+                                            <div class="d-flex align-items-center mb-2">
+                                                <div class="me-2">
+                                                    <div class="rounded-circle bg-pulse-grey" style="height: 35px; width: 35px"></div>
+                                                </div>
+                                                <div class="me-4 w-75 bg-pulse-grey" style="height: 16px"></div>
+                                                <div class="ms-auto bg-pulse-grey" style="width: 35px; height: 16px"></div>
+                                            </div>
+                                            <div class="bg-pulse-grey w-100" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-100 mt-2" style="height: 16px"></div>
+                                            <div class="bg-pulse-grey w-75 mt-2" style="height: 16px"></div>
+                                        </div>
+                                    </div>                                </div>
+                            </div>                        </div>
+                    </div>
+                </div>
+                
+                <div
+                    class="hidden"
+                    aria-hidden="true"
+                    data-region="view-group-info"
+                >
+                    <div
+                        class="pt-3 h-100 d-flex flex-column"
+                        data-region="group-info-content-container"
+                        style="overflow-y: auto"
+                    ></div>
+                </div>                <div class="h-100 view-overview-body" aria-hidden="false" data-region="view-overview"  data-user-id="90599">
+                    <div id="message-drawer-view-overview-container-6ac35b1530d226ac35b152387b8" class="d-flex flex-column h-100" style="overflow-y: auto">
+                            
+                            
+                            <div
+                                class="section border-0 card rounded-0"
+                                data-region="view-overview-favourites"
+                            >
+                                <div id="view-overview-favourites-toggle" class="card-header rounded-0" data-region="toggle">
+                                    <button
+                                        class="btn btn-link w-100 text-start p-1 p-sm-2 d-flex rounded-0 align-items-center overview-section-toggle collapsed"
+                                        data-toggle="collapse"
+                                        data-target="#view-overview-favourites-target-6ac35b1530d226ac35b152387b8"
+                                        aria-expanded="false"
+                                        aria-controls="view-overview-favourites-target-6ac35b1530d226ac35b152387b8"
+                                    >
+                                        <span class="collapsed-icon-container">
+                                            <span class="dir-rtl-hide"><i class="icon fa fa-chevron-right fa-fw " aria-hidden="true" ></i></span>
+                                            <span class="dir-ltr-hide"><i class="icon fa fa-chevron-left fa-fw " aria-hidden="true" ></i></span>
+                                        </span>
+                                        <span class="expanded-icon-container">
+                                            <i class="icon fa fa-chevron-down fa-fw " aria-hidden="true" ></i>
+                                        </span>
+                                        <span class="font-weight-bold ms-1">Favoriten</span>
+                                        <small
+                                            class="hidden ms-1"
+                                            data-region="section-total-count-container" aria-labelledby="view-overview-favourites-total-count-label"
+                                        >
+                                            (<span aria-hidden="true" data-region="section-total-count"></span>)
+                                            <span class="sr-only" id="view-overview-favourites-total-count-label">
+                                                Insgesamt  Kommunikationen
+                                            </span>
+                                        </small>
+                                        <span class="hidden ms-2" data-region="loading-icon-container">
+                                            <span class="loading-icon icon-no-margin"><i class="icon fa fa-spinner fa-spin fa-fw "  title="Laden ..." role="img" aria-label="Laden ..."></i></span>
+                                        </span>
+                                        <span
+                                            class="hidden badge rounded-pill bg-primary text-white ms-auto"
+                                            data-region="section-unread-count-container" aria-labelledby="view-overview-favourites-unread-count-label"
+                                        >
+                                            <span aria-hidden="true" data-region="section-unread-count"></span>
+                                            <span class="sr-only" id="view-overview-favourites-unread-count-label">
+                                                 ungelesene Diskussionen
+                                            </span>
+                                        </span>
+                                    </button>
+                                </div>
+                                                            <div
+                                class="collapse border-bottom  lazy-load-list"
+                                aria-live="polite"
+                                data-region="lazy-load-list"
+                                data-user-id="90599"
+                                            id="view-overview-favourites-target-6ac35b1530d226ac35b152387b8"
+            aria-labelledby="view-overview-favourites-toggle"
+            data-parent="#message-drawer-view-overview-container-6ac35b1530d226ac35b152387b8"
+
+                            >
+                                
+                                <div class="hidden text-center p-2" data-region="empty-message-container">
+                                            <p class="text-muted mt-2">Keine Kommunikation als Favorit markiert</p>
+
+                                </div>
+                                <div class="hidden list-group" data-region="content-container">
+                                    
+                                </div>
+                                <div class="list-group" data-region="placeholder-container">
+                                            <div class="text-center py-2"><span class="loading-icon icon-no-margin"><i class="icon fa fa-spinner fa-spin fa-fw "  title="Laden ..." role="img" aria-label="Laden ..."></i></span>
+</div>
+
+                                </div>
+                                <div class="w-100 text-center p-3 hidden" data-region="loading-icon-container" >
+                                    <span class="loading-icon icon-no-margin"><i class="icon fa fa-spinner fa-spin fa-fw "  title="Laden ..." role="img" aria-label="Laden ..."></i></span>
+                                </div>
+                            </div>
+                            </div>
+                            
+                            
+                            <div
+                                class="section border-0 card rounded-0"
+                                data-region="view-overview-group-messages"
+                            >
+                                <div id="view-overview-group-messages-toggle" class="card-header rounded-0" data-region="toggle">
+                                    <button
+                                        class="btn btn-link w-100 text-start p-1 p-sm-2 d-flex rounded-0 align-items-center overview-section-toggle collapsed"
+                                        data-toggle="collapse"
+                                        data-target="#view-overview-group-messages-target-6ac35b1530d226ac35b152387b8"
+                                        aria-expanded="false"
+                                        aria-controls="view-overview-group-messages-target-6ac35b1530d226ac35b152387b8"
+                                    >
+                                        <span class="collapsed-icon-container">
+                                            <span class="dir-rtl-hide"><i class="icon fa fa-chevron-right fa-fw " aria-hidden="true" ></i></span>
+                                            <span class="dir-ltr-hide"><i class="icon fa fa-chevron-left fa-fw " aria-hidden="true" ></i></span>
+                                        </span>
+                                        <span class="expanded-icon-container">
+                                            <i class="icon fa fa-chevron-down fa-fw " aria-hidden="true" ></i>
+                                        </span>
+                                        <span class="font-weight-bold ms-1">Gruppe</span>
+                                        <small
+                                            class="hidden ms-1"
+                                            data-region="section-total-count-container" aria-labelledby="view-overview-group-messages-total-count-label"
+                                        >
+                                            (<span aria-hidden="true" data-region="section-total-count"></span>)
+                                            <span class="sr-only" id="view-overview-group-messages-total-count-label">
+                                                Insgesamt  Kommunikationen
+                                            </span>
+                                        </small>
+                                        <span class="hidden ms-2" data-region="loading-icon-container">
+                                            <span class="loading-icon icon-no-margin"><i class="icon fa fa-spinner fa-spin fa-fw "  title="Laden ..." role="img" aria-label="Laden ..."></i></span>
+                                        </span>
+                                        <span
+                                            class="hidden badge rounded-pill bg-primary text-white ms-auto"
+                                            data-region="section-unread-count-container" aria-labelledby="view-overview-group-messages-unread-count-label"
+                                        >
+                                            <span aria-hidden="true" data-region="section-unread-count"></span>
+                                            <span class="sr-only" id="view-overview-group-messages-unread-count-label">
+                                                 ungelesene Diskussionen
+                                            </span>
+                                        </span>
+                                    </button>
+                                </div>
+                                                            <div
+                                class="collapse border-bottom  lazy-load-list"
+                                aria-live="polite"
+                                data-region="lazy-load-list"
+                                data-user-id="90599"
+                                            id="view-overview-group-messages-target-6ac35b1530d226ac35b152387b8"
+            aria-labelledby="view-overview-group-messages-toggle"
+            data-parent="#message-drawer-view-overview-container-6ac35b1530d226ac35b152387b8"
+
+                            >
+                                
+                                <div class="hidden text-center p-2" data-region="empty-message-container">
+                                            <p class="text-muted mt-2">Keine Gruppenkommunikation</p>
+
+                                </div>
+                                <div class="hidden list-group" data-region="content-container">
+                                    
+                                </div>
+                                <div class="list-group" data-region="placeholder-container">
+                                            <div class="text-center py-2"><span class="loading-icon icon-no-margin"><i class="icon fa fa-spinner fa-spin fa-fw "  title="Laden ..." role="img" aria-label="Laden ..."></i></span>
+</div>
+
+                                </div>
+                                <div class="w-100 text-center p-3 hidden" data-region="loading-icon-container" >
+                                    <span class="loading-icon icon-no-margin"><i class="icon fa fa-spinner fa-spin fa-fw "  title="Laden ..." role="img" aria-label="Laden ..."></i></span>
+                                </div>
+                            </div>
+                            </div>
+                            
+                            
+                            <div
+                                class="section border-0 card rounded-0"
+                                data-region="view-overview-messages"
+                            >
+                                <div id="view-overview-messages-toggle" class="card-header rounded-0" data-region="toggle">
+                                    <button
+                                        class="btn btn-link w-100 text-start p-1 p-sm-2 d-flex rounded-0 align-items-center overview-section-toggle collapsed"
+                                        data-toggle="collapse"
+                                        data-target="#view-overview-messages-target-6ac35b1530d226ac35b152387b8"
+                                        aria-expanded="false"
+                                        aria-controls="view-overview-messages-target-6ac35b1530d226ac35b152387b8"
+                                    >
+                                        <span class="collapsed-icon-container">
+                                            <span class="dir-rtl-hide"><i class="icon fa fa-chevron-right fa-fw " aria-hidden="true" ></i></span>
+                                            <span class="dir-ltr-hide"><i class="icon fa fa-chevron-left fa-fw " aria-hidden="true" ></i></span>
+                                        </span>
+                                        <span class="expanded-icon-container">
+                                            <i class="icon fa fa-chevron-down fa-fw " aria-hidden="true" ></i>
+                                        </span>
+                                        <span class="font-weight-bold ms-1">Persönlich</span>
+                                        <small
+                                            class="hidden ms-1"
+                                            data-region="section-total-count-container" aria-labelledby="view-overview-messages-total-count-label"
+                                        >
+                                            (<span aria-hidden="true" data-region="section-total-count"></span>)
+                                            <span class="sr-only" id="view-overview-messages-total-count-label">
+                                                Insgesamt  Kommunikationen
+                                            </span>
+                                        </small>
+                                        <span class="hidden ms-2" data-region="loading-icon-container">
+                                            <span class="loading-icon icon-no-margin"><i class="icon fa fa-spinner fa-spin fa-fw "  title="Laden ..." role="img" aria-label="Laden ..."></i></span>
+                                        </span>
+                                        <span
+                                            class="hidden badge rounded-pill bg-primary text-white ms-auto"
+                                            data-region="section-unread-count-container" aria-labelledby="view-overview-messages-unread-count-label"
+                                        >
+                                            <span aria-hidden="true" data-region="section-unread-count"></span>
+                                            <span class="sr-only" id="view-overview-messages-unread-count-label">
+                                                 ungelesene Diskussionen
+                                            </span>
+                                        </span>
+                                    </button>
+                                </div>
+                                                            <div
+                                class="collapse border-bottom  lazy-load-list"
+                                aria-live="polite"
+                                data-region="lazy-load-list"
+                                data-user-id="90599"
+                                            id="view-overview-messages-target-6ac35b1530d226ac35b152387b8"
+            aria-labelledby="view-overview-messages-toggle"
+            data-parent="#message-drawer-view-overview-container-6ac35b1530d226ac35b152387b8"
+
+                            >
+                                
+                                <div class="hidden text-center p-2" data-region="empty-message-container">
+                                            <p class="text-muted mt-2">Keine persönliche Kommunikation</p>
+
+                                </div>
+                                <div class="hidden list-group" data-region="content-container">
+                                    
+                                </div>
+                                <div class="list-group" data-region="placeholder-container">
+                                            <div class="text-center py-2"><span class="loading-icon icon-no-margin"><i class="icon fa fa-spinner fa-spin fa-fw "  title="Laden ..." role="img" aria-label="Laden ..."></i></span>
+</div>
+
+                                </div>
+                                <div class="w-100 text-center p-3 hidden" data-region="loading-icon-container" >
+                                    <span class="loading-icon icon-no-margin"><i class="icon fa fa-spinner fa-spin fa-fw "  title="Laden ..." role="img" aria-label="Laden ..."></i></span>
+                                </div>
+                            </div>
+                            </div>
+                    </div>
+                </div>
+                
+                <div
+                    data-region="view-search"
+                    aria-hidden="true"
+                    class="h-100 hidden"
+                    data-user-id="90599"
+                    data-users-offset="0"
+                    data-messages-offset="0"
+                    style="overflow-y: auto"
+                    
+                >
+                    <div class="hidden" data-region="search-results-container" style="overflow-y: auto">
+                        
+                        <div class="d-flex flex-column">
+                            <div class="mb-3 bg-white" data-region="all-contacts-container">
+                                <div data-region="contacts-container"  class="pt-2">
+                                    <h3 class="h6 px-2">Kontakte</h3>
+                                    <div class="list-group" data-region="list"></div>
+                                </div>
+                                <div data-region="non-contacts-container" class="pt-2 border-top">
+                                    <h3 class="h6 px-2">Weitere Personen</h3>
+                                    <div class="list-group" data-region="list"></div>
+                                </div>
+                                <div class="text-end">
+                                    <button class="btn btn-link text-primary" data-action="load-more-users">
+                                        <span data-region="button-text">Mehr laden</span>
+                                        <span data-region="loading-icon-container" class="hidden"><span class="loading-icon icon-no-margin"><i class="icon fa fa-spinner fa-spin fa-fw "  title="Laden ..." role="img" aria-label="Laden ..."></i></span>
+</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="bg-white" data-region="messages-container">
+                                <h3 class="h6 px-2 pt-2">Mitteilungen</h3>
+                                <div class="list-group" data-region="list"></div>
+                                <div class="text-end">
+                                    <button class="btn btn-link text-primary" data-action="load-more-messages">
+                                        <span data-region="button-text">Mehr laden</span>
+                                        <span data-region="loading-icon-container" class="hidden"><span class="loading-icon icon-no-margin"><i class="icon fa fa-spinner fa-spin fa-fw "  title="Laden ..." role="img" aria-label="Laden ..."></i></span>
+</span>
+                                    </button>
+                                </div>
+                            </div>
+                            <p class="hidden p-3 text-center" data-region="no-results-container">Keine Ergebnisse</p>
+                        </div>                    </div>
+                    <div class="hidden" data-region="loading-placeholder">
+                        <div class="text-center pt-3 icon-size-4"><span class="loading-icon icon-no-margin"><i class="icon fa fa-spinner fa-spin fa-fw "  title="Laden ..." role="img" aria-label="Laden ..."></i></span>
+</div>
+                    </div>
+                    <div class="p-3 text-center" data-region="empty-message-container">
+                        <p>Personen und Mitteilungen suchen</p>
+                    </div>
+                </div>                
+                <div class="h-100 hidden bg-white" aria-hidden="true" data-region="view-settings">
+                    <div class="hidden" data-region="content-container">
+                        
+                        <div data-region="settings" class="p-3">
+                            <h3 class="h6 font-weight-bold">Datenschutz</h3>
+                            <p>Welche Personen sollen Ihnen persönliche Mitteilungen senden können?</p>
+                            <div data-preference="blocknoncontacts" class="mb-3">
+                                <fieldset>
+                                    <legend class="sr-only">Mitteilungen akzeptieren von:</legend>
+                                        <div class="custom-control custom-radio mb-2">
+                                            <input
+                                                type="radio"
+                                                name="message_blocknoncontacts"
+                                                class="custom-control-input"
+                                                id="block-noncontacts-6ac35b1530d226ac35b152387b8-1"
+                                                value="1"
+                                            >
+                                            <label class="custom-control-label ms-2" for="block-noncontacts-6ac35b1530d226ac35b152387b8-1">
+                                                Nur meine Kontakte
+                                            </label>
+                                        </div>
+                                        <div class="custom-control custom-radio mb-2">
+                                            <input
+                                                type="radio"
+                                                name="message_blocknoncontacts"
+                                                class="custom-control-input"
+                                                id="block-noncontacts-6ac35b1530d226ac35b152387b8-0"
+                                                value="0"
+                                            >
+                                            <label class="custom-control-label ms-2" for="block-noncontacts-6ac35b1530d226ac35b152387b8-0">
+                                                Kontakte und aus meinen Kursen
+                                            </label>
+                                        </div>
+                                </fieldset>
+                            </div>
+                        
+                            <div class="hidden" data-region="notification-preference-container" role="group" aria-labelledby="notification-preferences-header-6ac35b1530d226ac35b152387b8">
+                                <h3 class="mb-2 mt-4 h6 font-weight-bold" id="notification-preferences-header-6ac35b1530d226ac35b152387b8">Systemnachrichten</h3>
+                            </div>
+                        
+                            <h3 class="mb-2 mt-4 h6 font-weight-bold">Allgemein</h3>
+                            <div data-preference="entertosend">
+                                <div class="custom-control custom-switch">
+                                    <input type="checkbox" class="custom-control-input" id="enter-to-send-6ac35b1530d226ac35b152387b8" >
+                                    <label class="custom-control-label" for="enter-to-send-6ac35b1530d226ac35b152387b8">
+                                        Eingabetaste zum Senden tippen
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div data-region="placeholder-container">
+                        
+                        <div class="d-flex flex-column p-3">
+                            <div class="w-25 bg-pulse-grey h6" style="height: 18px"></div>
+                            <div class="w-75 bg-pulse-grey mb-4" style="height: 18px"></div>
+                            <div class="mb-3">
+                                <div class="w-100 d-flex mb-3">
+                                    <div class="bg-pulse-grey rounded-circle" style="width: 18px; height: 18px"></div>
+                                    <div class="bg-pulse-grey w-50 ms-2" style="height: 18px"></div>
+                                </div>
+                                <div class="w-100 d-flex mb-3">
+                                    <div class="bg-pulse-grey rounded-circle" style="width: 18px; height: 18px"></div>
+                                    <div class="bg-pulse-grey w-50 ms-2" style="height: 18px"></div>
+                                </div>
+                                <div class="w-100 d-flex mb-3">
+                                    <div class="bg-pulse-grey rounded-circle" style="width: 18px; height: 18px"></div>
+                                    <div class="bg-pulse-grey w-50 ms-2" style="height: 18px"></div>
+                                </div>
+                            </div>
+                            <div class="w-50 bg-pulse-grey h6 mb-3 mt-2" style="height: 18px"></div>
+                            <div class="mb-4">
+                                <div class="w-100 d-flex mb-2 align-items-center">
+                                    <div class="bg-pulse-grey w-25" style="width: 18px; height: 27px"></div>
+                                    <div class="bg-pulse-grey w-25 ms-2" style="height: 18px"></div>
+                                </div>
+                                <div class="w-100 d-flex mb-2 align-items-center">
+                                    <div class="bg-pulse-grey w-25" style="width: 18px; height: 27px"></div>
+                                    <div class="bg-pulse-grey w-25 ms-2" style="height: 18px"></div>
+                                </div>
+                            </div>
+                            <div class="w-25 bg-pulse-grey h6 mb-3 mt-2" style="height: 18px"></div>
+                            <div class="mb-3">
+                                <div class="w-100 d-flex mb-2 align-items-center">
+                                    <div class="bg-pulse-grey w-25" style="width: 18px; height: 27px"></div>
+                                    <div class="bg-pulse-grey w-50 ms-2" style="height: 18px"></div>
+                                </div>
+                            </div>
+                        </div>                    </div>
+                </div>            </div>
+            <div class="footer-container position-relative" data-region="footer-container">
+                
+                <div
+                    class="hidden border-top bg-white position-relative"
+                    aria-hidden="true"
+                    data-region="view-conversation"
+                    data-enter-to-send="0"
+                >
+                    <div class="hidden p-sm-2" data-region="content-messages-footer-container">
+                        
+                            <div
+                                class="emoji-auto-complete-container w-100 hidden"
+                                data-region="emoji-auto-complete-container"
+                                aria-live="polite"
+                                aria-hidden="true"
+                            >
+                            </div>
+                        <div class="d-flex mt-sm-1">
+                            <textarea
+                                dir="auto"
+                                data-region="send-message-txt"
+                                class="form-control bg-light"
+                                rows="3"
+                                data-auto-rows
+                                data-min-rows="3"
+                                data-max-rows="5"
+                                aria-label="Mitteilung schreiben..."
+                                placeholder="Mitteilung schreiben..."
+                                style="resize: none"
+                                maxlength="4096"
+                            ></textarea>
+                        
+                            <div class="position-relative d-flex flex-column">
+                                    <div
+                                        data-region="emoji-picker-container"
+                                        class="emoji-picker-container hidden"
+                                        aria-hidden="true"
+                                    >
+                                        
+                                        <div
+                                            data-region="emoji-picker"
+                                            class="card shadow emoji-picker"
+                                        >
+                                            <div class="card-header px-1 pt-1 pb-0 d-flex justify-content-between flex-shrink-0">
+                                                <button
+                                                    class="btn btn-outline-secondary icon-no-margin category-button rounded-0 selected"
+                                                    data-action="show-category"
+                                                    data-category="Recent"
+                                                    title="Kürzlich verwendete"
+                                                >
+                                                    <i class="icon fa-regular fa-clock fa-fw " aria-hidden="true" ></i>
+                                                </button>
+                                                <button
+                                                    class="btn btn-outline-secondary icon-no-margin category-button rounded-0"
+                                                    data-action="show-category"
+                                                    data-category="Smileys & Emotion"
+                                                    title="Smileys & Emotionen"
+                                                >
+                                                    <i class="icon fa-regular fa-face-smile fa-fw " aria-hidden="true" ></i>
+                                                </button>
+                                                <button
+                                                    class="btn btn-outline-secondary icon-no-margin category-button rounded-0"
+                                                    data-action="show-category"
+                                                    data-category="People & Body"
+                                                    title="Menschen & Körperteile"
+                                                >
+                                                    <i class="icon fa fa-person fa-fw " aria-hidden="true" ></i>
+                                                </button>
+                                                <button
+                                                    class="btn btn-outline-secondary icon-no-margin category-button rounded-0"
+                                                    data-action="show-category"
+                                                    data-category="Animals & Nature"
+                                                    title="Tiere & Natur"
+                                                >
+                                                    <i class="icon fa fa-leaf fa-fw " aria-hidden="true" ></i>
+                                                </button>
+                                                <button
+                                                    class="btn btn-outline-secondary icon-no-margin category-button rounded-0"
+                                                    data-action="show-category"
+                                                    data-category="Food & Drink"
+                                                    title="Essen & Trinken"
+                                                >
+                                                    <i class="icon fa fa-pizza-slice fa-fw " aria-hidden="true" ></i>
+                                                </button>
+                                                <button
+                                                    class="btn btn-outline-secondary icon-no-margin category-button rounded-0"
+                                                    data-action="show-category"
+                                                    data-category="Travel & Places"
+                                                    title="Reisen & Orte"
+                                                >
+                                                    <i class="icon fa fa-plane fa-fw " aria-hidden="true" ></i>
+                                                </button>
+                                                <button
+                                                    class="btn btn-outline-secondary icon-no-margin category-button rounded-0"
+                                                    data-action="show-category"
+                                                    data-category="Activities"
+                                                    title="Aktivitäten"
+                                                >
+                                                    <i class="icon fa fa-futbol fa-fw " aria-hidden="true" ></i>
+                                                </button>
+                                                <button
+                                                    class="btn btn-outline-secondary icon-no-margin category-button rounded-0"
+                                                    data-action="show-category"
+                                                    data-category="Objects"
+                                                    title="Objekte"
+                                                >
+                                                    <i class="icon fa fa-hammer fa-fw " aria-hidden="true" ></i>
+                                                </button>
+                                                <button
+                                                    class="btn btn-outline-secondary icon-no-margin category-button rounded-0"
+                                                    data-action="show-category"
+                                                    data-category="Symbols"
+                                                    title="Symbole"
+                                                >
+                                                    <i class="icon fa fa-peace fa-fw " aria-hidden="true" ></i>
+                                                </button>
+                                                <button
+                                                    class="btn btn-outline-secondary icon-no-margin category-button rounded-0"
+                                                    data-action="show-category"
+                                                    data-category="Flags"
+                                                    title="Nationalflaggen"
+                                                >
+                                                    <i class="icon fa fa-flag fa-fw " aria-hidden="true" ></i>
+                                                </button>
+                                            </div>
+                                            <div class="card-body p-2 d-flex flex-column overflow-hidden">
+                                                <div class="input-group mb-1 flex-shrink-0">
+                                                    <div class="input-group-prepend">
+                                                        <span class="input-group-text pe-0 bg-white text-muted">
+                                                            <i class="icon fa fa-magnifying-glass fa-fw " aria-hidden="true" ></i>
+                                                        </span>
+                                                    </div>
+                                                    <input
+                                                        type="text"
+                                                        class="form-control border-start-0"
+                                                        placeholder="Suchen"
+                                                        aria-label="Suchen"
+                                                        data-region="search-input"
+                                                    >
+                                                </div>
+                                                <div class="flex-grow-1 overflow-auto emojis-container h-100" data-region="emojis-container">
+                                                    <div class="position-relative" data-region="row-container"></div>
+                                                </div>
+                                                <div class="flex-grow-1 overflow-auto search-results-container h-100 hidden" data-region="search-results-container">
+                                                    <div class="position-relative" data-region="row-container"></div>
+                                                </div>
+                                            </div>
+                                            <div
+                                                class="card-footer d-flex flex-shrink-0"
+                                                data-region="footer"
+                                            >
+                                                <div class="emoji-preview" data-region="emoji-preview"></div>
+                                                <div data-region="emoji-short-name" class="emoji-short-name text-muted text-wrap ms-2"></div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button
+                                        class="btn btn-link btn-icon icon-size-3 ms-1"
+                                        aria-label="Emoji-Auswahl umschalten"
+                                        data-action="toggle-emoji-picker"
+                                    >
+                                        <i class="icon fa-regular fa-face-smile fa-fw " aria-hidden="true" ></i>
+                                    </button>
+                                <button
+                                    class="btn btn-link btn-icon icon-size-3 ms-1 mt-auto"
+                                    aria-label="Mitteilung senden"
+                                    data-action="send-message"
+                                >
+                                    <span data-region="send-icon-container"><i class="icon fa-regular fa-paper-plane fa-fw " aria-hidden="true" ></i></span>
+                                    <span class="hidden" data-region="loading-icon-container"><span class="loading-icon icon-no-margin"><i class="icon fa fa-spinner fa-spin fa-fw "  title="Laden ..." role="img" aria-label="Laden ..."></i></span>
+</span>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="hidden p-sm-2" data-region="content-messages-footer-edit-mode-container">
+                        
+                        <div class="d-flex p-3 justify-content-end">
+                            <button
+                                class="btn btn-link btn-icon my-1 icon-size-4"
+                                data-action="delete-selected-messages"
+                                data-toggle="tooltip"
+                                data-placement="top"
+                                title="Ausgewählte Mitteilungen löschen"
+                            >
+                                <span data-region="icon-container"><i class="icon fa fa-trash-can fa-fw " aria-hidden="true" ></i></span>
+                                <span class="hidden" data-region="loading-icon-container"><span class="loading-icon icon-no-margin"><i class="icon fa fa-spinner fa-spin fa-fw "  title="Laden ..." role="img" aria-label="Laden ..."></i></span>
+</span>
+                                <span class="sr-only">Ausgewählte Mitteilungen löschen</span>
+                            </button>
+                        </div>                    </div>
+                    <div class="hidden bg-secondary p-sm-3" data-region="content-messages-footer-require-contact-container">
+                        
+                        <div class="p-3 bg-white">
+                            <p data-region="title"></p>
+                            <p class="text-muted" data-region="text"></p>
+                            <button type="button" class="btn btn-primary btn-block" data-action="request-add-contact">
+                                <span data-region="dialogue-button-text">Kontaktanfrage senden</span>
+                                <span class="hidden" data-region="loading-icon-container"><span class="loading-icon icon-no-margin"><i class="icon fa fa-spinner fa-spin fa-fw "  title="Laden ..." role="img" aria-label="Laden ..."></i></span>
+</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="hidden bg-secondary p-sm-3" data-region="content-messages-footer-require-unblock-container">
+                        
+                        <div class="p-3 bg-white">
+                            <p class="text-muted" data-region="text">Sie haben diese Person blockiert.</p>
+                            <button type="button" class="btn btn-primary btn-block" data-action="request-unblock">
+                                <span data-region="dialogue-button-text">Blockierung für diese Person aufheben</span>
+                                <span class="hidden" data-region="loading-icon-container"><span class="loading-icon icon-no-margin"><i class="icon fa fa-spinner fa-spin fa-fw "  title="Laden ..." role="img" aria-label="Laden ..."></i></span>
+</span>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="hidden bg-secondary p-sm-3" data-region="content-messages-footer-unable-to-message">
+                        
+                        <div class="p-3 bg-white">
+                            <p class="text-muted" data-region="text">Sie können dieser Person keine Mitteilung senden.</p>
+                        </div>
+                    </div>
+                    <div class="p-sm-2" data-region="placeholder-container">
+                        <div class="d-flex">
+                            <div class="bg-pulse-grey w-100" style="height: 80px"></div>
+                            <div class="mx-2 mb-2 align-self-end bg-pulse-grey" style="height: 20px; width: 20px"></div>
+                        </div>                    </div>
+                    <div
+                        class="hidden position-absolute z-index-1"
+                        data-region="confirm-dialogue-container"
+                        style="top: -1px; bottom: 0; right: 0; left: 0; background: rgba(0,0,0,0.3);"
+                    ></div>
+                </div>                    <div data-region="view-overview" class="text-center">
+                        <a href="https://moodle.htw-berlin.de/message/index.php">
+                            Alle anzeigen
+                        </a>
+                    </div>
+            </div>
+        </div>
+
+</div>
+</div>
+
+
+</body></html>
