@@ -319,6 +319,92 @@ Bei der ersten Tankstelle fehlt am `2025-02-01` mitten am Tag die Zeile für `13
 1. **Geschlossene Stunden (176796 Zeilen):** Wenn eine Tankstelle geschlossen hat, wird für diese Stunden gar keine Zeile im Datensatz angelegt.
 2. **Keine Preisänderung in dieser Stunde (28210 Zeilen):** Tankerkönig zeichnet nur Preisänderungen auf. Am Anfang des Tages (nach der Öffnung bis zur ersten Preismeldung) wurden die Stunden ohne Meldung zwar noch als Zeilen mit `NA` aufgefüllt (siehe Aufgabe a). Sobald an einem Tag aber der erste Preis gemeldet wurde, fehlt eine spätere Stunde komplett als Zeile im Datensatz, wenn die Tankstelle in dieser Stunde ihren Preis nicht geändert hat.
 
+## Woche 3 -- 10.11.2026
+
+a. Erstellen Sie vollständig beschriftete Histogramme für die Merkmale `e10_median` und `diesel_median` und überlagern diese zum besseren Vergleich in einem Diagramm. Dazu können Sie auch Bibliotheken wie ggplot2 und plotly betrachten.
+
+b. Bestimmen Sie Fünf- oder Sechs-Punkte-Zusammenfassungen der Merkmale `e10_median` und `diesel_median` und erstellen zugehörige Boxplots mit Ausreißererkennung. 
+
+c. Vergleichen Sie anhand der Histogramme, der Fünf- oder Sechs-Punkte-Zusammenfassungen sowie der Boxplots die Werteverteilungen von `e10_median` und `diesel_median`.  
+
+d. Extrahieren Sie die Ausreißer von `e10_median` und `diesel_median`. Finden Sie mit Detektivarbeit heraus,  
+
+  * ob es ein Muster für die Ausreißer gibt, z.B. wann sie wo auftreten
+  * ob die Ausreißer echte oder falsche Werte sind. 
+  
+  
+### a. Histogramme
+
+```{r}
+hist(tanken$e10_median / 1000,
+      main = "Verteilung der E10-Preise",
+      xlab = "Preis in €/Liter",
+      ylab = "Anzahl der Messungen")
+
+hist(tanken$diesel_median /1000,
+     main = "Verteilung der Dieselpreise",
+     xlab = "Preis in €/Liter",
+     ylab = "Anzahl der Messungen")
+```
+
+
+### b. 
+
+```{r}
+summary(tanken$e10_median / 1000)
+summary(tanken$diesel_median / 1000)
+```
+```{r}
+ se <- summary(tanken$e10_median / 1000)
+iqr_e <-  se[5]-se[2]
+iqr_e 
+
+sd <- summary(tanken$diesel_median / 1000)
+iqr_d <-  sd[5]-sd[2]
+iqr_d 
+```
+
+```{r}
+grenze_oben_e <- se[5] + 1.5 * iqr_e
+grenze_unten_e <- se[2] - 1.5 * iqr_e
+
+grenze_oben_d <- sd[5] + 1.5 * iqr_d
+grenze_unten_d <- sd[2] - 1.5 * iqr_d
+```
+
+```{r}
+ausreisser_oben_e  <- (tanken$e10_median / 1000)[!is.na(tanken$e10_median / 1000) & (tanken$e10_median / 1000) > grenze_oben_e]
+
+length(ausreisser_oben_e)
+
+ausreisser_unten_e <- (tanken$e10_median / 1000)[!is.na(tanken$e10_median / 1000)& ((tanken$e10_median / 1000) < grenze_unten_e)]
+
+length(ausreisser_unten_e)
+
+ausreisser_oben_d  <- (tanken$diesel_median / 1000)[!is.na(tanken$diesel_median / 1000) & (tanken$diesel_median / 1000) > grenze_oben_d]
+
+length(ausreisser_oben_d)
+
+ausreisser_unten_d <- (tanken$diesel_median / 1000)[!is.na(tanken$diesel_median / 1000)& ((tanken$diesel_median / 1000) < grenze_unten_d)]
+
+length(ausreisser_unten_d)
+```
+
+```{r}
+boxplot(tanken$e10_median / 1000, tanken$diesel_median / 1000,
+        names = c("E10", "Diesel"),
+        main  = "Boxplots der Kraftstoffpreise mit Ausreißern",
+        ylab  = "Preis in €/Liter")
+```
+Beim Diesel gibt es Ausreißer bei 0 €.
+
+```{r}
+tanken[!is.na(tanken$diesel_median) & tanken$diesel_median == 0,
+              c("date", "time", "brand", "street", "e10_median", "diesel_median")]
+```
+Das Ergebnis zeigt, dass alle Zeilen zur Tankstelle in der `Finckensteinallee 133` gehören. Die Nullwerte gibt es nur an 2 Tagen. Am `2025-03-06` um 7, 19 und 20 Uhr und am `2025-08-13` um 7, 12 und 19 Uhr. Der `E10-Preis` ist zur selben Zeit ganz normal.
+Die Nullwerte sind wahrscheinlich keine echte Preise.
+  
 
 ## Quellen
 
