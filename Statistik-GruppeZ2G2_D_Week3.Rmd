@@ -1,0 +1,543 @@
+---
+title: "Semesterbegleitende Abgabe WiSe2026-27"
+output: html_document
+editor_options: 
+  markdown: 
+    wrap: sentence
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Statistik im Bachelor Wirtschaftsinformatik
+
+Dozent_innen: Martin Spott, Michael Heimann, Anja Hirsch\
+Stand: `r format(Sys.Date(), format='%d.%m.%Y')`
+
+<!-- Bitte geben Sie Ihre Gruppennummer und Ihre Namen an -->
+
+**Gruppe:**
+
+Gruppe D
+
+**Autor_innen:**
+
+Jakob Fahr\
+Anahita Karimi\
+David Marcel Mayer\
+Timo Wahl
+
+## Einleitung
+
+In diesem Semester beschäftigen wir uns mit Kraftstoffpreisen in Berlin.
+Dazu benutzen wir Daten von der Organisation Tankerkönig [1], die jede Preisänderung angeschlossener Tankstellenbetreiber_innen mit Zeitstempel protokolliert.
+In der Datei *tankerkoenig_WiSe2026-27_1.csv* finden Sie den Ausschnitt der Daten, den Sie für die Aufgaben benutzen sollen.
+Dabei haben wir für jede Tankstelle und jede Stunde den Median der von Tankerkönig registrierten Preisänderungen der Kraftstoffe Diesel und E10 ermittelt.
+
+### Regeln
+
+Arbeiten Sie in Ihrer Moodlegruppe von bis zu vier Studierenden, die alle in derselben Übungsgruppe sein und die eine zu wählende Abgabe auch in den zugehörigen Übungen vorstellen müssen (Terminkalender folgt).
+Jede/r von Ihnen hat in Moodle nur Zugriff auf die Gruppeneinteilung Ihrer in LSF festgelegten Übungsgruppe, wo Sie sich in einer Gruppe eintragen müssen, um Punkte zu bekommen.
+
+Bearbeiten Sie die Aufgaben fortlaufend in diesem RMarkdown-Dokument und **geben es bei jeder Teilabgabe komplett als RMarkdown- und als mit Knit übersetztes HTML-Dokument ab**.
+Stellen Sie sicher, dass das RMarkdown-Dokument auch für uns lauffähig ist.
+Gehen Sie dazu davon aus, dass sich auf unseren Rechnern die Daten im selben Verzeichnis befinden werden wie Ihr RMarkdown-Dokument.
+
+Benutzen Sie nur Verfahren und Techniken, die wir in der Vorlesung besprochen haben.
+Sie können aber gerne komplexere Visualisierungen einsetzen, wenn dies sinnvoll erscheint.
+
+Erklären Sie kurz Ihr Vorgehen vor jedem Codeabschnitt und interpretieren die Ergebnisse danach.
+Schreiben Sie Erklärungen/Interpretationen in Textform zwischen die Codeblöcke, nicht als Kommentare in die Codeblöcke.
+Sie können den Code aber gerne zusätzlich knapp kommentieren.
+
+Für jede weitere Woche bekommen Sie eine Aufgabenstellung in RMarkdown, die Sie bitte in diesem Dokument fortlaufend anhängen und dort bearbeiten.
+Geben Sie immer das gesamte Dokument einschließlich der vorangehenden Aufgaben ab, da die Aufgaben teilweise aufeinander aufbauen und Sie vorangehende Lösungen später benötigen.
+
+## Woche 1 -- 27.10.2026
+
+Beschreiben Sie zwischen den Codeblöcken in Textform, was Sie warum tun und was Sie herausfinden.
+
+a.  Importieren Sie die Daten.
+b.  Beschreiben Sie die Daten. Was sind die Merkmale, was die Merkmalsträger?
+c.  Geben Sie für alle Merkmale an, ob sie qualitativ/quantitativ, diskrekt/stetig und auf welchen Skalen sie definiert sind.
+d.  Berechnen Sie für das Merkmal `brand` (Marke) die Tabellen mit absoluter und relativer Häufigkeit.
+e.  Stellen Sie die Tabelle absoluter Häufigkeit von `brand` als Balkendiagramm dar. Beschriften Sie alle Axen und geben dem Diagramm eine Überschrift.
+f.  Was bedeuten die absoluten Häufigkeiten im Kontext unserer Daten? Warum gibt es Unterschiede zwischen den Werten der verschiedenen Marken?
+
+### a. Datenimport
+
+Die Daten liegen im CSV Format.
+Wir lesen sie mit `read.csv()` ein und speichern sie unter dem Namen `tanken`, damit wir sie in den folgenden Aufgaben auswerten können.
+
+```{r}
+   tanken <- read.csv("tankerkoenig_WiSe2026-27_1.csv")
+```
+
+Der Datensatz enthält 478274 Zeilen und 13 Spalten.
+
+### b. Beschreibung der Daten
+
+Um uns einen Überblick zu verschaffen, lassen wir uns die ersten Zeilen und die Struktur der Daten anzeigen.
+
+```{r}
+head(tanken)
+str(tanken)
+```
+
+Der Datensatz enthält stündliche Kraftstoffpreise von Berliner Tankstellen.
+Der Merksmalsträger ist eine Tankstelle in einer bestimmten Stunde an einem bestimmten Tag.
+Grundgesamtheit sind alle Stunden der 78 Tankstellen in Berlin von Februar 2025 bis Januar 2026.
+Merkmale sind die Spalten: 
+- `X`: die Zeilennummer
+- `id`: eindeutige ID der Tankstelle
+- `date`, `time`: Datum und Stunde
+- `name`, `brand`: Name und Marke der Tankstelle
+- `street`, `house_number`, `post_code`: Adresse der Tankstelle
+- `opening_time`, `closing_time`: Öffnungs und Schließzeit
+- `e10_median`, `diesel_median`: Median der Preise für E10 und Diesel in dieser Stunde. Die Preise sind in Euro pro Liter angegeben, aber ohne Komma.
+
+Bei einigen Zeilen fehlen die Preise (`NA`).
+
+### c. Merkmalstypen
+
+| Merkmal         | qualitativ/quantitativ | diskret/stetig | Skala           |
+|-----------------|------------------------|----------------|-----------------|
+| `X`             | quantitativ            | diskret        | Ordinalskala    |
+| `id`            | qualitativ             | diskret        | Nominalskala    |
+| `date`          | quantitativ            | diskret        | Intervallskala  |
+| `time`          | quantitativ            | diskret        | Intervallskala  |
+| `name`          | qualitativ             | diskret        | Nominalskala    |
+| `brand`         | qualitativ             | diskret        | Nominalskala    |
+| `street`        | qualitativ             | diskret        | Nominalskala    |
+| `house_number`  | qualitativ             | diskret        | Nominalskala    |
+| `post_code`     | qualitativ             | diskret        | Nominalskala    |
+| `opening_time`  | quantitativ            | diskret        | Intervallskala  |
+| `closing_time`  | quantitativ            | diskret        | Intervallskala  |
+| `e10_median`    | quantitativ            | quasi-stetig   | Verhältnisskala |
+| `diesel_median` | quantitativ            | quasi-stetig   | Verhältnisskala |
+
+Postleitzahl, Hausnummer und id bestehen zwar teilweise aus Ziffern, sind aber nur Bezeichnungen, mit denen man nicht rechnen kann.
+Deshalb sind sie qualitativ und nominal.
+Datum und Uhrzeiten sind intervallskaliert.
+Abstände sind sinnvoll, aber der Nullpunkt ist willkürlich.
+Die Preise sind verhältnisskaliert, weil 0 € ein echter Nullpunkt ist.
+Sie sind quasi-stetig, weil sie gerundet angegeben werden.
+
+### d. Häufigkeiten der Marken
+
+Wir zählen mit `table()`, wie oft jede Marke im Datensatz vorkommt (absolute Häufigkeit), und rechnen das mit `prop.table()` in Anteile um (relative Häufigkeit). Die Anteile runden wir mit `round()` auf drei Nachkommastellen.
+
+
+```{r}
+brand_abs <- table(tanken$brand)
+brand_abs
+
+brand_rel <- prop.table(brand_abs)
+round (brand_rel, 3)
+```
+
+### e. Balkendiagramm
+
+Da `brand` ein qualitatives Merkmal ist, stellen wir die absoluten Häufigkeiten als Balkendiagramm dar.
+Damit alle Markennamen lesbar sind, verkleinern wir sie (mit `cex.names`) und drehen sie senkrecht (mit `las = 2`).
+
+```{r}
+barplot(brand_abs/1000,
+        main = "Absolute Häufigkeit der Tankstellenmarken",
+        xlab = "Marke",
+        ylab = "Anzahl Stunden aller Tankstellen in Tausend",
+        ylim = c(0, 120),
+        cex.names = 0.7, 
+        las = 2, 
+        col = "skyblue")
+```
+
+
+Auf der x Achse sind die Tankstellenmarken.
+Auf der y Achse ist die absolute Häufigkeit dargestellt, also die Anzahl der Stunden, für die im Datensatz ein Preis einer Tankstelle dieser Marke vorliegt (zusammengezählt über alle Tankstellen der Marke und das ganze Jahr).
+Jeder Balken steht für eine Marke, und seine Höhe zeigt, wie oft diese Marke im Datensatz vorkommt.
+Am häufigsten kommt STAR vor, dicht gefolgt von Shell.
+Mit Abstand folgt TotalEnergies, am seltensten ist AGIP ENI.
+
+
+
+### f. Interpretation der Häufigkeiten
+
+Die absolute Häufigkeit einer Marke gibt an, für wie viele Stunden im Datensatz ein Preis einer Tankstelle dieser Marke vorliegt, zusammengezählt über alle Berliner Tankstellen der Marke im Zeitraum von Februar 2025 bis Januar 2026.
+
+Die Unterschiede können vor allem durch die Anzahl der Tankstellen je Marke entstehen. STAR hat im Datensatz 17 Tankstellen, Shell 15, AGIP ENI dagegen nur 4. Je mehr Tankstellen eine Marke hat, desto mehr Stunden kommen zusammen. Außerdem sind die Öffnungszeiten auch relevant, je länger eine Tankstelle geöffnet hat, desto mehr Stunden mit Preisen gibt es im Datensatz.
+
+```{r}
+tankstellen <- unique(tanken[, c("id", "brand")])
+table(tankstellen$brand)
+```
+
+
+**---Fügen Sie hier kommende Aufgabenbeschreibungen mit Lösungen ein ---**
+
+## Woche 2
+
+a. Bestimmen Sie, wie viele Werte bei jedem Merkmal im Datensatz fehlen (NA). Finden Sie mit Detektivarbeit heraus, welche Eigenschaft die Datensätze mit den fehlenden Werten haben und wie man die fehlenden mit sinnvollen Werten ersetzen kann. Das Ersetzen müssen Sie nur erklären, nicht implementieren.  
+b. Bestimmen Sie, zu welchen Uhrzeiten Messungen durchgeführt wurden und jeweils wie viele. Finden Sie mit Detektivarbeit heraus, welche Eigenschaften die Datensätze mit Messungen haben, die nicht bei voller Stunde vorgenommen wurden. Runden Sie die Zeit von allen Datensätzen zur nächsten vollen Stunde ab (streichen die Minuten), um später einfacher mit den Daten arbeiten zu können.  
+c. Finden Sie heraus, ob Merkmalsträger komplett fehlen. Wenn ja, können Sie ein Muster für das Fehlen erkennen?
+
+
+### a. Fehlende Werte
+
+Mit `is.na()` wird für jeden Wert geprüft, ob er fehlt.`colSums()` zählt dann die fehlenden Werte für jede Spalte. Mit `mean()` berechnen wir zusätzlich den Anteil der fehlenden Preise.
+
+
+```{r}
+colSums(is.na(tanken))
+mean(is.na(tanken$e10_median))
+mean(is.na(tanken$diesel_median))
+```
+
+Fehlende Werte gibt es nur bei `house_number`, `e10_median` und `diesel_median`. Bei `house_number` fehlen 85868 Werte. Das liegt daran, dass die Hausnummer schon in `street` steht. Bei `e10_median` und `diesel_median` fehlen jeweils 28151 Werte, also etwa 5,9 % aller Zeilen. Da es bei beiden genau gleich viele sind, fehlen wahrscheinlich immer beide Preise gleichzeitig.
+
+Um herauszufinden, was die Zeilen mit fehlenden Preisen gemeinsam haben, filtern wir nur die Zeilen, in denen `e10_median` fehlt, und speichern sie als `fehlende_preise`. Mit `head()` schauen wir uns die ersten 15 Zeilen an.
+
+```{r}
+fehlende_preise <- tanken[is.na(tanken$e10_median) ,]
+head(fehlende_preise, 15)
+```
+
+In allen Zeilen fehlt auch `diesel_median`. Außerdem ist die Uhrzeit immer 07:30, also die erste Stunde nach der Öffnung um 07:00. Das sind aber alles Zeilen von derselben Tankstelle. Deshalb prüfen wir mit `table()`, ob das Muster auch bei den anderen Tankstellen gilt.
+
+```{r}
+
+table(fehlende_preise$time)
+table(fehlende_preise$opening_time)
+```
+Die meisten fehlenden Preise gibt es nachts und früh morgens zwischen 00:00 und 07:00 Uhr. Tagsüber fehlen nur etwa 300 Werte pro Stunde. Bei `opening_time` sieht man, dass 16875 der fehlenden Preise von Tankstellen kommen, die um 00:00 öffnen, also 24 Stunden offen haben. Danach kommen die Tankstellen, die um 06:00 öffnen.
+
+Die Preise fehlen also immer am Anfang des Tages. Eine Tankstelle hat so lange keinen Preis, bis sie an dem Tag zum ersten Mal ihren Preis ändert. Bei Tankstellen, die 24 Stunden offen haben, ist das nachts, bei den anderen in der ersten Stunde nach dem Öffnen. Natürlich gibt es in dieser Zeit trotzdem einen Preis, er wurde nur noch nicht gemeldet. Deshalb konnte für diese Stunde kein Median berechnet werden.
+
+**Ersetzen der fehlenden Werte:**
+
+Weil ein Preis so lange gilt, bis er geändert wird, kann man einen fehlenden Wert durch den letzten bekannten Preis derselben Tankstelle ersetzen, also durch den letzten Preis vom Vortag. Dabei muss man darauf achten, nur Werte derselben Tankstelle zu nehmen und nicht einfach die Zeile darüber. 
+
+### b. Uhrzeiten der Messungen
+
+Zuerst wird mit `table()` angezeigt, zu welchen Uhrzeiten Messungen vorliegen und wie viele es jeweils sind.
+Mit `length(unique())` zählen wir außerdem, wie viele verschiedene Uhrzeiten im Datensatz vorkommen. 
+```{r}
+length(unique(tanken$time))
+table(tanken$time)
+```
+Im Datensatz kommen 58 verschiedene Uhrzeiten vor.
+Neben den 24 vollen Stunden gibt es auch Messungen um xx:15 und xx:30
+
+
+Die Uhrzeit liegt als Text im Format `"xx:xx"` vor. Mit `sub()` wird der Doppelpunkt durch einen leeren Text ersetzt, also gelöscht, sodass aus `"07:30"` die Zahl `730` wird. Mit der Ganzzahldivision `%/%` erhält man daraus die Stunde und mit dem Rest der Division `%%` die Minute
+
+```{r}
+zeit   <- as.integer(sub(":", "", tanken$time))
+stunde <- zeit %/% 100
+minute <- zeit %% 100
+
+table(minute)
+```
+
+Von den 478274 Messungen wurden 449634 zur vollen Stunde durchgeführt, 11807 zur Viertelstunde und 16833 zur halben Stunde.
+
+```{r}
+voll       <- tanken[minute == 0, ]
+nicht_voll <- tanken[minute != 0, ]
+
+table(nicht_voll$street)
+length(unique(nicht_voll$id))
+
+table(nicht_voll$time)
+table(nicht_voll$street, minute[minute != 0])
+
+```
+
+Die meisten Messungen erfolgten zur vollen Stunde. Die Ausnahmen stammen ausschließlich von 5 Tankstellen, die ihre Preise immer zu einer festen Minute melden:
+
+- **xx:15**: Altentreptower Straße, Waidmannsluster Damm 54
+- **xx:30**: Finckensteinallee 133, Steglitzer Damm 77, Teltower Damm 164
+
+
+Zum Schluss runden wir alle Uhrzeiten auf die volle Stunde ab, indem wir die Minuten streichen.
+Die Stunde haben wir oben bereits berechnet, bisher aber nur in der Variable `stunde` gespeichert.
+Mit `sprintf("%02d:00", stunde)` machen wir daraus wieder eine Uhrzeit im Format `"xx:00"`, wobei `%02d` die Stunde zweistellig mit führender Null schreibt.
+
+
+```{r}
+tanken$time <- sprintf("%02d:00", stunde)
+table(tanken$time)
+```
+
+
+### c. Komplett fehlende Merkmalsträger
+
+Ein Merkmalsträger ist eine Tankstelle in einer bestimmten Stunde an einem bestimmten Tag. Zuerst wird geprüft, wie viele Zeilen es theoretisch geben müsste, wenn für alle 78 Tankstellen an allen 365 Tagen jede der 24 Stunden vorhanden wäre.
+
+```{r}
+78 * 365 * 24
+nrow(tanken)
+```
+
+Bei 24 Stunden pro Tag gäbe es 683280 Merkmalsträger, wir haben aber nur 478274 Zeilen. Es fehlen also 205006 Stunden. 
+
+Grund: Öffnungszeiten.
+Es muss geprüft werden ob es im Datensatz überhaupt Zeilen außerhalb der Öffnungszeiten gibt, und dann muss berechnet werden, wie viele Stunden die Tankstellen insgesamt geöffnet haben.
+
+```{r}
+open_stunde  <- as.integer(sub(":00", "", tanken$opening_time))
+close_stunde <- as.integer(sub(":00", "", tanken$closing_time))
+
+
+sum(stunde < open_stunde)
+sum(stunde >= close_stunde)
+
+tag_info  <- tanken[!duplicated(tanken[, c("id", "date")]), ]
+tag_open  <- as.integer(sub(":00", "", tag_info$opening_time))
+tag_close <- as.integer(sub(":00", "", tag_info$closing_time))
+
+sum(tag_close - tag_open)
+sum(tag_close - tag_open) - nrow(tanken)
+```
+
+Außerhalb der Öffnungszeiten gibt es 0 Zeilen. Insgesamt hatten alle Tankstellen im Jahr zusammen 506484 Stunden geöffnet. Damit fehlen schon mal $683280 - 506484 = 176796$ Merkmalsträger einfach deshalb, weil die Tankstellen nachts geschlossen hatten.
+
+Allerdings fehlen auch innerhalb der Öffnungszeiten noch $506484 - 478274 = 28210$ Zeilen komplett. Um zu sehen, wann diese Zeilen fehlen, wird die erste Tankstelle an den ersten beiden Tagen näher betrachten. Des Weiteren wird geschaut für jede Stunde des Tages, wie viele geöffnete Stunden im Datensatz fehlen.
+
+```{r}
+tanken[1:14, c("date", "time", "opening_time", "closing_time", "e10_median")]
+
+offen_je_stunde <- sapply(0:23, function(h) sum(tag_open <= h & h < tag_close))
+offen_je_stunde - as.integer(table(tanken$time))
+```
+
+Bei der ersten Tankstelle fehlt am `2025-02-01` mitten am Tag die Zeile für `13:00` Uhr (vor dem Abrunden `13:30`). Auch über den ganzen Datensatz verteilt fehlen tagsüber zwischen 06:00 und 22:00 Uhr in jeder Stunde rund 1300 bis 1800 Zeilen.
+
+**Muster für das Fehlen der Merkmalsträger:**
+
+1. **Geschlossene Stunden (176796 Zeilen):** Wenn eine Tankstelle geschlossen hat, wird für diese Stunden gar keine Zeile im Datensatz angelegt.
+2. **Keine Preisänderung in dieser Stunde (28210 Zeilen):** Tankerkönig zeichnet nur Preisänderungen auf. Am Anfang des Tages (nach der Öffnung bis zur ersten Preismeldung) wurden die Stunden ohne Meldung zwar noch als Zeilen mit `NA` aufgefüllt (siehe Aufgabe a). Sobald an einem Tag aber der erste Preis gemeldet wurde, fehlt eine spätere Stunde komplett als Zeile im Datensatz, wenn die Tankstelle in dieser Stunde ihren Preis nicht geändert hat.
+
+## Woche 3 -- 10.11.2026
+
+a. Erstellen Sie vollständig beschriftete Histogramme für die Merkmale `e10_median` und `diesel_median` und überlagern diese zum besseren Vergleich in einem Diagramm. Dazu können Sie auch Bibliotheken wie ggplot2 und plotly betrachten. 
+
+b. Bestimmen Sie Fünf- oder Sechs-Punkte-Zusammenfassungen der Merkmale `e10_median` und `diesel_median` und erstellen zugehörige Boxplots mit Ausreißererkennung. 
+
+c. Vergleichen Sie anhand der Histogramme, der Fünf- oder Sechs-Punkte-Zusammenfassungen sowie der Boxplots die Werteverteilungen von `e10_median` und `diesel_median`.  
+
+d. Extrahieren Sie die Ausreißer von `e10_median` und `diesel_median`. Finden Sie mit Detektivarbeit heraus,  
+
+  * ob es ein Muster für die Ausreißer gibt, z.B. wann sie wo auftreten
+  * ob die Ausreißer echte oder falsche Werte sind. 
+
+### a. Histogramme E10- & Diesel-Median
+
+Vorab setzen wir die 6 unmöglichen Dieselpreise von 0 aus Woche 2a auf NA. Sonst würde das Diesel-Histogramm bei 0 beginnen und alle echten Preise in wenigen Balken zusammendrücken. Die Änderung gilt für alle folgenden Teilaufgaben.
+
+```{r}
+tanken$diesel_median[which(tanken$diesel_median == 0)] <- NA
+
+hist(tanken$e10_median, col=rgb(1,0,0,0.5), xlab="Preis (Zehntel-Cent pro Liter)", ylab="Häufigkeit", main="Histogramm von e10_median")
+
+hist(tanken$diesel_median, col=rgb(0,0,1,0.5), xlab="Preis (Zehntel-Cent pro Liter)", ylab="Häufigkeit", main="Histogramm von diesel_median")
+
+library(ggplot2)
+lang <- data.frame(
+  Sorte = rep(c("E10", "Diesel"), each = nrow(tanken)),
+  Preis = c(tanken$e10_median, tanken$diesel_median))
+
+ggplot(na.omit(lang), aes(x = Preis, fill = Sorte)) +
+  geom_histogram(binwidth = 25, alpha = 0.5, position = "identity") +
+  coord_cartesian(xlim = c(1375, 2000)) +
+  scale_fill_manual(values = c(E10 = "red", Diesel = "blue")) +
+  labs(title = "Verteilung der stündlichen Medianpreise in Berlin",
+       x = "Preis (Zehntel-Cent pro Liter)", y = "Häufigkeit", fill = "Kraftstoff") +
+  theme_minimal()
+```
+
+1. Einzelne Histogramme (Base R): Mit hist() zeichnen wir für e10_median und diesel_median je ein eigenes Histogramm. Es zeigt, wie oft die stündlichen Medianpreise in bestimmten Preisklassen liegen. col = rgb(r, g, b, 0.5) setzt eine halbtransparente Farbe, Rot für E10 und Blau für Diesel. Mit xlab, ylab und main beschriften wir die Achsen (inklusive Einheit) und geben einen Titel.
+
+2. Daten umformen: Um beide Histogramme in einem Diagramm zu überlagern, braucht ggplot2 die Daten im „langen“ Format. Dafür legen wir den Datensatz lang mit zwei Spalten an. Sorte gibt die Kraftstoffart an, also E10 oder Diesel. Preis enthält den zugehörigen Preis. Mit rep(..., each = nrow(tanken)) schreiben wir für alle E10-Preise „E10“ und für alle Dieselpreise „Diesel“ in die Spalte Sorte.
+
+3. Überlagertes Histogramm (ggplot2): na.omit(lang) entfernt die fehlenden Preise.
+aes(x = Preis, fill = Sorte) legt den Preis auf die x-Achse und färbt die Balken nach Kraftstoffart.
+geom_histogram(binwidth = 25, ...) sorgt dafür, dass beide Histogramme dieselben Klassen mit einer Breite von 25 haben und sich direkt vergleichen lassen. alpha = 0.5 macht die Balken halbtransparent, und position = "identity" legt sie übereinander statt sie zu stapeln.
+coord_cartesian(xlim = c(1375, 2000)) zeigt nur den Bereich, in dem fast alle Preise liegen. Ausgeblendet, aber nicht gelöscht, werden die rund 540 E10- und 150 Dieselpreise über 2 €. Sie stammen fast alle von der Autobahntankstelle Avus (siehe d).
+scale_fill_manual() legt dieselben Farben wie bei den einzelnen Histogrammen fest, also Rot für E10 und Blau für Diesel.
+labs() beschriftet Titel, Achsen und Legende, und theme_minimal() sorgt für ein schlichtes Layout.
+
+### b. Boxplots mit Ausreißererkennung
+
+```{r}
+# Sechs-Punkte-Zusammenfassung (Min, Q1, Median, Mittelwert, Q3, Max)
+summary(tanken$e10_median)
+summary(tanken$diesel_median)
+
+# Fünf-Punkte-Zusammenfassung nach Tukey
+fivenum(tanken$e10_median)
+fivenum(tanken$diesel_median)
+
+boxplot(tanken$e10_median, tanken$diesel_median,
+        names = c("E10", "Diesel"), col = c(rgb(1,0,0,0.5), rgb(0,0,1,0.5)),
+        ylab = "Preis (Zehntel-Cent pro Liter)",
+        main = "Boxplots der stündlichen Medianpreise")
+
+# Ausreißer anzeigen (Werte außerhalb 1,5 × IQR)
+b_e10 <- boxplot.stats(tanken$e10_median)
+length(b_e10$out); range(b_e10$out)
+
+b_diesel <- boxplot.stats(tanken$diesel_median)
+length(b_diesel$out); range(b_diesel$out)
+```
+summary() liefert die Sechs-Punkte-Zusammenfassung: Minimum, unteres Quartil, Median, Mittelwert, oberes Quartil und Maximum. Außerdem gibt es die Zahl der NAs an. fivenum() liefert die Fünf-Punkte-Zusammenfassung ohne Mittelwert. Im Boxplot reicht die Box vom unteren zum oberen Quartil, der Strich in der Box ist der Median. Die Whisker reichen bis zum letzten Wert innerhalb von 1,5 × IQR (Interquartilsabstand). Alles außerhalb wird als Punkt gezeigt und gilt als Ausreißer. `boxplot.stats()` gibt diese Ausreißer in `$out` zurück: Bei E10 sind es `r length(b_e10$out)` (von `r min(b_e10$out)` bis `r max(b_e10$out)`), bei Diesel `r length(b_diesel$out)` (von `r min(b_diesel$out)` bis `r max(b_diesel$out)`). Die 6 Dieselpreise von 0 wurden schon in a auf NA gesetzt, da es sich um Fehler handelt.
+
+### c. Vergleich der Verteilungen von E10 und Diesel
+
+Lage: E10 ist teurer als Diesel. Der Median liegt bei E10 bei 1639, bei Diesel bei 1619 Zehntel-Cent, also 2 Cent pro Liter Unterschied. Beim Mittelwert sind es 3,1 Cent (1649 zu 1618). Im Histogramm ist die E10-Verteilung entsprechend nach rechts verschoben.
+
+Streuung: Die mittleren 50 % der Preise liegen bei beiden sehr eng beieinander. Bei E10 reicht dieser Bereich von 1604 bis 1689 (IQR 85), bei Diesel von 1569 bis 1659 (IQR 90). Diesel streut also etwas stärker. Auch die Spannweite ist beim Diesel etwas größer: 1220 gegenüber 1185.
+
+Form: Beide Verteilungen sind eingipflig. Bei E10 liegt der Mittelwert 10 über dem Median. Die Verteilung ist also rechtsschief, mit einem langen Ausläufer zu hohen Preisen. Bei Diesel sind Mittelwert und Median fast gleich (1618 zu 1619). Symmetrisch ist die Verteilung trotzdem nicht: Innerhalb der Box liegt der Median näher am oberen Quartil (Median − Q1 = 50, Q3 − Median = 40), die Box ist also nach unten ausladend. Gleichzeitig gibt es wie bei E10 einen langen Ausläufer nach oben (5277 Ausreißer nach oben, nur 84 nach unten). Beide Effekte gleichen sich beim Mittelwert ungefähr aus. Diesel ist damit insgesamt ebenfalls leicht rechtsschief, aber deutlich schwächer als E10.
+
+Ausreißer: Bei E10 erkennt der Boxplot 5207 Ausreißer, und zwar nur nach oben, von 1819 bis 2669 (2,67 € pro Liter). Der kleinste E10-Preis von 1484 liegt noch innerhalb der Whisker. Diesel hat 5361 Ausreißer, davon die meisten nach oben, bis 2619, und zusätzlich 84 nach unten, bis 1399. Die 6 Nullpreise beim Diesel waren ein Datenfehler und wurden vorher auf NA gesetzt.
+
+Fazit: E10 ist im Schnitt etwa 2 bis 3 Cent teurer. Diesel streut etwas mehr und ist nur schwach schief, E10 ist deutlich rechtsschief mit Ausreißern ausschließlich nach oben.
+
+### d. Ausreißer der Preise
+
+#### Ausreißer extrahieren
+
+Als Ausreißer zählen, wie beim Boxplot, alle Werte außerhalb der Whisker, also mehr als das 1,5-fache des Quartilsabstands unter dem 1. oder über dem 3. Quartil. `boxplot.stats()` liefert diese Werte in `$out` und die Whisker-Grenzen in `$stats` (1. und 5. Wert). Die 6 unmöglichen Dieselpreise von 0 sind seit a bereits NA und verfälschen die Auswertung deshalb nicht.
+
+```{r ausreisser_extrahieren}
+grenzen_e10    <- boxplot.stats(tanken$e10_median)$stats[c(1, 5)]
+grenzen_diesel <- boxplot.stats(tanken$diesel_median)$stats[c(1, 5)]
+grenzen_e10
+grenzen_diesel
+
+# TRUE, wenn der Preis außerhalb der Whisker liegt (NA zählt nicht als Ausreißer)
+tanken$ausr_e10    <- !is.na(tanken$e10_median) &
+  (tanken$e10_median < grenzen_e10[1] | tanken$e10_median > grenzen_e10[2])
+tanken$ausr_diesel <- !is.na(tanken$diesel_median) &
+  (tanken$diesel_median < grenzen_diesel[1] | tanken$diesel_median > grenzen_diesel[2])
+
+sum(tanken$ausr_e10)
+sum(tanken$ausr_diesel)
+range(tanken$e10_median[tanken$ausr_e10])
+range(tanken$diesel_median[tanken$ausr_diesel])
+
+# Ausreißer nach unten / nach oben
+table(tanken$diesel_median[tanken$ausr_diesel] < grenzen_diesel[1])
+
+ausreisser <- tanken[tanken$ausr_e10 | tanken$ausr_diesel, ]
+nrow(ausreisser)
+```
+
+Bei E10 gibt es `r format(sum(tanken$ausr_e10), big.mark = ".", decimal.mark = ",")` Ausreißer, alle nach oben (über der oberen Whisker-Grenze von `r grenzen_e10[2]`, also über 1,814 €). Bei Diesel sind es `r format(sum(tanken$ausr_diesel), big.mark = ".", decimal.mark = ",")`, davon `r sum(tanken$ausr_diesel & tanken$diesel_median < grenzen_diesel[1])` nach unten und der Rest nach oben. Alle Zeilen mit mindestens einem Ausreißer stehen im Datensatz `ausreisser`.
+
+#### Wo treten die Ausreißer auf?
+
+Wir berechnen für jede Tankstelle den Anteil ihrer Preise, die Ausreißer sind:
+
+```{r ausreisser_wo}
+anteil_ausr_station <- tapply(tanken$ausr_e10, tanken$id, sum) /
+                       tapply(!is.na(tanken$e10_median), tanken$id, sum)
+round(100 * head(sort(anteil_ausr_station, decreasing = TRUE), 5), 1)
+
+avus <- tanken$name == "Avus"
+summary(tanken$e10_median[avus])
+summary(tanken$diesel_median[avus])
+sum(tanken$ausr_e10[avus])
+sum(tanken$ausr_diesel[avus])
+```
+
+Eine Tankstelle sticht heraus: Bei der ARAL-Tankstelle „Avus“ an der A 115 ist **jeder einzelne** vorhandene E10-Preis ein Ausreißer. Dasselbe gilt für Diesel. Ihr Median liegt bei etwa 1,99 € für E10 und 1,94 € für Diesel, also rund 35 bzw. 32 Cent über dem Median aller Tankstellen. Damit stammen `r sum(tanken$ausr_e10[avus])` der `r sum(tanken$ausr_e10)` E10-Ausreißer und `r sum(tanken$ausr_diesel[avus])` der `r sum(tanken$ausr_diesel)` Diesel-Ausreißer allein von dieser Tankstelle. Bei allen anderen Tankstellen sind höchstens etwa 3 % der Preise Ausreißer.
+
+#### Wann treten die Ausreißer auf?
+
+Ohne die Avus-Tankstelle schauen wir, zu welcher Uhrzeit und in welchem Monat Ausreißer auftreten:
+
+```{r ausreisser_wann, fig.width = 8, fig.height = 4.5}
+ohne_avus <- tanken[!avus, ]
+stunde_oa <- as.integer(substr(ohne_avus$time, 1, 2))   # Stunde der Messung, z. B. 7
+anteil_stunde <- tapply(ohne_avus$ausr_e10, stunde_oa, sum) /
+                 tapply(!is.na(ohne_avus$e10_median), stunde_oa, sum)
+round(100 * anteil_stunde, 1)
+
+anteil_stunde_d <- tapply(ohne_avus$ausr_diesel, stunde_oa, sum) /
+                   tapply(!is.na(ohne_avus$diesel_median), stunde_oa, sum)
+round(100 * anteil_stunde_d, 1)
+
+barplot(100 * anteil_stunde,
+        main = "Anteil E10-Ausreißer nach Uhrzeit (ohne Avus)",
+        xlab = "Stunde des Tages",
+        ylab = "Anteil Ausreißer in %",
+        col = "steelblue")
+
+monat <- substr(ohne_avus$date, 1, 7)
+round(100 * tapply(ohne_avus$ausr_e10, monat, sum) / tapply(!is.na(ohne_avus$e10_median), monat, sum), 1)
+round(100 * tapply(ohne_avus$ausr_diesel, monat, sum) / tapply(!is.na(ohne_avus$diesel_median), monat, sum), 1)
+```
+
+Es gibt zwei deutliche Muster:
+
+1. **Uhrzeit:** Die meisten Ausreißer liegen zwischen 6 und 7 Uhr morgens, bei E10 und bei Diesel (jeweils rund 6 bis 8 % der Preise in diesen Stunden, nachmittags fast 0 %). Das passt zum bekannten Tagesverlauf der Spritpreise: Die Tankstellen erhöhen die Preise am Morgen deutlich und senken sie im Laufe des Tages wieder.
+2. **Monat:** Gehäuft treten Ausreißer im Februar 2025 und im Januar 2026 auf, Diesel-Ausreißer vor allem im Januar 2026. In diesen Monaten war das allgemeine Preisniveau höher, wie der Verlauf des Tagesmedians zeigt. Besonders auffällig ist der Sprung zum Jahreswechsel 2025/26, nach dem beide Sorten auf rund 1,68 € steigen:
+
+```{r preisverlauf, fig.width = 8, fig.height = 4.5}
+tagesmedian_e10    <- tapply(tanken$e10_median, tanken$date, median, na.rm = TRUE)
+tagesmedian_diesel <- tapply(tanken$diesel_median, tanken$date, median, na.rm = TRUE)
+tage_datum <- as.Date(names(tagesmedian_e10))
+
+plot(tage_datum, tagesmedian_e10, type = "l", col = "steelblue",
+     ylim = range(c(tagesmedian_e10, tagesmedian_diesel)),
+     main = "Tagesmedian der Preise über alle Tankstellen",
+     xlab = "Datum", ylab = "Preis in Zehntel-Cent pro Liter")
+lines(tage_datum, tagesmedian_diesel, col = "darkorange")
+legend("bottomleft", legend = c("E10", "Diesel"), col = c("steelblue", "darkorange"), lty = 1)
+```
+
+Die wenigen Diesel-Ausreißer nach unten stammen fast alle vom 3. und 4. Juni 2025, also aus einer Phase, in der Diesel insgesamt besonders günstig war:
+
+```{r diesel_unten}
+unten <- tanken$ausr_diesel & tanken$diesel_median < grenzen_diesel[1]
+table(tanken$date[unten])
+length(unique(tanken$id[unten]))   # Anzahl verschiedener Tankstellen
+```
+
+Die Ausreißer nach unten verteilen sich auf `r length(unique(tanken$id[unten]))` verschiedene Tankstellen mehrerer Marken (u. a. JET, star, Sprint, ENI). Der Tagesmedian für Diesel erreicht am 3. und 4. Juni mit 1,499 € sein Jahrestief. Es handelt sich also um eine echte, allgemeine Preissenkung und nicht um den Fehler einer einzelnen Tankstelle.
+
+#### Echte oder falsche Werte?
+
+Die bisherigen Muster lassen sich alle inhaltlich erklären: Autobahntankstellen sind bekanntlich deutlich teurer, morgens sind die Preise am höchsten, und es gibt Phasen mit insgesamt höheren oder niedrigeren Preisen. Diese Ausreißer sind also **echte Werte**. Sie sind ungewöhnlich, aber tatsächlich so an der Tankstelle verlangt worden und sollten nicht entfernt werden.
+
+Anders sieht es bei den extremsten Werten aus. Wir schauen uns den höchsten E10-Preis mit den Stunden davor und danach an:
+
+```{r hoechster_wert}
+i <- which.max(tanken$e10_median)
+tanken[i, c("name", "street", "date", "time", "e10_median", "diesel_median")]
+tanken[tanken$id == tanken$id[i] & tanken$date == tanken$date[i],
+       c("time", "e10_median", "diesel_median")]
+```
+
+Bei der ESSO-Tankstelle am Mariendorfer Damm 44 springen am 21.02.2025 um 17 Uhr beide Preise um fast einen Euro nach oben (E10 auf 2,669 €, Diesel auf 2,619 €) und liegen eine Stunde später wieder fast auf dem alten Niveau. Ein so starker Sprung für nur eine Stunde, gleichzeitig bei beiden Sorten und nur an einer Tankstelle, ist unrealistisch. Hier handelt es sich sehr wahrscheinlich um einen **Eingabe- oder Übertragungsfehler**. Der Wert um 18 Uhr (2,289 €) ist ebenfalls verdächtig: Da der Stundenwert ein Median der Preismeldungen ist, ist er vermutlich durch den fehlerhaften Preis mit verzerrt. Diese beiden Werte sollte man wie die Dieselpreise von 0 als falsch behandeln, also auf NA setzen und wie in Woche 2a beschrieben ersetzen.
+
+Gibt es weitere solche Sprünge? Dazu vergleichen wir jeden Preis mit dem Median derselben Tankstelle am selben Tag und suchen alle Werte, die um mindestens 25 Cent davon abweichen:
+
+```{r spruenge}
+tagesmed_e10 <- ave(tanken$e10_median, tanken$id, tanken$date,
+                    FUN = function(x) median(x, na.rm = TRUE))
+sprung <- which(abs(tanken$e10_median - tagesmed_e10) >= 250)
+tanken[sprung, c("name", "street", "date", "time", "e10_median", "diesel_median")]
+```
+
+Es gibt genau diese zwei Werte der ESSO-Tankstelle. Alle anderen Ausreißer entstehen also nicht durch einzelne Sprünge, sondern durch dauerhaft hohe Preise (Avus) oder durch allgemeine Preisbewegungen.
+
+**Fazit:** Fast alle Ausreißer sind echte Werte. Sie kommen von der teuren Autobahntankstelle Avus, von den morgendlichen Preisspitzen sowie aus Phasen mit allgemein hohem (Februar 2025, Januar 2026) oder niedrigem Preisniveau (Anfang Juni 2025). Falsch sind nur einzelne Werte wie die Preissprünge bei der ESSO-Tankstelle am 21.02.2025 (und die Dieselpreise von 0 aus Woche 2a).
+
+
+## Quellen
+
+[1] Tankerkönig UG, URL: <https://tankerkoenig.de>, letzter Aufruf: 02.11.2026
