@@ -19,7 +19,7 @@ Stand: `r format(Sys.Date(), format='%d.%m.%Y')`
 
 **Gruppe:**
 
-Gruppe D
+Gruppe_Z2G2_D
 
 **Autor_innen:**
 
@@ -332,24 +332,46 @@ d. Extrahieren Sie die Ausreißer von `e10_median` und `diesel_median`. Finden S
   * ob es ein Muster für die Ausreißer gibt, z.B. wann sie wo auftreten
   * ob die Ausreißer echte oder falsche Werte sind. 
 
-### a. Histogramme E10- & Diesel-Median
+### a. Histogramme
 
-Vorab setzen wir die 6 unmöglichen Dieselpreise von 0 aus Woche 2a auf NA. Sonst würde das Diesel-Histogramm bei 0 beginnen und alle echten Preise in wenigen Balken zusammendrücken. Die Änderung gilt für alle folgenden Teilaufgaben.
+Beim Anschauen der Daten ist uns aufgefallen, dass es beim Diesel Preise von 0 € gibt. Das kann kein echter Preis sein, deshalb schauen wir uns diese Zeilen zuerst an. Mit `!is.na()` werden Zeilen ohne Preis dabei ausgelassen.
+
+```{r nullpreise}
+tanken[!is.na(tanken$diesel_median) & tanken$diesel_median == 0,
+       c("date", "time", "brand", "street", "e10_median", "diesel_median")]
+```
+
+Es gibt 6 Nullpreise, alle von der Tankstelle in der Finckensteinallee 133. Sie kommen nur an zwei Tagen vor: am 06.03.2025 um 7, 19 und 20 Uhr und am 13.08.2025 um 7, 12 und 19 Uhr. E10 hat zu diesen Zeiten normale Preise und auch Diesel ist in den Stunden dazwischen normal. Die Nullen sind also Fehler in den Daten.
+
+Deshalb setzen wir die 6 Werte auf NA. Sonst würde das Diesel-Histogramm bei 0 anfangen und man könnte die echten Preise kaum noch erkennen. Das gilt auch für alle weiteren Teilaufgaben.
 
 ```{r}
 tanken$diesel_median[which(tanken$diesel_median == 0)] <- NA
+```
 
+Zuerst zeichnen wir mit `hist()` für E10 und Diesel jeweils ein eigenes Histogramm. Mit `col = rgb(r, g, b, 0.5)` wird die Farbe halb durchsichtig (Rot für E10, Blau für Diesel). Mit `main`, `xlab` und `ylab` geben wir Titel und Achsenbeschriftung an.
+
+```{r}
 hist(tanken$e10_median, col=rgb(1,0,0,0.5), xlab="Preis (Zehntel-Cent pro Liter)", ylab="Häufigkeit", main="Histogramm von e10_median")
 
 hist(tanken$diesel_median, col=rgb(0,0,1,0.5), xlab="Preis (Zehntel-Cent pro Liter)", ylab="Häufigkeit", main="Histogramm von diesel_median")
+```
 
+Damit wir beide Histogramme in ein Diagramm legen können, nehmen wir ggplot2. Dafür brauchen wir die Daten in einer Tabelle mit nur zwei Spalten: `Sorte` (E10 oder Diesel) und `Preis`. Diese Tabelle nennen wir `lang`. Mit `rep(..., each = nrow(tanken))` wird in `Sorte` erst bei allen E10-Preisen „E10“ und danach bei allen Dieselpreisen „Diesel“ eingetragen.
+
+Zum Zeichnen entfernen wir mit `na.omit()` die fehlenden Preise. In `aes()` legen wir den Preis auf die x-Achse und färben nach Sorte.
+Mit `binwidth = 25` und `boundary = 0` haben beide Histogramme die gleichen Klassen (1375–1400, 1400–1425, …), sonst könnte man sie nicht gut vergleichen. `alpha = 0.5` macht die Balken durchsichtig und `position = "identity"` legt sie übereinander statt sie zu stapeln.
+Mit `coord_cartesian()` zeigen wir nur den Bereich von 1375 bis 2000, in dem fast alle Preise liegen. Die etwa 540 E10- und 150 Dieselpreise über 2 € werden nur ausgeblendet, nicht gelöscht. Sie kommen fast alle von der Autobahntankstelle Avus (siehe d).
+Mit `scale_fill_manual()` nehmen wir die gleichen Farben wie oben, mit `labs()` beschriften wir das Diagramm.
+
+```{r}
 library(ggplot2)
 lang <- data.frame(
   Sorte = rep(c("E10", "Diesel"), each = nrow(tanken)),
   Preis = c(tanken$e10_median, tanken$diesel_median))
 
 ggplot(na.omit(lang), aes(x = Preis, fill = Sorte)) +
-  geom_histogram(binwidth = 25, alpha = 0.5, position = "identity") +
+  geom_histogram(binwidth = 25, boundary = 0, alpha = 0.5, position = "identity") +
   coord_cartesian(xlim = c(1375, 2000)) +
   scale_fill_manual(values = c(E10 = "red", Diesel = "blue")) +
   labs(title = "Verteilung der stündlichen Medianpreise in Berlin",
@@ -357,18 +379,13 @@ ggplot(na.omit(lang), aes(x = Preis, fill = Sorte)) +
   theme_minimal()
 ```
 
-1. Einzelne Histogramme (Base R): Mit hist() zeichnen wir für e10_median und diesel_median je ein eigenes Histogramm. Es zeigt, wie oft die stündlichen Medianpreise in bestimmten Preisklassen liegen. col = rgb(r, g, b, 0.5) setzt eine halbtransparente Farbe, Rot für E10 und Blau für Diesel. Mit xlab, ylab und main beschriften wir die Achsen (inklusive Einheit) und geben einen Titel.
-
-2. Daten umformen: Um beide Histogramme in einem Diagramm zu überlagern, braucht ggplot2 die Daten im „langen“ Format. Dafür legen wir den Datensatz lang mit zwei Spalten an. Sorte gibt die Kraftstoffart an, also E10 oder Diesel. Preis enthält den zugehörigen Preis. Mit rep(..., each = nrow(tanken)) schreiben wir für alle E10-Preise „E10“ und für alle Dieselpreise „Diesel“ in die Spalte Sorte.
-
-3. Überlagertes Histogramm (ggplot2): na.omit(lang) entfernt die fehlenden Preise.
-aes(x = Preis, fill = Sorte) legt den Preis auf die x-Achse und färbt die Balken nach Kraftstoffart.
-geom_histogram(binwidth = 25, ...) sorgt dafür, dass beide Histogramme dieselben Klassen mit einer Breite von 25 haben und sich direkt vergleichen lassen. alpha = 0.5 macht die Balken halbtransparent, und position = "identity" legt sie übereinander statt sie zu stapeln.
-coord_cartesian(xlim = c(1375, 2000)) zeigt nur den Bereich, in dem fast alle Preise liegen. Ausgeblendet, aber nicht gelöscht, werden die rund 540 E10- und 150 Dieselpreise über 2 €. Sie stammen fast alle von der Autobahntankstelle Avus (siehe d).
-scale_fill_manual() legt dieselben Farben wie bei den einzelnen Histogrammen fest, also Rot für E10 und Blau für Diesel.
-labs() beschriftet Titel, Achsen und Legende, und theme_minimal() sorgt für ein schlichtes Layout.
+Beide Verteilungen haben nur einen Gipfel, der bei etwa 1,60 € liegt. E10 liegt insgesamt etwas weiter rechts als Diesel, ist also meistens etwas teurer. Nach links fallen beide schnell ab, nach rechts laufen sie langsam aus. Bei E10 sieht man das stärker. Diesel geht dafür weiter nach links, bis ungefähr 1,40 €.
 
 ### b. Boxplots mit Ausreißererkennung
+
+Mit `summary()` bekommen wir die Sechs-Punkte-Zusammenfassung (Minimum, unteres Quartil, Median, Mittelwert, oberes Quartil, Maximum) und die Anzahl der NAs. `fivenum()` gibt die Fünf-Punkte-Zusammenfassung ohne Mittelwert aus.
+Danach zeichnen wir beide Boxplots nebeneinander. Die Box geht vom unteren bis zum oberen Quartil, der Strich in der Mitte ist der Median. Die Whisker gehen bis zum letzten Wert, der noch innerhalb von 1,5 × IQR (Interquartilsabstand) liegt. Alle Werte darüber hinaus werden als Punkte gezeichnet und sind Ausreißer.
+Mit `boxplot.stats()` bekommen wir die Ausreißer in `$out`. Mit `length()` zählen wir sie und mit `range()` sehen wir den kleinsten und größten Ausreißer.
 
 ```{r}
 # Sechs-Punkte-Zusammenfassung (Min, Q1, Median, Mittelwert, Q3, Max)
@@ -391,25 +408,41 @@ length(b_e10$out); range(b_e10$out)
 b_diesel <- boxplot.stats(tanken$diesel_median)
 length(b_diesel$out); range(b_diesel$out)
 ```
-summary() liefert die Sechs-Punkte-Zusammenfassung: Minimum, unteres Quartil, Median, Mittelwert, oberes Quartil und Maximum. Außerdem gibt es die Zahl der NAs an. fivenum() liefert die Fünf-Punkte-Zusammenfassung ohne Mittelwert. Im Boxplot reicht die Box vom unteren zum oberen Quartil, der Strich in der Box ist der Median. Die Whisker reichen bis zum letzten Wert innerhalb von 1,5 × IQR (Interquartilsabstand). Alles außerhalb wird als Punkt gezeigt und gilt als Ausreißer. `boxplot.stats()` gibt diese Ausreißer in `$out` zurück: Bei E10 sind es `r length(b_e10$out)` (von `r min(b_e10$out)` bis `r max(b_e10$out)`), bei Diesel `r length(b_diesel$out)` (von `r min(b_diesel$out)` bis `r max(b_diesel$out)`). Die 6 Dieselpreise von 0 wurden schon in a auf NA gesetzt, da es sich um Fehler handelt.
+
+Der Median liegt bei E10 bei 1639 (1,639 €) und bei Diesel bei 1619 (1,619 €). Die Boxen sind sehr klein, die mittleren 50 % der Preise liegen also nah beieinander. Beide haben viele Ausreißer nach oben. Bei E10 sind es `r length(b_e10$out)` (von `r min(b_e10$out)` bis `r max(b_e10$out)`), bei Diesel `r length(b_diesel$out)` (von `r min(b_diesel$out)` bis `r max(b_diesel$out)`). Nur Diesel hat auch Ausreißer nach unten. Die 6 Nullpreise sind nicht mehr dabei, weil wir sie in a auf NA gesetzt haben.
 
 ### c. Vergleich der Verteilungen von E10 und Diesel
 
-Lage: E10 ist teurer als Diesel. Der Median liegt bei E10 bei 1639, bei Diesel bei 1619 Zehntel-Cent, also 2 Cent pro Liter Unterschied. Beim Mittelwert sind es 3,1 Cent (1649 zu 1618). Im Histogramm ist die E10-Verteilung entsprechend nach rechts verschoben.
+Lage: E10 ist teurer als Diesel. Der Median ist bei E10 1639 und bei Diesel 1619, das sind 2 Cent Unterschied pro Liter. Beim Mittelwert sind es 3,1 Cent (1649 zu 1618). Im Histogramm sieht man das daran, dass E10 weiter rechts liegt.
 
-Streuung: Die mittleren 50 % der Preise liegen bei beiden sehr eng beieinander. Bei E10 reicht dieser Bereich von 1604 bis 1689 (IQR 85), bei Diesel von 1569 bis 1659 (IQR 90). Diesel streut also etwas stärker. Auch die Spannweite ist beim Diesel etwas größer: 1220 gegenüber 1185.
+Streuung: Bei beiden liegen die mittleren 50 % der Preise eng zusammen. Bei E10 von 1604 bis 1689 (IQR 85), bei Diesel von 1569 bis 1659 (IQR 90). Diesel streut also etwas mehr. Die Spannweite ist beim Diesel auch etwas größer (1220 zu 1185).
 
-Form: Beide Verteilungen sind eingipflig. Bei E10 liegt der Mittelwert 10 über dem Median. Die Verteilung ist also rechtsschief, mit einem langen Ausläufer zu hohen Preisen. Bei Diesel sind Mittelwert und Median fast gleich (1618 zu 1619). Symmetrisch ist die Verteilung trotzdem nicht: Innerhalb der Box liegt der Median näher am oberen Quartil (Median − Q1 = 50, Q3 − Median = 40), die Box ist also nach unten ausladend. Gleichzeitig gibt es wie bei E10 einen langen Ausläufer nach oben (5277 Ausreißer nach oben, nur 84 nach unten). Beide Effekte gleichen sich beim Mittelwert ungefähr aus. Diesel ist damit insgesamt ebenfalls leicht rechtsschief, aber deutlich schwächer als E10.
+Form: Für die Lageregel aus der Vorlesung brauchen wir außer Mittelwert und Median noch den Modus. Weil die Preise stetig sind, bestimmen wir ihn über Klassen. Wir nehmen die gleichen Klassen wie im Histogramm (Breite 25), suchen die Klasse mit den meisten Werten und nehmen ihre Mitte. `hist(..., plot = FALSE)` zählt dafür nur die Werte pro Klasse, ohne etwas zu zeichnen.
 
-Ausreißer: Bei E10 erkennt der Boxplot 5207 Ausreißer, und zwar nur nach oben, von 1819 bis 2669 (2,67 € pro Liter). Der kleinste E10-Preis von 1484 liegt noch innerhalb der Whisker. Diesel hat 5361 Ausreißer, davon die meisten nach oben, bis 2619, und zusätzlich 84 nach unten, bis 1399. Die 6 Nullpreise beim Diesel waren ein Datenfehler und wurden vorher auf NA gesetzt.
+```{r modus}
+klassen  <- seq(1375, 2700, by = 25)
+h_e10    <- hist(tanken$e10_median,    breaks = klassen, plot = FALSE)
+h_diesel <- hist(tanken$diesel_median, breaks = klassen, plot = FALSE)
 
-Fazit: E10 ist im Schnitt etwa 2 bis 3 Cent teurer. Diesel streut etwas mehr und ist nur schwach schief, E10 ist deutlich rechtsschief mit Ausreißern ausschließlich nach oben.
+modus_e10    <- h_e10$mids[which.max(h_e10$counts)]
+modus_diesel <- h_diesel$mids[which.max(h_diesel$counts)]
+modus_e10
+modus_diesel
+```
+
+Bei E10 ist Mittelwert (1649) > Median (1639) > Modus (`r modus_e10`). Nach der Lageregel ist die Verteilung also linkssteil, also rechtsschief. Das sieht man auch im Histogramm.
+
+Bei Diesel sind Mittelwert (1618) und Median (1619) fast gleich, der Modus liegt mit `r modus_diesel` aber darunter. In der Box liegt der Median näher am oberen Quartil (Median − Q1 = 50, Q3 − Median = 40). Gleichzeitig gibt es nach oben viel mehr Ausreißer als nach unten (5277 zu 84). Das gleicht sich beim Mittelwert ungefähr aus. Diesel ist also nur leicht linkssteil, viel weniger als E10. Der Modus hängt aber stark davon ab, wie man die Klassen wählt. Mit einer Klassenbreite von 10 wäre er bei beiden 1610. Deshalb verlassen wir uns bei der Form vor allem auf Mittelwert, Median, Boxplot und Histogramm.
+
+Ausreißer: E10 hat 5207 Ausreißer, alle nach oben (1819 bis 2669). Der kleinste E10-Preis (1484) liegt noch innerhalb der Whisker. Diesel hat 5361 Ausreißer, die meisten nach oben bis 2619 und 84 nach unten bis 1399.
+
+Insgesamt ist E10 im Schnitt etwa 2 bis 3 Cent teurer. Diesel streut etwas mehr und ist kaum schief, E10 ist deutlich linkssteil und hat nur Ausreißer nach oben.
 
 ### d. Ausreißer der Preise
 
 #### Ausreißer extrahieren
 
-Als Ausreißer zählen, wie beim Boxplot, alle Werte außerhalb der Whisker, also mehr als das 1,5-fache des Quartilsabstands unter dem 1. oder über dem 3. Quartil. `boxplot.stats()` liefert diese Werte in `$out` und die Whisker-Grenzen in `$stats` (1. und 5. Wert). Die 6 unmöglichen Dieselpreise von 0 sind seit a bereits NA und verfälschen die Auswertung deshalb nicht.
+Als Ausreißer nehmen wir wie beim Boxplot alle Werte außerhalb der Whisker. `boxplot.stats()` gibt in `$stats` den 1. und 5. Wert als Whisker-Grenzen aus. Damit markieren wir für jede Zeile, ob der E10- bzw. Dieselpreis ein Ausreißer ist. Die Nullpreise sind seit a schon NA.
 
 ```{r ausreisser_extrahieren}
 grenzen_e10    <- boxplot.stats(tanken$e10_median)$stats[c(1, 5)]
@@ -435,11 +468,11 @@ ausreisser <- tanken[tanken$ausr_e10 | tanken$ausr_diesel, ]
 nrow(ausreisser)
 ```
 
-Bei E10 gibt es `r format(sum(tanken$ausr_e10), big.mark = ".", decimal.mark = ",")` Ausreißer, alle nach oben (über der oberen Whisker-Grenze von `r grenzen_e10[2]`, also über 1,814 €). Bei Diesel sind es `r format(sum(tanken$ausr_diesel), big.mark = ".", decimal.mark = ",")`, davon `r sum(tanken$ausr_diesel & tanken$diesel_median < grenzen_diesel[1])` nach unten und der Rest nach oben. Alle Zeilen mit mindestens einem Ausreißer stehen im Datensatz `ausreisser`.
+Bei E10 gibt es `r format(sum(tanken$ausr_e10), big.mark = ".", decimal.mark = ",")` Ausreißer, alle nach oben (über `r grenzen_e10[2]`, also über 1,814 €). Bei Diesel sind es `r format(sum(tanken$ausr_diesel), big.mark = ".", decimal.mark = ",")`, davon `r sum(tanken$ausr_diesel & tanken$diesel_median < grenzen_diesel[1])` nach unten. Alle Zeilen mit mindestens einem Ausreißer speichern wir in `ausreisser`.
 
 #### Wo treten die Ausreißer auf?
 
-Wir berechnen für jede Tankstelle den Anteil ihrer Preise, die Ausreißer sind:
+Zuerst schauen wir, bei welchen Tankstellen die Ausreißer vorkommen. Dafür rechnen wir mit `tapply()` für jede Tankstelle aus, wie viel Prozent ihrer Preise Ausreißer sind.
 
 ```{r ausreisser_wo}
 anteil_ausr_station <- tapply(tanken$ausr_e10, tanken$id, sum) /
@@ -453,11 +486,11 @@ sum(tanken$ausr_e10[avus])
 sum(tanken$ausr_diesel[avus])
 ```
 
-Eine Tankstelle sticht heraus: Bei der ARAL-Tankstelle „Avus“ an der A 115 ist **jeder einzelne** vorhandene E10-Preis ein Ausreißer. Dasselbe gilt für Diesel. Ihr Median liegt bei etwa 1,99 € für E10 und 1,94 € für Diesel, also rund 35 bzw. 32 Cent über dem Median aller Tankstellen. Damit stammen `r sum(tanken$ausr_e10[avus])` der `r sum(tanken$ausr_e10)` E10-Ausreißer und `r sum(tanken$ausr_diesel[avus])` der `r sum(tanken$ausr_diesel)` Diesel-Ausreißer allein von dieser Tankstelle. Bei allen anderen Tankstellen sind höchstens etwa 3 % der Preise Ausreißer.
+Eine Tankstelle fällt sofort auf: Bei der ARAL „Avus“ an der A 115 ist jeder Preis ein Ausreißer, bei E10 und bei Diesel. Ihr Median liegt bei ungefähr 1,99 € (E10) und 1,94 € (Diesel), also etwa 35 bzw. 32 Cent über dem Median aller Tankstellen. Von dieser einen Tankstelle kommen `r sum(tanken$ausr_e10[avus])` der `r sum(tanken$ausr_e10)` E10-Ausreißer und `r sum(tanken$ausr_diesel[avus])` der `r sum(tanken$ausr_diesel)` Diesel-Ausreißer. Bei allen anderen Tankstellen sind höchstens etwa 3 % der Preise Ausreißer.
 
 #### Wann treten die Ausreißer auf?
 
-Ohne die Avus-Tankstelle schauen wir, zu welcher Uhrzeit und in welchem Monat Ausreißer auftreten:
+Jetzt lassen wir die Avus weg und schauen, zu welcher Uhrzeit und in welchem Monat die übrigen Ausreißer vorkommen:
 
 ```{r ausreisser_wann, fig.width = 8, fig.height = 4.5}
 ohne_avus <- tanken[!avus, ]
@@ -481,10 +514,10 @@ round(100 * tapply(ohne_avus$ausr_e10, monat, sum) / tapply(!is.na(ohne_avus$e10
 round(100 * tapply(ohne_avus$ausr_diesel, monat, sum) / tapply(!is.na(ohne_avus$diesel_median), monat, sum), 1)
 ```
 
-Es gibt zwei deutliche Muster:
+Dabei sieht man zwei Muster:
 
-1. **Uhrzeit:** Die meisten Ausreißer liegen zwischen 6 und 7 Uhr morgens, bei E10 und bei Diesel (jeweils rund 6 bis 8 % der Preise in diesen Stunden, nachmittags fast 0 %). Das passt zum bekannten Tagesverlauf der Spritpreise: Die Tankstellen erhöhen die Preise am Morgen deutlich und senken sie im Laufe des Tages wieder.
-2. **Monat:** Gehäuft treten Ausreißer im Februar 2025 und im Januar 2026 auf, Diesel-Ausreißer vor allem im Januar 2026. In diesen Monaten war das allgemeine Preisniveau höher, wie der Verlauf des Tagesmedians zeigt. Besonders auffällig ist der Sprung zum Jahreswechsel 2025/26, nach dem beide Sorten auf rund 1,68 € steigen:
+1. Uhrzeit: Die meisten Ausreißer gibt es um 6 und 7 Uhr morgens, bei E10 und Diesel (etwa 6 bis 8 % der Preise in diesen Stunden, nachmittags fast keine). Das passt dazu, dass die Preise morgens am höchsten sind und im Laufe des Tages sinken.
+2. Monat: Viele Ausreißer gibt es im Februar 2025 und im Januar 2026, bei Diesel vor allem im Januar 2026. In diesen Monaten waren die Preise allgemein höher. Das sieht man im Verlauf des Tagesmedians unten, vor allem nach dem Jahreswechsel 2025/26, als beide Sorten auf etwa 1,68 € steigen:
 
 ```{r preisverlauf, fig.width = 8, fig.height = 4.5}
 tagesmedian_e10    <- tapply(tanken$e10_median, tanken$date, median, na.rm = TRUE)
@@ -499,7 +532,7 @@ lines(tage_datum, tagesmedian_diesel, col = "darkorange")
 legend("bottomleft", legend = c("E10", "Diesel"), col = c("steelblue", "darkorange"), lty = 1)
 ```
 
-Die wenigen Diesel-Ausreißer nach unten stammen fast alle vom 3. und 4. Juni 2025, also aus einer Phase, in der Diesel insgesamt besonders günstig war:
+Die wenigen Diesel-Ausreißer nach unten sind fast alle vom 3. und 4. Juni 2025. Da war Diesel insgesamt besonders billig:
 
 ```{r diesel_unten}
 unten <- tanken$ausr_diesel & tanken$diesel_median < grenzen_diesel[1]
@@ -507,13 +540,13 @@ table(tanken$date[unten])
 length(unique(tanken$id[unten]))   # Anzahl verschiedener Tankstellen
 ```
 
-Die Ausreißer nach unten verteilen sich auf `r length(unique(tanken$id[unten]))` verschiedene Tankstellen mehrerer Marken (u. a. JET, star, Sprint, ENI). Der Tagesmedian für Diesel erreicht am 3. und 4. Juni mit 1,499 € sein Jahrestief. Es handelt sich also um eine echte, allgemeine Preissenkung und nicht um den Fehler einer einzelnen Tankstelle.
+Sie kommen von `r length(unique(tanken$id[unten]))` verschiedenen Tankstellen und mehreren Marken (z. B. JET, star, Sprint, ENI). Der Tagesmedian von Diesel erreicht am 3. und 4. Juni mit 1,499 € seinen tiefsten Wert im ganzen Jahr (genauso tief war er nur noch am 26. Mai). Es war also eine echte Preissenkung bei vielen Tankstellen und kein Fehler einer einzelnen Tankstelle.
 
 #### Echte oder falsche Werte?
 
-Die bisherigen Muster lassen sich alle inhaltlich erklären: Autobahntankstellen sind bekanntlich deutlich teurer, morgens sind die Preise am höchsten, und es gibt Phasen mit insgesamt höheren oder niedrigeren Preisen. Diese Ausreißer sind also **echte Werte**. Sie sind ungewöhnlich, aber tatsächlich so an der Tankstelle verlangt worden und sollten nicht entfernt werden.
+Alle bisherigen Muster kann man erklären: Autobahntankstellen sind teurer, morgens sind die Preise am höchsten und es gibt Zeiten, in denen die Preise allgemein höher oder niedriger sind. Diese Ausreißer sind also echte Werte. Sie sind ungewöhnlich, wurden aber wirklich so verlangt und sollten nicht gelöscht werden.
 
-Anders sieht es bei den extremsten Werten aus. Wir schauen uns den höchsten E10-Preis mit den Stunden davor und danach an:
+Anders ist es beim höchsten E10-Preis. Wir schauen uns diesen Wert zusammen mit den anderen Stunden am selben Tag an:
 
 ```{r hoechster_wert}
 i <- which.max(tanken$e10_median)
@@ -522,9 +555,9 @@ tanken[tanken$id == tanken$id[i] & tanken$date == tanken$date[i],
        c("time", "e10_median", "diesel_median")]
 ```
 
-Bei der ESSO-Tankstelle am Mariendorfer Damm 44 springen am 21.02.2025 um 17 Uhr beide Preise um fast einen Euro nach oben (E10 auf 2,669 €, Diesel auf 2,619 €) und liegen eine Stunde später wieder fast auf dem alten Niveau. Ein so starker Sprung für nur eine Stunde, gleichzeitig bei beiden Sorten und nur an einer Tankstelle, ist unrealistisch. Hier handelt es sich sehr wahrscheinlich um einen **Eingabe- oder Übertragungsfehler**. Der Wert um 18 Uhr (2,289 €) ist ebenfalls verdächtig: Da der Stundenwert ein Median der Preismeldungen ist, ist er vermutlich durch den fehlerhaften Preis mit verzerrt. Diese beiden Werte sollte man wie die Dieselpreise von 0 als falsch behandeln, also auf NA setzen und wie in Woche 2a beschrieben ersetzen.
+Bei der ESSO am Mariendorfer Damm 44 steigen am 21.02.2025 um 17 Uhr beide Preise um fast einen Euro (E10 auf 2,669 €, Diesel auf 2,619 €). Eine Stunde später sind sie fast wieder auf dem alten Stand. So ein Sprung für nur eine Stunde, bei beiden Sorten gleichzeitig und nur an einer Tankstelle, ist nicht realistisch. Das ist sehr wahrscheinlich ein Eingabe- oder Übertragungsfehler. Auch der Wert um 18 Uhr (2,289 €) ist verdächtig. Weil der Stundenwert ein Median der Preismeldungen ist, wurde er wahrscheinlich von dem falschen Preis mit hochgezogen. Diese beiden Werte sollte man wie die Nullpreise als Fehler behandeln, also auf NA setzen und so ersetzen, wie in Woche 2a beschrieben.
 
-Gibt es weitere solche Sprünge? Dazu vergleichen wir jeden Preis mit dem Median derselben Tankstelle am selben Tag und suchen alle Werte, die um mindestens 25 Cent davon abweichen:
+Um zu prüfen, ob es noch mehr solche Sprünge gibt, vergleichen wir jeden Preis mit dem Median derselben Tankstelle am selben Tag. Gesucht sind alle Preise, die mindestens 25 Cent davon abweichen:
 
 ```{r spruenge}
 tagesmed_e10 <- ave(tanken$e10_median, tanken$id, tanken$date,
@@ -533,9 +566,9 @@ sprung <- which(abs(tanken$e10_median - tagesmed_e10) >= 250)
 tanken[sprung, c("name", "street", "date", "time", "e10_median", "diesel_median")]
 ```
 
-Es gibt genau diese zwei Werte der ESSO-Tankstelle. Alle anderen Ausreißer entstehen also nicht durch einzelne Sprünge, sondern durch dauerhaft hohe Preise (Avus) oder durch allgemeine Preisbewegungen.
+Es kommen nur die zwei Werte der ESSO heraus. Alle anderen Ausreißer entstehen also nicht durch einzelne Sprünge, sondern durch dauerhaft hohe Preise (Avus) oder durch allgemeine Preisänderungen.
 
-**Fazit:** Fast alle Ausreißer sind echte Werte. Sie kommen von der teuren Autobahntankstelle Avus, von den morgendlichen Preisspitzen sowie aus Phasen mit allgemein hohem (Februar 2025, Januar 2026) oder niedrigem Preisniveau (Anfang Juni 2025). Falsch sind nur einzelne Werte wie die Preissprünge bei der ESSO-Tankstelle am 21.02.2025 (und die Dieselpreise von 0 aus Woche 2a).
+Fazit: Fast alle Ausreißer sind echte Werte. Sie kommen von der Autobahntankstelle Avus, von den hohen Preisen am Morgen und aus Zeiten mit allgemein hohen (Februar 2025, Januar 2026) oder niedrigen Preisen (Anfang Juni 2025). Falsch sind nur einzelne Werte, nämlich die Preissprünge bei der ESSO am 21.02.2025 und die Dieselpreise von 0 aus Teilaufgabe a.
 
 
 ## Quellen
