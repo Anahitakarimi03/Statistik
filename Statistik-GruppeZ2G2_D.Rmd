@@ -320,6 +320,113 @@ Bei der ersten Tankstelle fehlt am `2025-02-01` mitten am Tag die Zeile für `13
 2. **Keine Preisänderung in dieser Stunde (28210 Zeilen):** Tankerkönig zeichnet nur Preisänderungen auf. Am Anfang des Tages (nach der Öffnung bis zur ersten Preismeldung) wurden die Stunden ohne Meldung zwar noch als Zeilen mit `NA` aufgefüllt (siehe Aufgabe a). Sobald an einem Tag aber der erste Preis gemeldet wurde, fehlt eine spätere Stunde komplett als Zeile im Datensatz, wenn die Tankstelle in dieser Stunde ihren Preis nicht geändert hat.
 
 
+## Woche 3 -- 10.11.2026
+
+a. Erstellen Sie vollständig beschriftete Histogramme für die Merkmale `e10_median` und `diesel_median` und überlagern diese zum besseren Vergleich in einem Diagramm. Dazu können Sie auch Bibliotheken wie ggplot2 und plotly betrachten.
+b. Bestimmen Sie Fünf- oder Sechs-Punkte-Zusammenfassungen der Merkmale `e10_median` und `diesel_median` und erstellen zugehörige Boxplots mit Ausreißererkennung.
+c. Vergleichen Sie anhand der Histogramme, der Fünf- oder Sechs-Punkte-Zusammenfassungen sowie der Boxplots die Werteverteilungen von `e10_median` und `diesel_median`.
+d. Extrahieren Sie die Ausreißer von `e10_median` und `diesel_median`. Finden Sie mit Detektivarbeit heraus,
+    * ob es ein Muster für die Ausreißer gibt, z.B. wann sie wo auftreten
+    * ob die Ausreißer echte oder falsche Werte sind.
+
+### a. Histogramme
+
+Die Preise sind in Zehntel-Cent pro Liter angegeben, der Wert 1649 bedeutet also 1,649 € pro Liter.
+Zuerst erstellen wir mit `hist()` für jede Kraftstoffsorte ein eigenes Histogramm.
+Damit beide Histogramme vergleichbar sind, verwenden wir für beide dieselben Klassengrenzen in 10er-Schritten.
+Mit `range(..., na.rm = TRUE)` bestimmen wir dafür den kleinsten und größten Preis beider Merkmale, die fehlenden Werte (siehe Woche 2) werden dabei ignoriert.
+
+```{r}
+grenzen <- seq(0, 2700, by = 10)
+range(tanken$e10_median, tanken$diesel_median, na.rm = TRUE)
+
+hist(tanken$e10_median, breaks = grenzen, xlim = c(1400, 2000),
+     main = "Histogramm der E10-Preise",
+     xlab = "Preis in Zehntel-Cent pro Liter", ylab = "Absolute Häufigkeit")
+
+hist(tanken$diesel_median, breaks = grenzen, xlim = c(1400, 2000),
+     main = "Histogramm der Dieselpreise",
+     xlab = "Preis in Zehntel-Cent pro Liter", ylab = "Absolute Häufigkeit")
+```
+
+Die Preise liegen zwischen 0 und 2669. Fast alle Werte liegen aber zwischen 1400 und 2000, deshalb zeigen wir nur diesen Bereich (`xlim`), sonst wären die Balken kaum zu erkennen. Die wenigen Werte außerhalb schauen wir uns in Teilaufgabe d genauer an.
+
+Für den direkten Vergleich zeichnen wir beide Histogramme übereinander.
+Das zweite Histogramm wird mit `add = TRUE` in das erste Diagramm gezeichnet.
+Mit `rgb()` wählen wir halbdurchsichtige Farben (der vierte Wert ist die Deckkraft), damit man beide Verteilungen auch dort sieht, wo sie sich überlappen.
+Eine Legende zeigt, welche Farbe zu welcher Kraftstoffsorte gehört.
+
+```{r}
+farbe_e10    <- rgb(0, 0.4, 1, 0.4)   # blau, halbdurchsichtig
+farbe_diesel <- rgb(1, 0.5, 0, 0.4)   # orange, halbdurchsichtig
+
+hist(tanken$e10_median, breaks = grenzen, xlim = c(1400, 2000), col = farbe_e10,
+     main = "Verteilung der Kraftstoffpreise in Berlin: E10 und Diesel",
+     xlab = "Preis in Zehntel-Cent pro Liter", ylab = "Absolute Häufigkeit")
+hist(tanken$diesel_median, breaks = grenzen, col = farbe_diesel, add = TRUE)
+legend("topright", legend = c("E10", "Diesel"), fill = c(farbe_e10, farbe_diesel))
+```
+
+Beide Verteilungen sind eingipflig mit dem häufigsten Preis um 1600. E10 ist rechtsschief: Links fällt die Verteilung steil ab, nach rechts läuft sie bis etwa 1850 langsam aus. Diesel ist breiter gestreut und reicht weiter nach links bis etwa 1450, dafür nach rechts nicht so weit wie E10. Insgesamt liegt Diesel etwas weiter links, war im betrachteten Jahr also meistens etwas günstiger als E10. Rechts von 1850 gibt es bei beiden Kraftstoffen nur noch vereinzelte Werte.
+
+### b. Fünf- bzw. Sechs-Punkte-Zusammenfassung und Boxplots
+
+Die Sechs-Punkte-Zusammenfassung erhalten wir mit `summary()`. Sie enthält die Fünf-Punkte-Zusammenfassung (Minimum, unteres Quartil, Median, oberes Quartil, Maximum) und zusätzlich das arithmetische Mittel. `summary()` zeigt außerdem die Anzahl der fehlenden Werte (`NA's`) an.
+Mit `IQR()` berechnen wir zusätzlich den Interquartilsabstand, den wir für die Ausreißererkennung brauchen.
+
+```{r}
+summary(tanken$e10_median)
+summary(tanken$diesel_median)
+
+IQR(tanken$e10_median, na.rm = TRUE)
+IQR(tanken$diesel_median, na.rm = TRUE)
+```
+
+| | Minimum | 1. Quartil | Median | Mittelwert | 3. Quartil | Maximum | IQR |
+|---|---|---|---|---|---|---|---|
+| E10 | 1484 | 1604 | 1639 | 1649,4 | 1689 | 2669 | 85 |
+| Diesel | 0 | 1569 | 1619 | 1618,1 | 1659 | 2619 | 90 |
+
+Bei beiden Merkmalen fehlen 28151 Werte (siehe Woche 2).
+
+Als Ausreißer gelten wie in der Vorlesung alle Werte, die mehr als das 1,5-fache des IQR unter dem unteren oder über dem oberen Quartil liegen. Wir berechnen diese Grenzen, um sie später mit den Boxplots zu vergleichen.
+
+```{r}
+q_e10    <- quantile(tanken$e10_median,    c(0.25, 0.75), na.rm = TRUE)
+q_diesel <- quantile(tanken$diesel_median, c(0.25, 0.75), na.rm = TRUE)
+
+grenzen_e10    <- c(q_e10[1]    - 1.5 * IQR(tanken$e10_median,    na.rm = TRUE),
+                    q_e10[2]    + 1.5 * IQR(tanken$e10_median,    na.rm = TRUE))
+grenzen_diesel <- c(q_diesel[1] - 1.5 * IQR(tanken$diesel_median, na.rm = TRUE),
+                    q_diesel[2] + 1.5 * IQR(tanken$diesel_median, na.rm = TRUE))
+grenzen_e10
+grenzen_diesel
+```
+
+Bei E10 sind also Preise unter 1476,5 oder über 1816,5 Ausreißer, bei Diesel Preise unter 1434 oder über 1794.
+
+Die Boxplots zeichnen wir mit `boxplot()`. Die Funktion verwendet standardmäßig die erweiterte Version aus der Vorlesung: Die Whisker reichen höchstens bis zum 1,5-fachen IQR, alle Werte außerhalb werden einzeln als Punkte (Ausreißer) eingezeichnet. Wir stellen beide Merkmale nebeneinander dar, damit man sie direkt vergleichen kann.
+
+```{r}
+boxplot(tanken$e10_median, tanken$diesel_median,
+        names = c("E10", "Diesel"), col = c(farbe_e10, farbe_diesel),
+        main = "Boxplots der Kraftstoffpreise mit Ausreißern",
+        xlab = "Kraftstoff", ylab = "Preis in Zehntel-Cent pro Liter")
+```
+
+Weil der Diesel-Ausreißer bei 0 die Skala stark streckt, sind die Boxen in diesem Diagramm sehr klein. Deshalb zeichnen wir die Boxplots noch einmal mit einem Ausschnitt der y-Achse (`ylim`) von 1300 bis 2700. Der Wert 0 ist dann nicht mehr zu sehen, alle anderen Ausreißer schon.
+
+```{r}
+boxplot(tanken$e10_median, tanken$diesel_median,
+        names = c("E10", "Diesel"), col = c(farbe_e10, farbe_diesel),
+        ylim = c(1300, 2700),
+        main = "Boxplots der Kraftstoffpreise (Ausschnitt 1300 bis 2700)",
+        xlab = "Kraftstoff", ylab = "Preis in Zehntel-Cent pro Liter")
+```
+
+Bei beiden Kraftstoffen gibt es sehr viele Ausreißer nach oben. Nach unten hat E10 keine Ausreißer, Diesel dagegen schon, darunter einige Werte von 0.
+
+
 ## Quellen
 
 [1] Tankerkönig UG, URL: <https://tankerkoenig.de>, letzter Aufruf: 02.11.2026
