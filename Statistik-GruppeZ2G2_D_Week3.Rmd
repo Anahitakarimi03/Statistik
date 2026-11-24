@@ -570,7 +570,190 @@ Es kommen nur die zwei Werte der ESSO heraus. Alle anderen Ausreißer entstehen 
 
 Fazit: Fast alle Ausreißer sind echte Werte. Sie kommen von der Autobahntankstelle Avus, von den hohen Preisen am Morgen und aus Zeiten mit allgemein hohen (Februar 2025, Januar 2026) oder niedrigen Preisen (Anfang Juni 2025). Falsch sind nur einzelne Werte, nämlich die Preissprünge bei der ESSO am 21.02.2025 und die Dieselpreise von 0 aus Teilaufgabe a.
 
+## Woche 4 -- 17.11.2026
+
+a. Fügen Sie Ihrer Tabelle eine neue Spalte mit dem Wochentag hinzu. Generieren Sie Boxplots der Merkmale `e10_median` und `diesel_median` für jeden Wochentag und stellen die sieben Boxplots für jeden der Kraftstoffe nebeneinander. Interpretieren Sie die Preisunterschiede zwischen den Wochentagen und den Kraftstoffen.
+
+b. Generieren Sie Boxplots der Merkmale `e10_median` und `diesel_median` für jede Uhrzeit (`time`) und stellen die stündlichen Boxplots für jeden der Kraftstoffe nebeneinander. Interpretieren Sie die Preisunterschiede zwischen den Uhrzeiten und den Kraftstoffen.
+
+c. Generieren Sie Boxplots der Merkmale `e10_median` und `diesel_median` für jede Marke (`brand`) und stellen die Boxplots der Marken für jeden der Kraftstoffe nebeneinander. Interpretieren Sie die Preisunterschiede zwischen den Marken und den Kraftstoffen.
+
+d. Welches der Merkmale hat nach obigen Analysen den stärksten Einfluss auf die Preise von E10 und Diesel? Begründen Sie die Antwort mit Hilfe der Boxplots und absoluten Messungen der Preisunterschiede.
+
+
+### a. Boxplots nach Wochentag
+
+Zuerst wandeln wir das Datum in `date` mit `as.Date()` in ein Datumsobjekt um und lesen mit `format(..., "%u")` die Wochentagsnummer (1 = Montag bis 7 = Sonntag) aus.
+Damit die Wochentage im Boxplot in der richtigen zeitlichen Reihenfolge und nicht alphabetisch erscheinen, speichern wir die neue Spalte `weekday` mit `factor()` und den deutschen Kurzbezeichnungen von `Mo` bis `So`.
+
+```{r wochentag_spalte}
+wochentag_nr <- format(as.Date(tanken$date), "%u")
+tanken$weekday <- factor(wochentag_nr,
+                         levels = 1:7,
+                         labels = c("Mo", "Di", "Mi", "Do", "Fr", "Sa", "So"))
+
+table(tanken$weekday)
+```
+
+An den Werktagen von Montag bis Freitag gibt es jeweils rund 69.000 Zeilen, am Samstag (67.257) und Sonntag (65.974) etwas weniger, weil einige Tankstellen am Wochenende kürzere Öffnungszeiten haben.
+
+Jetzt berechnen wir mit `tapply()` für jeden Wochentag den Median und den Interquartilsabstand (`IQR`) und zeichnen die sieben Boxplots für E10 und Diesel nebeneinander.
+Wie in Woche 3a begrenzen wir die y-Achse mit `ylim = c(1380, 2100)`, damit die Boxen gut erkennbar bleiben und nicht durch den einzelnen falschen ESSO-Ausreißer bei 2669 gestaucht werden.
+
+```{r boxplots_wochentag, fig.width = 11, fig.height = 5}
+med_wd_e10    <- tapply(tanken$e10_median, tanken$weekday, median, na.rm = TRUE)
+med_wd_diesel <- tapply(tanken$diesel_median, tanken$weekday, median, na.rm = TRUE)
+iqr_wd_e10    <- tapply(tanken$e10_median, tanken$weekday, IQR, na.rm = TRUE)
+iqr_wd_diesel <- tapply(tanken$diesel_median, tanken$weekday, IQR, na.rm = TRUE)
+
+rbind(E10_Median = med_wd_e10, Diesel_Median = med_wd_diesel,
+      E10_IQR = iqr_wd_e10, Diesel_IQR = iqr_wd_diesel)
+
+par(mfrow = c(1, 2))
+boxplot(e10_median ~ weekday, data = tanken,
+        col = rgb(1, 0, 0, 0.5),
+        main = "E10-Preise nach Wochentag",
+        xlab = "Wochentag", ylab = "Preis (Zehntel-Cent pro Liter)",
+        ylim = c(1380, 2100))
+
+boxplot(diesel_median ~ weekday, data = tanken,
+        col = rgb(0, 0, 1, 0.5),
+        main = "Diesel-Preise nach Wochentag",
+        xlab = "Wochentag", ylab = "Preis (Zehntel-Cent pro Liter)",
+        ylim = c(1380, 2100))
+par(mfrow = c(1, 1))
+```
+
+Wochentage: Zwischen den Wochentagen unterscheiden sich die Preise kaum.
+Bei E10 liegt der Median am Dienstag und Mittwoch mit 1634 (1,634 €) am niedrigsten, an Montag, Donnerstag, Freitag und Samstag bei 1639 (1,639 €) und am Sonntag mit 1644 (1,644 €) am höchsten.
+Das ist über die ganze Woche nur ein Unterschied von 10 Zehntel-Cent (1,0 Cent pro Liter).
+Bei Diesel sind Mittwoch, Donnerstag und Freitag mit einem Median von 1609 (1,609 €) am günstigsten, während der Sonntag mit 1629 (1,629 €) um 20 Zehntel-Cent (2,0 Cent pro Liter) teurer ist.
+Dass der Sonntag leicht teurer ist und eine etwas kleinere Box hat (IQR 80 statt 85 bis 90 an den Werktagen), liegt auch daran, dass sonntags vermehrt durchgehend geöffnete und teurere Tankstellen geöffnet haben.
+
+Kraftstoffe: An allen sieben Wochentagen liegt die Box von E10 über der von Diesel.
+Je nach Wochentag ist E10 im Median um 15 Zehntel-Cent (Dienstag und Sonntag) bis 30 Zehntel-Cent (Donnerstag und Freitag), also um 1,5 bis 3,0 Cent pro Liter teurer als Diesel.
+Ausreißer nach unten treten (vor allem dienstags und mittwochs) nur bei Diesel auf, während beide Sorten an jedem Wochentag viele Ausreißer nach oben durch die Autobahntankstelle Avus haben.
+
+
+### b. Boxplots nach Uhrzeit
+
+Die Uhrzeiten in `time` haben wir bereits in Woche 2b auf die vollen Stunden von `"00:00"` bis `"23:00"` abgerundet.
+Wir geben mit `tapply()` zuerst die Anzahl der gültigen Preise sowie die stündlichen Mediane aus und stellen danach die 24 stündlichen Boxplots für E10 und Diesel nebeneinander dar.
+Mit `las = 2` drehen wir die Uhrzeiten auf der x-Achse senkrecht, damit alle Stunden lesbar sind.
+
+```{r boxplots_uhrzeit, fig.width = 12, fig.height = 5.5}
+med_time_e10    <- tapply(tanken$e10_median, tanken$time, median, na.rm = TRUE)
+med_time_diesel <- tapply(tanken$diesel_median, tanken$time, median, na.rm = TRUE)
+anzahl_time     <- tapply(!is.na(tanken$e10_median), tanken$time, sum)
+
+rbind(Anzahl_Werte = anzahl_time,
+      E10_Median = med_time_e10,
+      Diesel_Median = med_time_diesel)
+
+par(mfrow = c(1, 2))
+boxplot(e10_median ~ time, data = tanken,
+        col = rgb(1, 0, 0, 0.5), las = 2, cex.axis = 0.7,
+        main = "E10-Preise nach Uhrzeit",
+        xlab = "Uhrzeit", ylab = "Preis (Zehntel-Cent pro Liter)",
+        ylim = c(1380, 2100))
+
+boxplot(diesel_median ~ time, data = tanken,
+        col = rgb(0, 0, 1, 0.5), las = 2, cex.axis = 0.7,
+        main = "Diesel-Preise nach Uhrzeit",
+        xlab = "Uhrzeit", ylab = "Preis (Zehntel-Cent pro Liter)",
+        ylim = c(1380, 2100))
+par(mfrow = c(1, 1))
+```
+
+Uhrzeiten: Bei der Uhrzeit sieht man ein sehr deutliches Tagesmuster mit großen Preisunterschieden.
+Nachts zwischen 00:00 und 04:00 Uhr gibt es im ganzen Jahr nur 4 bis 19 gültige Preise pro Stunde, weil die Tankstellen vor ihrer ersten Preisänderung am Tag `NA` in den Preisspalten haben (siehe Woche 2a).
+Diese wenigen gemeldeten Nachtpreise liegen relativ hoch (Median bei E10 zwischen 1664 und 1709, bei Diesel zwischen 1644 und 1674).
+Um 05:00 Uhr melden die ersten rund 6.600 Tankstellen ihre Preise, wodurch der Median kurz auf 1629 (E10) bzw. 1599 (Diesel) fällt.
+Zum Berufsverkehr um 06:00 Uhr springen die Preise auf ihr Tageshoch von 1749 (1,749 €) bei E10 und 1694 (1,694 €) bei Diesel und bleiben auch um 07:00 Uhr fast genauso hoch (1739 bzw. 1689).
+Ab 08:00 Uhr sinken die Preise bis 11:00 Uhr (1624 E10 / 1604 Diesel) deutlich ab, steigen um 12:00 Uhr noch einmal um rund 2,5 Cent an (1649 / 1629) und fallen danach mit kleinen Zwischenhochs (um 14, 18 und 20 Uhr) weiter ab.
+Am günstigsten ist es am Abend: E10 erreicht um 17:00, 19:00 und 21:00 Uhr seinen tiefsten Median von 1609 (1,609 €), Diesel erreicht sein Tagestief um 21:00 Uhr mit 1579 (1,579 €).
+Zwischen der teuersten Stunde (06:00 Uhr) und der günstigsten Stunde (21:00 Uhr) liegen im Median 140 Zehntel-Cent (14,0 Cent pro Liter) bei E10 und 115 Zehntel-Cent (11,5 Cent pro Liter) bei Diesel.
+Außerdem sieht man, dass die hohen Ausreißer der Autobahntankstelle Avus (um 2,00 €) nur zwischen 06:00 und 22:00 Uhr auftreten, weil die Avus nachts geschlossen hat.
+
+Kraftstoffe: Beide Sorten folgen genau demselben Tagesverlauf, aber die Morgenspitze ist bei E10 noch stärker ausgeprägt als bei Diesel.
+Um 06:00 und 07:00 Uhr ist E10 im Median um 55 bzw. 50 Zehntel-Cent (5,5 bzw. 5,0 Cent pro Liter) teurer als Diesel, während der Abstand am Nachmittag (15:00 und 16:00 Uhr) auf 10 bis 15 Zehntel-Cent (1,0 bis 1,5 Cent pro Liter) schrumpft und abends um 21:00 Uhr bei 30 Zehntel-Cent (3,0 Cent pro Liter) liegt.
+
+
+### c. Boxplots nach Marke
+
+Um die neun Tankstellenmarken (`brand`) übersichtlich zu vergleichen, sortieren wir sie mit `reorder()` aufsteigend nach ihrem E10-Medianpreis.
+Danach berechnen wir Median und Interquartilsabstand für jede Marke und stellen die Boxplots für E10 und Diesel nebeneinander dar.
+
+```{r boxplots_marke, fig.width = 11, fig.height = 5.5}
+brand_sortiert <- reorder(tanken$brand, tanken$e10_median, FUN = median, na.rm = TRUE)
+
+med_brand_e10    <- tapply(tanken$e10_median, brand_sortiert, median, na.rm = TRUE)
+med_brand_diesel <- tapply(tanken$diesel_median, brand_sortiert, median, na.rm = TRUE)
+iqr_brand_e10    <- tapply(tanken$e10_median, brand_sortiert, IQR, na.rm = TRUE)
+iqr_brand_diesel <- tapply(tanken$diesel_median, brand_sortiert, IQR, na.rm = TRUE)
+
+rbind(E10_Median = med_brand_e10, Diesel_Median = med_brand_diesel,
+      E10_IQR = iqr_brand_e10, Diesel_IQR = iqr_brand_diesel)
+
+par(mfrow = c(1, 2), mar = c(7, 4, 3, 1))
+boxplot(e10_median ~ brand_sortiert, data = tanken,
+        col = rgb(1, 0, 0, 0.5), las = 2, cex.axis = 0.8,
+        main = "E10-Preise nach Marke",
+        xlab = "", ylab = "Preis (Zehntel-Cent pro Liter)",
+        ylim = c(1380, 2100))
+
+boxplot(diesel_median ~ brand_sortiert, data = tanken,
+        col = rgb(0, 0, 1, 0.5), las = 2, cex.axis = 0.8,
+        main = "Diesel-Preise nach Marke",
+        xlab = "", ylab = "Preis (Zehntel-Cent pro Liter)",
+        ylim = c(1380, 2100))
+par(mfrow = c(1, 1), mar = c(5, 4, 4, 2) + 0.1)
+```
+
+Marken: Anhand der Boxplots lassen sich die Marken in drei Preisgruppen einteilen.
+Am günstigsten sind `HEM` und `JET` (E10-Median 1619; Diesel-Median 1604 bzw. 1609) sowie `STAR` und `Sprint` (E10-Median 1624; Diesel-Median 1604 bzw. 1609).
+Im Mittelfeld liegen `AGIP ENI` und `TotalEnergies` mit einem Median von jeweils 1639 bei E10 und 1619 bei Diesel.
+Darüber folgen die teureren Marken `Shell` (1644 E10 / 1629 Diesel) und `ESSO` (1649 E10 / 1629 Diesel), und am teuersten ist `ARAL` mit einem Median von 1669 (1,669 €) bei E10 und 1639 (1,639 €) bei Diesel.
+Zwischen der teuersten Marke (`ARAL`) und den günstigsten Marken (`HEM`/`JET` bzw. `STAR`) beträgt der Unterschied im Median 50 Zehntel-Cent (5,0 Cent pro Liter) bei E10 und 35 Zehntel-Cent (3,5 Cent pro Liter) bei Diesel.
+`ARAL` hat außerdem mit einem IQR von 95 bei beiden Sorten die größte Streuung und viele Ausreißer nach oben, weil die Autobahntankstelle Avus zu `ARAL` gehört.
+
+Kraftstoffe: Die Reihenfolge von günstigen zu teuren Marken ist bei beiden Kraftstoffen fast gleich.
+Bei den günstigen Marken, im Mittelfeld und bei `Shell` ist E10 im Median um 10 bis 20 Zehntel-Cent (1,0 bis 2,0 Cent pro Liter) teurer als Diesel, bei `ARAL` ist der Abstand mit 30 Zehntel-Cent (3,0 Cent pro Liter; 1669 zu 1639) am größten.
+Dafür ist die Box (IQR) bei fast allen Marken beim Diesel um 5 bis 20 Zehntel-Cent größer als bei E10.
+
+
+### d. Vergleich der Einflussstärke auf die Preise
+
+Um zu bestimmen, welches der drei Merkmale (`weekday`, `time`, `brand`) den stärksten Einfluss auf die Preise hat, berechnen wir für jedes Merkmal den kleinsten und größten Gruppenmedian sowie die maximale Differenz (Spannweite) der Gruppenmediane und Gruppenmittelwerte in Zehntel-Cent pro Liter.
+
+```{r einfluss_vergleich}
+mean_wd_e10       <- tapply(tanken$e10_median, tanken$weekday, mean, na.rm = TRUE)
+mean_wd_diesel    <- tapply(tanken$diesel_median, tanken$weekday, mean, na.rm = TRUE)
+mean_time_e10     <- tapply(tanken$e10_median, tanken$time, mean, na.rm = TRUE)
+mean_time_diesel  <- tapply(tanken$diesel_median, tanken$time, mean, na.rm = TRUE)
+mean_brand_e10    <- tapply(tanken$e10_median, tanken$brand, mean, na.rm = TRUE)
+mean_brand_diesel <- tapply(tanken$diesel_median, tanken$brand, mean, na.rm = TRUE)
+
+einfluss <- data.frame(
+  Merkmal            = c("Wochentag (weekday)", "Uhrzeit (time)", "Marke (brand)"),
+  E10_Min_Median     = c(min(med_wd_e10), min(med_time_e10), min(med_brand_e10)),
+  E10_Max_Median     = c(max(med_wd_e10), max(med_time_e10), max(med_brand_e10)),
+  E10_Diff_Median    = c(diff(range(med_wd_e10)), diff(range(med_time_e10)), diff(range(med_brand_e10))),
+  Diesel_Min_Median  = c(min(med_wd_diesel), min(med_time_diesel), min(med_brand_diesel)),
+  Diesel_Max_Median  = c(max(med_wd_diesel), max(med_time_diesel), max(med_brand_diesel)),
+  Diesel_Diff_Median = c(diff(range(med_wd_diesel)), diff(range(med_time_diesel)), diff(range(med_brand_diesel))),
+  E10_Diff_Mean      = round(c(diff(range(mean_wd_e10)), diff(range(mean_time_e10)), diff(range(mean_brand_e10))), 1),
+  Diesel_Diff_Mean   = round(c(diff(range(mean_wd_diesel)), diff(range(mean_time_diesel)), diff(range(mean_brand_diesel))), 1)
+)
+einfluss
+```
+
+Den mit Abstand stärksten Einfluss auf die Preise von E10 und Diesel hat die **Uhrzeit (`time`)**, gefolgt von der **Marke (`brand`)**, während der **Wochentag (`weekday`)** fast keinen Einfluss hat:
+
+1. **Uhrzeit (`time`) – stärkster Einfluss:** Zwischen der teuersten Stunde (06:00 Uhr) und der günstigsten Stunde am Abend (21:00 Uhr) beträgt der maximale Preisunterschied im Median 140 Zehntel-Cent (14,0 Cent pro Liter) bei E10 und 115 Zehntel-Cent (11,5 Cent pro Liter) bei Diesel. Auch beim Mittelwert ist die Differenz mit 134,5 (E10) bzw. 120,6 Zehntel-Cent (Diesel) am größten. In den Boxplots sieht man diesen starken Einfluss daran, dass sich die kompletten Boxen im Tagesverlauf stark verschieben: Um 06:00 und 07:00 Uhr liegt selbst das untere Quartil Q1 (1719 bzw. 1709 bei E10; 1659 bei Diesel) deutlich über dem oberen Quartil Q3 der Abendstunden ab 17:00 Uhr (1634 bis 1659 bei E10; 1609 bis 1639 bei Diesel). Die mittleren 50 % der Preise am Morgen und am Abend überlappen sich also gar nicht, und innerhalb einer Nachmittags- oder Abendstunde sind die Boxen recht schmal (IQR 50 bis 60 bei E10), weil fast alle Tankstellen denselben Tagesverlauf mitmachen.
+2. **Marke (`brand`) – zweitstärkster Einfluss:** Zwischen der teuersten Marke (`ARAL`) und den günstigsten Marken (`HEM`/`JET` bzw. `STAR`) liegt im Median ein Unterschied von 50 Zehntel-Cent (5,0 Cent pro Liter) bei E10 und 35 Zehntel-Cent (3,5 Cent pro Liter) bei Diesel (im Mittelwert 58,2 bzw. 44,5 Zehntel-Cent). In den Boxplots sieht man zwar einen klaren Anstieg von den günstigen Marken zu `ARAL`, aber die Boxen aller Marken überlappen sich stark (z. B. `HEM` 1589–1659 und `ARAL` 1629–1724 bei E10), weil jede Marke über den Tag hinweg stark schwankt. Wer abends bei einer teuren Marke tankt, zahlt im Schnitt immer noch deutlich weniger als morgens um 06:00 Uhr bei einer günstigen Marke.
+3. **Wochentag (`weekday`) – geringster Einfluss:** Zwischen dem teuersten und dem günstigsten Wochentag liegen im Median nur 10 Zehntel-Cent (1,0 Cent pro Liter) bei E10 und 20 Zehntel-Cent (2,0 Cent pro Liter) bei Diesel (im Mittelwert 6,0 bzw. 16,4 Zehntel-Cent). In den Boxplots liegen alle sieben Boxen fast auf einer Linie und überlappen sich nahezu vollständig.
 
 ## Quellen
 
-[1] Tankerkönig UG, URL: <https://tankerkoenig.de>, letzter Aufruf: 02.11.2026
+[1] Tankerkönig UG, URL: <https://tankerkoenig.de>, letzter Aufruf: 17.11.2026
