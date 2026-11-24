@@ -8,6 +8,7 @@ editor_options:
 
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)
+options(OutDec = ",")
 ```
 
 # Statistik im Bachelor Wirtschaftsinformatik
@@ -768,7 +769,7 @@ d. Erstellen Sie Mosaikplots für die Kombination von `brand` und `e10_median_qu
 
 ### a. Qualitative Preiskategorien über Quantile
 
-Mit `quantile()` und `seq(0, 1, 0.2)` berechnen wir für E10 und Diesel jeweils sechs Grenzen: Minimum, 20 %, 40 %, 60 %, 80 % Quantil und Maximum. Weil in den Preisspalten `NA` vorkommen, müssen wir zusätzlich `na.rm = TRUE` angeben, sonst bricht `quantile()` mit einem Fehler ab. Die Nullpreise beim Diesel haben wir in Woche 3a bereits auf `NA` gesetzt, sie verfälschen die untere Grenze also nicht mehr.
+Wir berechnen mit quantile() für E10 und Diesel jeweils die 0 %-, 20 %-, 40 %-, 60 %-, 80 %- und 100 %-Quantile und teilen die Preise damit in fünf Bereiche ein.
 Mit `diff()` lassen wir uns zusätzlich die Breite der fünf Preisbereiche ausgeben.
 
 ```{r quantil_grenzen}
@@ -813,13 +814,13 @@ Schon in den Tabellen sieht man, dass die fünf Kategorien nicht genau gleich gr
 Die Alternative wäre, den Wertebereich vom Minimum bis zum Maximum in fünf gleich breite Bereiche zu teilen. Um zu sehen, was dabei herauskommt, machen wir das mit `cut(..., breaks = 5)` einmal zum Vergleich.
 
 ```{r gleich_breite_klassen}
-round(prop.table(table(cut(tanken$e10_median, breaks = 5))), 3)
-round(prop.table(table(cut(tanken$diesel_median, breaks = 5))), 3)
+round(prop.table(table(cut(tanken$e10_median, breaks = 5, dig.lab = 4))), 3)
+round(prop.table(table(cut(tanken$diesel_median, breaks = 5, dig.lab = 4))), 3)
 ```
 
-Bei gleich breiten Bereichen würden `r round(100 * prop.table(table(cut(tanken$e10_median, breaks = 5)))[1], 1)` % der E10-Preise und `r round(100 * prop.table(table(cut(tanken$diesel_median, breaks = 5)))[1], 1)` % der Dieselpreise im untersten Bereich landen. Die oberen Bereiche wären fast leer.
+Bei gleich breiten Bereichen würden `r round(100 * prop.table(table(cut(tanken$e10_median, breaks = 5)))[1], 1)` % der E10-Preise und `r round(100 * prop.table(table(cut(tanken$diesel_median, breaks = 5)))[1], 1)` % der Dieselpreise im untersten Bereich landen. 
 Der Grund sind die Ausreißer aus Woche 3: Die Avus mit Preisen um 2 € und der falsche ESSO-Wert bei 2669 strecken den Wertebereich nach oben, während fast alle Preise in einem schmalen Bereich um 1,60 € liegen (siehe Histogramm in Woche 3a).
-Solche Kategorien wären also nutzlos, weil fast jeder Preis *sehr niedrig* wäre.
+Mehr als 99 % aller Preise würden in den beiden unteren Bereichen landen, und die drei oberen Bereiche wären fast leer. Solche Kategorien wären also nutzlos.
 
 Die Berechnung über Quantile ist dagegen aus mehreren Gründen sinnvoll:
 
@@ -866,11 +867,9 @@ sapply(q_e10[2:5],    function(g) sum(tanken$e10_median == g,    na.rm = TRUE))
 sapply(q_diesel[2:5], function(g) sum(tanken$diesel_median == g, na.rm = TRUE))
 ```
 
-Fast alle Preise enden auf 9 (z. B. 1639 = 1,639 €), weil die Tankstellen ihre Preise fast immer auf x,xx9 € setzen. Die übrigen enden meist auf 4, das passiert, wenn der Stundenmedian aus zwei Preisen gemittelt wird. Dadurch kommen dieselben Preise tausendfach vor und die Quantile liegen genau auf solchen häufigen Werten.
-Weil `cut()` alle Preise, die genau auf einer Grenze liegen, komplett dem unteren Bereich zuordnet, bekommt der untere Bereich mehr als 20 % und der obere entsprechend weniger. Mit stetigen Preisen ohne gleiche Werte wären die Balken exakt 0,2 hoch.
+Gut drei Viertel der Preise (78,1 %) enden auf 9 (z. B. 1639), weil die Tankstellen ihre Preise fast immer auf x,xx9 € setzen. Die übrigen 21,9 % enden auf 4. Das passiert, wenn der Stundenmedian aus zwei Preisen gemittelt wird. Dadurch kommen dieselben Preise tausendfach vor, und die Quantile liegen genau auf solchen häufigen Werten. Weil `cut()` alle Preise, die genau auf einer Grenze liegen, komplett dem unteren Bereich zuordnet, verschieben sich die Anteile. Am deutlichsten ist das bei E10: Die 20 %-Grenze liegt genau bei 1599, dem dritthäufigsten Preis (25.157-mal). Alle diese Preise zählen zu sehr niedrig, deshalb hat diese Kategorie 24,9 % und niedrig nur 15,3 %. Beim Diesel liegen auf den Grenzen weniger Werte, deshalb sind die Balken dort mit 19,1 % bis 21,2 % gleichmäßiger. Mit stetigen Preisen ohne gleiche Werte wären die Balken exakt 0,2 hoch.
 
 **Hätten wir eine andere Verteilung erwartet?** Wenn man an das Histogramm aus Woche 3a denkt, würde man zuerst erwarten, dass *mittel* am häufigsten ist und *sehr niedrig* und *sehr hoch* selten sind, wie bei einer eingipfligen, rechtsschiefen Verteilung. So sähe es bei gleich breiten Bereichen aus (siehe b). Bei Quantilen ist es umgekehrt: nicht die Breite der Bereiche ist gleich, sondern ihre Besetzung. Die Form der Verteilung sieht man daher nicht an den Balkenhöhen, sondern an den Breiten der Bereiche aus a. Die mittleren Bereiche sind schmal, weil dort viele Preise dicht beieinander liegen, und *sehr hoch* ist sehr breit, weil die Verteilung nach rechts langsam ausläuft.
-Das Balkendiagramm sagt deshalb nichts über die Preise selbst aus. Interessant werden die Kategorien erst, wenn man sie wie in d mit einem anderen Merkmal kombiniert.
 
 ### d. Mosaikplots von Marke und Preiskategorie
 
@@ -910,9 +909,9 @@ mosaicplot(tab_diesel, col = farben, las = 2, cex.axis = 0.7,
 par(mfrow = c(1, 1))
 ```
 
-Wären Marke und Preiskategorie unabhängig, hätte jede Spalte fünf etwa gleich hohe Kästchen von je 20 %. Das ist in beiden Plots nicht so, die Farbanteile unterscheiden sich deutlich zwischen den Marken.
+Wären Marke und Preiskategorie unabhängig, hätte jede Spalte dieselbe Aufteilung wie alle Preise zusammen, also ungefähr 20 % pro Kategorie (bei E10 25 % sehr niedrig). Das ist in beiden Plots nicht so, die Farbanteile unterscheiden sich deutlich zwischen den Marken.
 
-**Spaltenbreiten:** Die Breiten entsprechen den Häufigkeiten aus Woche 1d. STAR und Shell haben die breitesten Spalten, AGIP ENI die schmalste. In beiden Plots sind die Breiten fast gleich, weil bei E10 und Diesel fast immer gleichzeitig ein Preis vorliegt (Woche 2a).
+**Spaltenbreiten:** Die Breiten entsprechen den Häufigkeiten aus Woche 1d. STAR und Shell haben die breitesten Spalten, AGIP ENI die schmalste. In beiden Plots sind die Breiten fast gleich, weil bei E10 und Diesel fast immer gleichzeitig ein Preis vorliegt.
 
 **E10:** Von links nach rechts nimmt der grüne Anteil ab und der rote zu, die Marken sind ja nach ihrem E10-Median sortiert. Den höchsten Anteil günstiger Preise hat `r names(which.max(guenstig_e10))` mit `r round(100 * max(guenstig_e10), 1)` %, den höchsten Anteil teurer Preise `r names(which.max(teuer_e10))` mit `r round(100 * max(teuer_e10), 1)` %.
 Bei ARAL fällt besonders der große rote Bereich *sehr hoch* auf: `r round(100 * anteil_e10["ARAL", "sehr hoch"], 1)` % der E10-Preise sind *sehr hoch*. Ein Teil davon kommt von der Autobahntankstelle Avus, deren Preise in Woche 3d alle Ausreißer waren und deshalb hier alle in *sehr hoch* landen (`r sum(tanken$e10_median_qualitativ[avus] == "sehr hoch", na.rm = TRUE)` von `r sum(!is.na(tanken$e10_median_qualitativ[avus]))` Avus-Preisen).
@@ -921,8 +920,8 @@ Keine Marke hat aber ausschließlich günstige oder ausschließlich teure Preise
 **Diesel:** Das Muster ist sehr ähnlich: Die günstigen Marken links haben auch beim Diesel mehr Grün, die teuren Marken rechts mehr Rot. Den höchsten Anteil günstiger Dieselpreise hat `r names(which.max(guenstig_diesel))` mit `r round(100 * max(guenstig_diesel), 1)` %, den höchsten Anteil teurer Dieselpreise `r names(which.max(teuer_diesel))` mit `r round(100 * max(teuer_diesel), 1)` %.
 
 **Vergleich:** Die Anteile teurer Preise schwanken zwischen den Marken bei E10 um `r round(100 * diff(range(teuer_e10)), 1)` Prozentpunkte und bei Diesel um `r round(100 * diff(range(teuer_diesel)), 1)` Prozentpunkte. Die Unterschiede zwischen den Marken sind also bei `r ifelse(diff(range(teuer_e10)) > diff(range(teuer_diesel)), "E10", "Diesel")` stärker ausgeprägt. Das passt zu Woche 4c, wo der Unterschied zwischen teuerster und günstigster Marke im Median bei E10 50 und bei Diesel nur 35 Zehntel-Cent betrug.
-Insgesamt zeigen beide Plots dasselbe: Die Preispolitik hängt vor allem von der Marke bzw. der Tankstelle ab und nicht von der Kraftstoffsorte. Eine Marke, die bei E10 günstig ist, ist meistens auch bei Diesel günstig.
 
+Außerdem sind die günstigen Marken beim Diesel weniger stark in sehr niedrig konzentriert (24 bis 27 % statt 33 bis 38 % bei E10). Ihre günstigen Preise verteilen sich gleichmäßiger auf sehr niedrig und niedrig. Insgesamt zeigen beide Plots dasselbe Muster: Ob eine Marke eher günstig oder eher teuer ist, gilt für E10 und Diesel gleichermaßen. Eine Marke, die bei E10 günstig ist, ist meistens auch bei Diesel günstig. Weil aber bei jeder Marke alle Kategorien vorkommen, bleibt der Einfluss der Marke kleiner als der der Uhrzeit.
 
 ## Quellen
 
